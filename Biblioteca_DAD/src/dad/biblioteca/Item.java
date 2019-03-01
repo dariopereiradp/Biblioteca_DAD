@@ -1,0 +1,130 @@
+package dad.biblioteca;
+
+public class Item {
+
+	public static int countID = 0;
+	private int id;
+	private String nome;
+	private boolean disponivel;
+	private int numero_exemplares;
+	private int n_exemp_disponiveis;
+	private int n_exemp_emprestados;
+
+	public Item(String nome) {
+		this.nome = nome;
+		disponivel = true;
+		id = ++countID;
+		numero_exemplares = 1;
+		setN_exemp_disponiveis(1);
+		n_exemp_emprestados = 0;
+	}
+
+	public String getNome() {
+		return nome;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
+
+	public boolean isDisponivel() {
+		if (n_exemp_disponiveis > 0)
+			disponivel = true;
+		else
+			disponivel = false;
+		return disponivel;
+	}
+
+	public void setDisponivel(boolean disponivel) {
+		this.disponivel = disponivel;
+	}
+
+	public void setDisponivel(String s) {
+		if (s.equals("Sim"))
+			disponivel = true;
+		else if (s.equals("Não"))
+			disponivel = false;
+	}
+
+	public int getNumero_exemplares() {
+		return numero_exemplares;
+	}
+
+	public void setNumero_exemplares(int numero_exemplares) {
+		if (numero_exemplares > 0) {
+			this.numero_exemplares = numero_exemplares;
+			if (n_exemp_disponiveis > numero_exemplares)
+				setN_exemp_disponiveis(numero_exemplares);
+			else
+				setN_exemp_disponiveis(numero_exemplares - n_exemp_emprestados);
+		}
+	}
+
+	public void incrementar_exemplares() {
+		numero_exemplares++;
+		n_exemp_disponiveis++;
+	}
+
+	public void decrementar_exemplares() {
+		numero_exemplares--;
+		n_exemp_disponiveis--;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public int getN_exemp_disponiveis() {
+		return n_exemp_disponiveis;
+	}
+
+	public void setN_exemp_disponiveis(int n_exemp_disponiveis) {
+		if (n_exemp_disponiveis >= 0) {
+			if (n_exemp_disponiveis <= numero_exemplares)
+				this.n_exemp_disponiveis = n_exemp_disponiveis;
+			if (n_exemp_disponiveis == 0)
+				disponivel = false;
+		}
+	}
+
+	public int getN_exemp_emprestados() {
+		return n_exemp_emprestados;
+	}
+
+	public void setN_exemp_emprestados() {
+		n_exemp_emprestados = numero_exemplares - n_exemp_disponiveis;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + id;
+		result = prime * result + ((nome == null) ? 0 : nome.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Item other = (Item) obj;
+		if (id != other.id)
+			return false;
+		if (nome.toLowerCase() == null) {
+			if (other.nome.toLowerCase() != null)
+				return false;
+		} else if (!nome.toLowerCase().equals(other.nome.toLowerCase()))
+			return false;
+		return true;
+	}
+
+}
