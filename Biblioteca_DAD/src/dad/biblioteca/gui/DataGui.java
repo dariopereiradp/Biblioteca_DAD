@@ -21,6 +21,8 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.RowFilter;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.table.TableRowSorter;
 
 import org.apache.commons.lang.time.DurationFormatUtils;
@@ -31,6 +33,7 @@ import dad.recursos.Log;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JCheckBox;
 
 public class DataGui extends JFrame {
 
@@ -48,6 +51,8 @@ public class DataGui extends JFrame {
 			menuOrdenar;
 	private JMenu mnEditar;
 	private JTextField pesquisa;
+	private JPanel filtrosPanel;
+	private JCheckBox checkID, checkTitulo, checkAutor, checkEditora, checkClassificacao;
 
 	private DataGui() {
 		INSTANCE = this;
@@ -73,6 +78,29 @@ public class DataGui extends JFrame {
 		pesquisaPanel.add(pesquisa, BorderLayout.CENTER);
 
 		getContentPane().add(pesquisaPanel, BorderLayout.NORTH);
+
+		filtrosPanel = new JPanel();
+		pesquisaPanel.add(filtrosPanel, BorderLayout.EAST);
+
+		checkID = new JCheckBox("ID");
+		checkID.setSelected(true);
+		filtrosPanel.add(checkID);
+
+		checkTitulo = new JCheckBox("T\u00EDtulo");
+		checkTitulo.setSelected(true);
+		filtrosPanel.add(checkTitulo);
+
+		checkAutor = new JCheckBox("Autor");
+		checkAutor.setSelected(true);
+		filtrosPanel.add(checkAutor);
+
+		checkEditora = new JCheckBox("Editora");
+		checkEditora.setSelected(true);
+		filtrosPanel.add(checkEditora);
+
+		checkClassificacao = new JCheckBox("Classifica\u00E7\u00E3o");
+		checkClassificacao.setSelected(true);
+		filtrosPanel.add(checkClassificacao);
 
 		tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		getContentPane().add(tabbedPane, BorderLayout.CENTER);
@@ -173,6 +201,14 @@ public class DataGui extends JFrame {
 
 		TableModelLivro.getInstance().addListeners();
 
+		tabbedPane.addChangeListener(new ChangeListener() {
+
+			@Override
+			public void stateChanged(ChangeEvent e) {
+				visibleBoxes();
+			}
+		});
+
 	}
 
 	private class MyDispatcher implements KeyEventDispatcher {
@@ -202,25 +238,72 @@ public class DataGui extends JFrame {
 		setVisible(true);
 	}
 
+	public void visibleBoxes() {
+		if (tabbedPane.getSelectedIndex() == 0) {
+			checkTitulo.setText("Título");
+			checkAutor.setText("Autor");
+			checkEditora.setVisible(true);
+			checkClassificacao.setVisible(true);
+		} else if (tabbedPane.getSelectedIndex() == 1) {
+			checkTitulo.setText("Título");
+			checkAutor.setText("Artista");
+			checkEditora.setVisible(false);
+			checkClassificacao.setVisible(true);
+		}
+		// TODO
+		filtrosPanel.repaint();
+	}
+
 	public void anular() {
-		if (tabbedPane.isEnabledAt(0))
+		if (tabbedPane.getSelectedIndex() == 0)
 			TableModelLivro.getInstance().getUndoManager().undo();
-		// else if(tabbedPane.isEnabledAt(1))
+		// else if (tabbedPane.getSelectedIndex() == 1)
 		// TODO
 	}
 
 	public void refazer() {
-		if (tabbedPane.isEnabledAt(0))
+		if (tabbedPane.getSelectedIndex() == 0)
 			TableModelLivro.getInstance().getUndoManager().redo();
-		// else if(tabbedPane.isEnabledAt(1))
+		// else if (tabbedPane.getSelectedIndex() == 1)
 		// TODO
 	}
 
 	public void ordenar() {
-		if (tabbedPane.isEnabledAt(0))
+		if (tabbedPane.getSelectedIndex() == 0)
 			TableModelLivro.getInstance().ordenar();
-		// else if(tabbedPane.isEnabledAt(1))
+		// else if (tabbedPane.getSelectedIndex() == 1)
 		// TODO
+	}
+
+	private int num_checkboxEnabled() {
+		int count = 0;
+		if (checkID.isSelected())
+			count++;
+		if (checkTitulo.isSelected())
+			count++;
+		if (checkAutor.isSelected())
+			count++;
+		if (checkEditora.isSelected())
+			count++;
+		if (checkClassificacao.isSelected())
+			count++;
+		return count;
+	}
+
+	public int[] checkBoxEnabled() {
+		int count = 0;
+		int[] columns = new int[num_checkboxEnabled()];
+		if (checkID.isSelected())
+			columns[count++] = 0;
+		if (checkTitulo.isSelected())
+			columns[count++] = 1;
+		if (checkAutor.isSelected())
+			columns[count++] = 2;
+		if (checkEditora.isSelected())
+			columns[count++] = 3;
+		if (checkClassificacao.isSelected())
+			columns[count++] = 4;
+		return columns;
 	}
 
 	public static DataGui getInstance() {
@@ -230,11 +313,15 @@ public class DataGui extends JFrame {
 	}
 
 	public void filter(String filtro) {
-		if (tabbedPane.isEnabledAt(0)) {
+		if (tabbedPane.getSelectedIndex() == 0) {
 			TableRowSorter<TableModelLivro> sorter = new TableRowSorter<TableModelLivro>(TableModelLivro.getInstance());
 			LivroPanel.getInstance().getLivros().setRowSorter(sorter);
-			RowFilter<TableModelLivro, Object> filter = RowFilter
-					.regexFilter((Pattern.compile("(?i)" + filtro, Pattern.CASE_INSENSITIVE).toString()));
+			RowFilter<TableModelLivro, Object> filter;
+			if (num_checkboxEnabled() == 5)
+				filter = RowFilter.regexFilter((Pattern.compile("(?i)" + filtro, Pattern.CASE_INSENSITIVE).toString()));
+			else
+				filter = RowFilter.regexFilter((Pattern.compile("(?i)" + filtro, Pattern.CASE_INSENSITIVE).toString()),
+						checkBoxEnabled());
 			sorter.setRowFilter(filter);
 		}
 	}

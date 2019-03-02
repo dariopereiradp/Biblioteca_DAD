@@ -114,7 +114,7 @@ public class LivroPanel extends JPanel {
 			private Icon getSortIcon(JTable table, int column) {
 				SortOrder sortOrder = getColumnSortOrder(table, column);
 				if (SortOrder.UNSORTED == sortOrder) {
-					return null;
+					return new ImageIcon( getClass().getResource( "sort.png" ) );
 				}
 				return SortOrder.ASCENDING == sortOrder ? ascendingIcon : descendingIcon;
 			}

@@ -143,6 +143,21 @@ public class TableModelLivro extends AbstractTableModel {
 		return livros.size();
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@Override
+	public Class getColumnClass(int column) {
+		switch (column) {
+		case 0:
+			return Integer.class;
+		case 5:
+			return Integer.class;
+		case 6:
+			return Integer.class;
+		default:
+			return String.class;
+		}
+	}
+
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
 		switch (columnIndex) {
