@@ -46,7 +46,7 @@ public class DataGui extends JFrame {
 	private static final long serialVersionUID = 5748160687318648477L;
 	private static DataGui INSTANCE;
 	private JTabbedPane tabbedPane;
-	private JTable media, revistas, jornais, users;
+	private JTable media, revistas, outros, users;
 	private JMenu mnArquivo;
 	private JTable emprestimos;
 	private JMenu mnAjuda;
@@ -118,11 +118,8 @@ public class DataGui extends JFrame {
 		media = new JTable();
 		tabbedPane.addTab("Multimédia", null, media, null);
 
-		jornais = new JTable();
-		tabbedPane.addTab("Jornais", null, jornais, null);
-
-		revistas = new JTable();
-		tabbedPane.addTab("Revistas", null, revistas, null);
+		outros = new JTable();
+		tabbedPane.addTab("Outros", null, outros, null);
 
 		emprestimos = new JTable();
 		tabbedPane.addTab("Empréstimos", null, emprestimos, null);
