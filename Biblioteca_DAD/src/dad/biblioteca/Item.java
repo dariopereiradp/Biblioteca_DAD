@@ -5,6 +5,7 @@ public class Item {
 	public static int countID = 0;
 	private int id;
 	private String nome;
+	private String local;
 	private boolean disponivel;
 	private int numero_exemplares;
 	private int n_exemp_disponiveis;
@@ -12,6 +13,17 @@ public class Item {
 
 	public Item(String nome) {
 		this.nome = nome;
+		local = "-";
+		disponivel = true;
+		id = ++countID;
+		numero_exemplares = 1;
+		setN_exemp_disponiveis(1);
+		n_exemp_emprestados = 0;
+	}
+	
+	public Item(String nome, String local) {
+		this.nome = nome;
+		this.local = local;
 		disponivel = true;
 		id = ++countID;
 		numero_exemplares = 1;
@@ -125,6 +137,14 @@ public class Item {
 		} else if (!nome.toLowerCase().equals(other.nome.toLowerCase()))
 			return false;
 		return true;
+	}
+
+	public String getLocal() {
+		return local;
+	}
+
+	public void setLocal(String local) {
+		this.local = local;
 	}
 
 }

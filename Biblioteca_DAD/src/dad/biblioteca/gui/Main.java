@@ -14,6 +14,7 @@ import javax.swing.UIManager;
 
 import dad.biblioteca.table.TableModelLivro;
 import dad.recursos.ConexaoLivros;
+import dad.recursos.ConexaoUser;
 import dad.recursos.Log;
 import mdlaf.MaterialLookAndFeel;
 
@@ -108,17 +109,29 @@ public class Main {
 						.getConnection("jdbc:ucanaccess://" + ConexaoLivros.dbFile + ";newdatabaseversion=V2003");
 				DatabaseMetaData dmd = con.getMetaData();
 				try (ResultSet rs = dmd.getTables(null, null, "Livros", new String[] { "TABLE" })) {
-
 					try (Statement s = con.createStatement()) {
 						s.executeUpdate("CREATE TABLE Livros (ID int NOT NULL,Título varchar(255) NOT NULL,"
 								+ "Autor varchar(255),Editora varchar(255),Classificação varchar(255),"
-								+ "Exemplares int,Disponíveis int,Disponível varchar(5),CONSTRAINT PK_Livros PRIMARY KEY (ID,Título));");
+								+ "Exemplares int,Disponíveis int,Disponível varchar(5),Local varchar(255),CONSTRAINT PK_Livros PRIMARY KEY (ID,Título));");
 						Log.getInstance().printLog("Base de dados livros.mbd criada com sucesso");
 					}
-
 				}
-
 			}
+
+			File users = new File(ConexaoUser.dbFile);
+			if (!users.exists()) {
+				con = DriverManager
+						.getConnection("jdbc:ucanaccess://" + ConexaoUser.dbFile + ";newdatabaseversion=V2003");
+				DatabaseMetaData dmd = con.getMetaData();
+				try (ResultSet rs = dmd.getTables(null, null, "Usuários", new String[] { "TABLE" })) {
+					try (Statement s = con.createStatement()) {
+						s.executeUpdate("CREATE TABLE Usuarios (ID int NOT NULL,Nome varchar(255) NOT NULL,"
+								+ "Idade int,CPF bigint);");
+						Log.getInstance().printLog("Base de dados users.mbd criada com sucesso");
+					}
+				}
+			}
+
 		} catch (SQLException e) {
 			String message = "Ocorreu um erro ao criar a base de dados... Tenta novamente!\n" + e.getMessage() + "\n"
 					+ this.getClass();

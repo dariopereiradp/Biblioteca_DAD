@@ -39,6 +39,9 @@ import javax.swing.table.TableCellRenderer;
 import dad.biblioteca.Livro;
 import dad.biblioteca.gui.DataGui;
 import dad.biblioteca.gui.Inicial;
+import dad.recursos.CellRenderer;
+import dad.recursos.CellRendererBollean;
+import dad.recursos.CellRendererInt;
 import mdlaf.animation.MaterialUIMovement;
 import mdlaf.utils.MaterialColors;
 
@@ -48,7 +51,7 @@ public class LivroPanel extends JPanel {
 	private JTable livros;
 	private TableModelLivro modelLivro;
 	private JPanel panelAdd, pInferior, panel2, panel3;
-	private JTextField titulo, autor, editora, classificacao;
+	private JTextField titulo, autor, editora, classificacao, local;
 	private JTextField jtfTotal;
 	private JButton bAdd;
 
@@ -83,7 +86,13 @@ public class LivroPanel extends JPanel {
 				else
 					c.setBackground(MaterialColors.GRAY_100);
 				if (isCellSelected(data, columns))
-					c.setBackground(Color.GREEN);
+					c.setBackground(MaterialColors.GREEN_A100);
+				if (columns == 7) {
+					if (TableModelLivro.getInstance().getValueAt(data, columns).equals("Sim"))
+						c.setBackground(MaterialColors.GREEN_A100);
+					else
+						c.setBackground(MaterialColors.RED_300);
+				}
 				return c;
 			}
 		};
@@ -114,7 +123,7 @@ public class LivroPanel extends JPanel {
 			private Icon getSortIcon(JTable table, int column) {
 				SortOrder sortOrder = getColumnSortOrder(table, column);
 				if (SortOrder.UNSORTED == sortOrder) {
-					return new ImageIcon( getClass().getResource( "sort.png" ) );
+					return new ImageIcon(getClass().getResource("sort.png"));
 				}
 				return SortOrder.ASCENDING == sortOrder ? ascendingIcon : descendingIcon;
 			}
@@ -138,7 +147,21 @@ public class LivroPanel extends JPanel {
 		livros.setFillsViewportHeight(true);
 		livros.setAutoCreateRowSorter(true);
 		livros.getTableHeader().setReorderingAllowed(false);
+		livros.setRowHeight(30);
 		livros.getColumnModel().getColumn(0).setMaxWidth(100);
+		livros.getColumnModel().getColumn(5).setMaxWidth(120);
+		livros.getColumnModel().getColumn(6).setMaxWidth(120);
+		livros.getColumnModel().getColumn(7).setMaxWidth(120);
+		livros.getColumnModel().getColumn(5).setMinWidth(120);
+		livros.getColumnModel().getColumn(6).setMinWidth(120);
+		livros.getColumnModel().getColumn(7).setMinWidth(120);
+		livros.setDefaultRenderer(Object.class, new CellRenderer());
+
+		livros.getColumnModel().getColumn(7).setCellRenderer(new CellRendererBollean());
+		livros.getColumnModel().getColumn(0).setCellRenderer(new CellRendererInt());
+		livros.getColumnModel().getColumn(5).setCellRenderer(new CellRendererInt());
+		livros.getColumnModel().getColumn(6).setCellRenderer(new CellRendererInt());
+
 		JScrollPane jsLivros = new JScrollPane(livros);
 		add(jsLivros, BorderLayout.CENTER);
 
@@ -298,9 +321,12 @@ public class LivroPanel extends JPanel {
 	}
 
 	private void inicializarPanelAdd() {
-		panelAdd = new JPanel(new GridLayout(2, 4));
+		panelAdd = new JPanel(new GridLayout(1, 5));
+		
+		JPanel panelTitulo = new JPanel(new BorderLayout());
 		JLabel lTitulo = new JLabel("Título: ");
-		panelAdd.add(lTitulo);
+		lTitulo.setFont(new Font("Roboto", Font.BOLD, 15));
+		panelTitulo.add(lTitulo, BorderLayout.WEST);
 
 		titulo = new JTextField();
 		titulo.addKeyListener(new KeyAdapter() {
@@ -310,10 +336,15 @@ public class LivroPanel extends JPanel {
 					adicionarLivro();
 			}
 		});
-		panelAdd.add(titulo);
+		panelTitulo.add(titulo, BorderLayout.CENTER);
 
+		panelAdd.add(panelTitulo);
+		
+		
+		JPanel panelAutor = new JPanel(new BorderLayout());
 		JLabel lAutor = new JLabel("Autor: ");
-		panelAdd.add(lAutor);
+		lAutor.setFont(new Font("Roboto", Font.BOLD, 15));
+		panelAutor.add(lAutor, BorderLayout.WEST);
 
 		autor = new JTextField();
 		autor.addKeyListener(new KeyAdapter() {
@@ -323,10 +354,15 @@ public class LivroPanel extends JPanel {
 					adicionarLivro();
 			}
 		});
-		panelAdd.add(autor);
+		panelAutor.add(autor, BorderLayout.CENTER);
+		panelAdd.add(panelAutor);
+		
+		JPanel last = new JPanel(new GridLayout(1, 6));
 
+		JPanel panelEditora = new JPanel(new BorderLayout());
 		JLabel lEditora = new JLabel("Editora: ");
-		panelAdd.add(lEditora);
+		lEditora.setFont(new Font("Roboto", Font.BOLD, 15));
+		panelEditora.add(lEditora, BorderLayout.WEST);
 
 		editora = new JTextField();
 		editora.addKeyListener(new KeyAdapter() {
@@ -336,10 +372,13 @@ public class LivroPanel extends JPanel {
 					adicionarLivro();
 			}
 		});
-		panelAdd.add(editora);
+		panelEditora.add(editora, BorderLayout.CENTER);
+		last.add(panelEditora);
 
+		JPanel panelClass = new JPanel(new BorderLayout());
 		JLabel lClassificacao = new JLabel("Classificação: ");
-		panelAdd.add(lClassificacao);
+		lClassificacao.setFont(new Font("Roboto", Font.BOLD, 15));
+		panelClass.add(lClassificacao, BorderLayout.WEST);
 
 		classificacao = new JTextField();
 		classificacao.addKeyListener(new KeyAdapter() {
@@ -349,7 +388,25 @@ public class LivroPanel extends JPanel {
 					adicionarLivro();
 			}
 		});
-		panelAdd.add(classificacao);
+		panelClass.add(classificacao, BorderLayout.CENTER);
+		last.add(panelClass);
+		
+		JPanel panelLocal = new JPanel(new BorderLayout());
+		JLabel lLocal = new JLabel("Localização: ");
+		lLocal.setFont(new Font("Roboto", Font.BOLD, 15));
+		panelLocal.add(lLocal, BorderLayout.WEST);
+
+		local = new JTextField();
+		local.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_ENTER)
+					adicionarLivro();
+			}
+		});
+		panelLocal.add(local, BorderLayout.CENTER);
+		last.add(panelLocal);
+		
 
 		addKeyListener(new KeyAdapter() {
 			@Override
@@ -358,8 +415,12 @@ public class LivroPanel extends JPanel {
 					adicionarLivro();
 			}
 		});
+		
+		JPanel both = new JPanel(new GridLayout(2, 1));
+		both.add(panelAdd);
+		both.add(last);
 
-		pInferior.add(panelAdd, BorderLayout.CENTER);
+		pInferior.add(both, BorderLayout.CENTER);
 	}
 
 	public void personalizarBotao(JButton jb) {
@@ -377,7 +438,7 @@ public class LivroPanel extends JPanel {
 				modelLivro.addLivro(new Livro(titulo.getText()));
 			else
 				modelLivro.addLivro(
-						new Livro(titulo.getText(), autor.getText(), editora.getText(), classificacao.getText()));
+						new Livro(titulo.getText(), autor.getText(), editora.getText(), classificacao.getText(), local.getText()));
 		}
 	}
 

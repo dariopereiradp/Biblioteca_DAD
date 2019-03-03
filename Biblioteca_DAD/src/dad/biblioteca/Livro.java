@@ -12,9 +12,9 @@ public class Livro extends Item implements Comparable<Livro> {
 		editora = "-";
 		classificacao = "-";
 	}
-
-	public Livro(String nome, String autor, String editora, String classificacao) {
-		super(nome);
+	
+	public Livro(String nome, String autor, String editora, String classificacao, String local) {
+		super(nome,local);
 		if (!autor.trim().equals(""))
 			this.autor = autor;
 		else

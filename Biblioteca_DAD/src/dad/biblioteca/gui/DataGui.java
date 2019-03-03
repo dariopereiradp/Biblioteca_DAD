@@ -23,12 +23,15 @@ import javax.swing.JTextField;
 import javax.swing.RowFilter;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableRowSorter;
-
 import org.apache.commons.lang.time.DurationFormatUtils;
 
 import dad.biblioteca.table.LivroPanel;
 import dad.biblioteca.table.TableModelLivro;
+import dad.recursos.CellRenderer;
+import dad.recursos.CellRendererInt;
+import dad.recursos.DefaultCellRenderer;
 import dad.recursos.Log;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
@@ -43,7 +46,7 @@ public class DataGui extends JFrame {
 	private static final long serialVersionUID = 5748160687318648477L;
 	private static DataGui INSTANCE;
 	private JTabbedPane tabbedPane;
-	private JTable dvds, revistas, cds, jornais;
+	private JTable media, revistas, jornais, users;
 	private JMenu mnArquivo;
 	private JTable emprestimos;
 	private JMenu mnAjuda;
@@ -52,7 +55,8 @@ public class DataGui extends JFrame {
 	private JMenu mnEditar;
 	private JTextField pesquisa;
 	private JPanel filtrosPanel;
-	private JCheckBox checkID, checkTitulo, checkAutor, checkEditora, checkClassificacao;
+	private JCheckBox checkID, checkTitulo, checkAutor, checkEditora, checkClassificacao, checkLocal;
+	private JMenuItem menuConfig;
 
 	private DataGui() {
 		INSTANCE = this;
@@ -101,17 +105,18 @@ public class DataGui extends JFrame {
 		checkClassificacao = new JCheckBox("Classifica\u00E7\u00E3o");
 		checkClassificacao.setSelected(true);
 		filtrosPanel.add(checkClassificacao);
+		
+		checkLocal = new JCheckBox("Localiza\u00E7\u00E3o");
+		checkLocal.setSelected(true);
+		filtrosPanel.add(checkLocal);
 
 		tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		getContentPane().add(tabbedPane, BorderLayout.CENTER);
 
 		tabbedPane.addTab("Livros", LivroPanel.getInstance());
 
-		cds = new JTable();
-		tabbedPane.addTab("CDs", null, cds, null);
-
-		dvds = new JTable();
-		tabbedPane.addTab("DVDs", null, dvds, null);
+		media = new JTable();
+		tabbedPane.addTab("Multimédia", null, media, null);
 
 		jornais = new JTable();
 		tabbedPane.addTab("Jornais", null, jornais, null);
@@ -121,6 +126,9 @@ public class DataGui extends JFrame {
 
 		emprestimos = new JTable();
 		tabbedPane.addTab("Empréstimos", null, emprestimos, null);
+
+		users = new JTable();
+		tabbedPane.addTab("Usuários", null, users, null);
 
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
@@ -140,6 +148,9 @@ public class DataGui extends JFrame {
 		menuVoltar = new JMenuItem("Voltar");
 		menuVoltar.addActionListener(new VoltarAction());
 		mnArquivo.add(menuVoltar);
+
+		menuConfig = new JMenuItem("Configura\u00E7\u00F5es");
+		mnArquivo.add(menuConfig);
 
 		mnEditar = new JMenu("Editar");
 		menuBar.add(mnEditar);
@@ -287,12 +298,14 @@ public class DataGui extends JFrame {
 			count++;
 		if (checkClassificacao.isSelected())
 			count++;
+		if(checkLocal.isSelected())
+			count++;
 		return count;
 	}
 
 	public int[] checkBoxEnabled() {
 		int count = 0;
-		int[] columns = new int[num_checkboxEnabled()];
+		int[] columns = new int[num_checkboxEnabled()+3];
 		if (checkID.isSelected())
 			columns[count++] = 0;
 		if (checkTitulo.isSelected())
@@ -303,6 +316,11 @@ public class DataGui extends JFrame {
 			columns[count++] = 3;
 		if (checkClassificacao.isSelected())
 			columns[count++] = 4;
+		columns[count++] = 5;
+		columns[count++] = 6;
+		columns[count++] = 7;
+		if (checkLocal.isSelected())
+			columns[count++] = 8;
 		return columns;
 	}
 
@@ -317,13 +335,50 @@ public class DataGui extends JFrame {
 			TableRowSorter<TableModelLivro> sorter = new TableRowSorter<TableModelLivro>(TableModelLivro.getInstance());
 			LivroPanel.getInstance().getLivros().setRowSorter(sorter);
 			RowFilter<TableModelLivro, Object> filter;
-			if (num_checkboxEnabled() == 5)
-				filter = RowFilter.regexFilter((Pattern.compile("(?i)" + filtro, Pattern.CASE_INSENSITIVE).toString()));
-			else
-				filter = RowFilter.regexFilter((Pattern.compile("(?i)" + filtro, Pattern.CASE_INSENSITIVE).toString()),
-						checkBoxEnabled());
-			sorter.setRowFilter(filter);
+			if (filtro.trim().equals("")) {
+				sorter.setRowFilter(null);
+			} else {
+				if (num_checkboxEnabled() == 6 || num_checkboxEnabled() == 0) {
+					filter = RowFilter
+							.regexFilter((Pattern.compile("(?i)" + filtro, Pattern.CASE_INSENSITIVE).toString()));
+					LivroPanel.getInstance().getLivros().setDefaultRenderer(Object.class, new CellRenderer());
+				} else
+					filter = RowFilter.regexFilter(
+							(Pattern.compile("(?i)" + filtro, Pattern.CASE_INSENSITIVE).toString()), checkBoxEnabled());
+				sorter.setRowFilter(filter);
+				setRenderers();
+			}
 		}
+	}
+
+	public void setRenderers() {
+		TableColumnModel tcl = LivroPanel.getInstance().getLivros().getColumnModel();
+		if (checkID.isSelected())
+			tcl.getColumn(0).setCellRenderer(new CellRendererInt());
+		else
+			tcl.getColumn(0).setCellRenderer(new DefaultCellRenderer());
+		if (checkTitulo.isSelected())
+			tcl.getColumn(1).setCellRenderer(new CellRenderer());
+		else
+			tcl.getColumn(1).setCellRenderer(new DefaultCellRenderer());
+		if (checkAutor.isSelected())
+			tcl.getColumn(2).setCellRenderer(new CellRenderer());
+		else
+			tcl.getColumn(2).setCellRenderer(new DefaultCellRenderer());
+		if (checkEditora.isSelected())
+			tcl.getColumn(3).setCellRenderer(new CellRenderer());
+		else
+			tcl.getColumn(3).setCellRenderer(new DefaultCellRenderer());
+		if (checkClassificacao.isSelected())
+			tcl.getColumn(4).setCellRenderer(new CellRenderer());
+		else
+			tcl.getColumn(4).setCellRenderer(new DefaultCellRenderer());
+		if (checkLocal.isSelected())
+			tcl.getColumn(8).setCellRenderer(new CellRenderer());
+		else
+			tcl.getColumn(8).setCellRenderer(new DefaultCellRenderer());
+
+
 	}
 
 	private class VoltarAction implements ActionListener {
@@ -335,4 +390,54 @@ public class DataGui extends JFrame {
 		}
 	}
 
+	public JTextField getPesquisa() {
+		return pesquisa;
+	}
+
+	// public TableCellRenderer getRenderer() {
+	// return new DefaultTableCellRenderer() {
+	// JTextField f = new JTextField();
+	//
+	// // @Override
+	// // public Component getTableCellRendererComponent(JTable arg0,
+	// // Object arg1, boolean arg2, boolean arg3, int arg4, int arg5) {
+	// // if(arg1 != null){
+	// // f.setText(arg1.toString());
+	// // String string = arg1.toString();
+	// // if(string.contains(pesquisa.getText().toLowerCase())){
+	// // int indexOf = string.indexOf(pesquisa.getText().toLowerCase());
+	// // try {
+	// //
+	// f.getHighlighter().addHighlight(indexOf,indexOf+pesquisa.getText().toLowerCase().length(),new
+	// //
+	// javax.swing.text.DefaultHighlighter.DefaultHighlightPainter(Color.RED));
+	// // } catch (BadLocationException e) {
+	// // e.printStackTrace();
+	// // }
+	// // }
+	// // } else {
+	// // f.setText("");
+	// // f.getHighlighter().removeAllHighlights();
+	// // }
+	// // return f;
+	// // }
+	// @Override
+	// public Component getTableCellRendererComponent(JTable table, Object
+	// value, boolean selected,
+	// boolean hasFocus, int row, int column) {
+	// DefaultTableCellRenderer d = new DefaultTableCellRenderer();
+	// Component c = this.getTableCellRendererComponent(table, value, selected,
+	// hasFocus, row, column);
+	// JLabel original = (JLabel) c;
+	// LabelHighlighted label = new LabelHighlighted();
+	// label.setFont(original.getFont());
+	// label.setText(original.getText());
+	// label.setBackground(original.getBackground());
+	// label.setForeground(original.getForeground());
+	// label.setHorizontalTextPosition(original.getHorizontalTextPosition());
+	// label.highlightText(pesquisa.getText().toLowerCase());
+	// return label;
+	// }
+	// };
+	// }
 }

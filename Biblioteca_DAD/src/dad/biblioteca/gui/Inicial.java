@@ -34,7 +34,7 @@ public class Inicial {
 	private static Inicial INSTANCE;
 	private JFrame frame;
 	// private Object[] options = { "Sim", "Não", "Cancelar" };
-	private Object[] itemOptions = { "Livro", "CD", "DVD", "Jornal", "Revista" };
+	private Object[] itemOptions = { "Livro", "Multimédia", "Jornal", "Revista" };
 
 	private Inicial() {
 		INSTANCE = this;
@@ -86,15 +86,12 @@ public class Inicial {
 					System.out.println("Livro");
 					break;
 				case 1:
-					System.out.println("CD");
+					System.out.println("Multimédia");
 					break;
 				case 2:
-					System.out.println("DVD");
-					break;
-				case 3:
 					System.out.println("Jornal");
 					break;
-				case 4:
+				case 3:
 					System.out.println("Revista");
 					break;
 				default:

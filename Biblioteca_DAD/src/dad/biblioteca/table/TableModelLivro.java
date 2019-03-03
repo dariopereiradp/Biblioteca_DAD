@@ -27,7 +27,7 @@ public class TableModelLivro extends AbstractTableModel {
 	private static TableModelLivro INSTANCE;
 	private ArrayList<Livro> livros;
 	private String[] colunas = { "ID", "Título", "Autor", "Editora", "Classificação", "Exemplares", "Disponíveis",
-			"Disponível" };
+			"Disponível", "Local" };
 	private Connection con;
 	private PreparedStatement pst;
 	private ResultSet rs;
@@ -45,7 +45,7 @@ public class TableModelLivro extends AbstractTableModel {
 			con = ConexaoLivros.getConnection();
 			pst = con.prepareStatement("select * from livros order by Título");
 			rs = pst.executeQuery();
-			String titulo, autor, editora, classificacao, disponivel, n_exemplares, disponiveis;
+			String titulo, autor, editora, classificacao, disponivel, n_exemplares, disponiveis, local;
 			if (rs.next()) {
 				do {
 					titulo = rs.getString(2);
@@ -55,7 +55,8 @@ public class TableModelLivro extends AbstractTableModel {
 					n_exemplares = rs.getString(6);
 					disponiveis = rs.getString(7);
 					disponivel = rs.getString(8);
-					Livro l = new Livro(titulo, autor, editora, classificacao);
+					local = rs.getString(9);
+					Livro l = new Livro(titulo, autor, editora, classificacao, local);
 					l.setNumero_exemplares(Integer.parseInt(n_exemplares));
 					l.setDisponivel(disponivel);
 					l.setN_exemp_disponiveis(Integer.parseInt(disponiveis));
@@ -180,6 +181,8 @@ public class TableModelLivro extends AbstractTableModel {
 				return "Sim";
 			else
 				return "Não";
+		case 8:
+			return livros.get(rowIndex).getLocal();
 		default:
 			return livros.get(rowIndex);
 		}
@@ -188,11 +191,12 @@ public class TableModelLivro extends AbstractTableModel {
 	@Override
 	public void setValueAt(Object valor, int rowIndex, int columnIndex) {
 		try {
-			if (!(columnIndex == 1 && ((String) valor).trim().equals(""))) {
-				if (((String) valor).trim().equals(""))
+			if (!(columnIndex == 1 && (String.valueOf(valor)).trim().equals(""))) {
+				if ((String.valueOf(valor).trim().equals("")))
 					valor = "-";
 				Livro livro = livros.get(rowIndex);
-				Livro l = new Livro(livro.getNome(), livro.getAutor(), livro.getEditora(), livro.getClassificacao());
+				Livro l = new Livro(livro.getNome(), livro.getAutor(), livro.getEditora(), livro.getClassificacao(),
+						livro.getLocal());
 				boolean disponivel = livro.isDisponivel();
 				switch (columnIndex) {
 				case 1:
@@ -248,8 +252,10 @@ public class TableModelLivro extends AbstractTableModel {
 					}
 					break;
 				case 5:
-					Integer.parseInt((String) valor);
 					undoManager.execute(new AtualizaExemplares(disponivel, livro, valor));
+					break;
+				case 8:
+					undoManager.execute(new AtualizaLivro("Local", livro, valor));
 					break;
 				default:
 					livros.get(rowIndex);
@@ -287,7 +293,7 @@ public class TableModelLivro extends AbstractTableModel {
 	private void insertLivro(Livro livro, int row) {
 		try {
 			pst = con.prepareStatement(
-					"insert into livros(ID,Título,Autor,Editora,Classificação,Exemplares,Disponíveis,Disponível) values (?,?,?,?,?,?,?,?)");
+					"insert into livros(ID,Título,Autor,Editora,Classificação,Exemplares,Disponíveis,Disponível,Local) values (?,?,?,?,?,?,?,?,?)");
 			pst.setString(1, String.valueOf(livro.getId()));
 			pst.setString(2, livro.getNome());
 			pst.setString(3, livro.getAutor().toString());
@@ -296,6 +302,7 @@ public class TableModelLivro extends AbstractTableModel {
 			pst.setString(6, String.valueOf(livro.getNumero_exemplares()));
 			pst.setString(7, String.valueOf(livro.getN_exemp_disponiveis()));
 			pst.setString(8, "Sim");
+			pst.setString(9, livro.getLocal());
 			pst.execute();
 			if (row != -2) {
 				if (row > -1)
@@ -544,6 +551,8 @@ public class TableModelLivro extends AbstractTableModel {
 			case "Classificação":
 				old = livro.getClassificacao();
 				break;
+			case "Local":
+				old = livro.getLocal();
 			default:
 				break;
 			}
@@ -563,6 +572,9 @@ public class TableModelLivro extends AbstractTableModel {
 				break;
 			case "Classificação":
 				livro.setClassificacao((String) valor);
+				break;
+			case "Local":
+				livro.setLocal((String) valor);
 				break;
 			default:
 				break;
@@ -596,6 +608,9 @@ public class TableModelLivro extends AbstractTableModel {
 					break;
 				case "Classificação":
 					livro.setClassificacao(old);
+					break;
+				case "Local":
+					livro.setLocal(old);
 					break;
 				default:
 					break;
@@ -639,9 +654,9 @@ public class TableModelLivro extends AbstractTableModel {
 		@Override
 		public void execute() {
 			try {
-				livro.setNumero_exemplares(Integer.parseInt((String) valor));
+				livro.setNumero_exemplares((Integer) valor);
 				pst = con.prepareStatement("update livros set Exemplares=? where ID=" + livro.getId());
-				pst.setString(1, (String) valor);
+				pst.setString(1, String.valueOf((Integer) valor));
 				pst.execute();
 				pst = con.prepareStatement("update livros set Disponíveis=? where ID=" + livro.getId());
 				pst.setString(1, String.valueOf(livro.getN_exemp_disponiveis()));
