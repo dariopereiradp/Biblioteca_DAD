@@ -4,17 +4,15 @@ public class Livro extends Item implements Comparable<Livro> {
 
 	private String autor;
 	private String editora;
-	private String classificacao;
 
 	public Livro(String nome) {
 		super(nome);
 		autor = "-";
 		editora = "-";
-		classificacao = "-";
 	}
 	
 	public Livro(String nome, String autor, String editora, String classificacao, String local) {
-		super(nome,local);
+		super(nome, classificacao, local, null);
 		if (!autor.trim().equals(""))
 			this.autor = autor;
 		else
@@ -23,10 +21,6 @@ public class Livro extends Item implements Comparable<Livro> {
 			this.editora = editora;
 		else
 			this.editora = "-";
-		if (!classificacao.trim().equals(""))
-			this.classificacao = classificacao;
-		else
-			this.classificacao = "-";
 	}
 
 	public String getAutor() {
@@ -45,17 +39,9 @@ public class Livro extends Item implements Comparable<Livro> {
 		this.editora = editora;
 	}
 
-	public String getClassificacao() {
-		return classificacao;
-	}
-
-	public void setClassificacao(String classificacao) {
-		this.classificacao = classificacao;
-	}
-
 	@Override
 	public String toString() {
-		return super.getNome() + " | " + autor + " | " + editora + " | " + classificacao + " | " + isDisponivel()
+		return super.getNome() + " | " + autor + " | " + editora + " | " + getClassificacao() + " | " + isDisponivel()
 				+ " | " + getNumero_exemplares();
 	}
 
@@ -64,7 +50,7 @@ public class Livro extends Item implements Comparable<Livro> {
 		final int prime = 31;
 		int result = super.hashCode();
 		result = prime * result + ((autor == null) ? 0 : autor.hashCode());
-		result = prime * result + ((classificacao == null) ? 0 : classificacao.hashCode());
+		result = prime * result + ((getClassificacao() == null) ? 0 : getClassificacao().hashCode());
 		result = prime * result + ((editora == null) ? 0 : editora.hashCode());
 		return result;
 	}

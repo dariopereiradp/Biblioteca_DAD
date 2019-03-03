@@ -1,34 +1,47 @@
 package dad.biblioteca;
 
+import java.awt.Image;
+
 public class Item {
 
 	public static int countID = 0;
 	private int id;
 	private String nome;
 	private String local;
+	private String classificacao;
 	private boolean disponivel;
 	private int numero_exemplares;
 	private int n_exemp_disponiveis;
 	private int n_exemp_emprestados;
+	private Image img;
 
 	public Item(String nome) {
 		this.nome = nome;
 		local = "-";
+		setClassificacao("-");
 		disponivel = true;
 		id = ++countID;
 		numero_exemplares = 1;
 		setN_exemp_disponiveis(1);
 		n_exemp_emprestados = 0;
 	}
-	
-	public Item(String nome, String local) {
+
+	public Item(String nome, String classificacao, String local, Image img) {
 		this.nome = nome;
-		this.local = local;
+		if (!local.trim().equals(""))
+			this.local = local;
+		else
+			this.local = "-";
+		if (!classificacao.trim().equals(""))
+			this.classificacao = classificacao;
+		else
+			this.classificacao = "-";
 		disponivel = true;
 		id = ++countID;
 		numero_exemplares = 1;
 		setN_exemp_disponiveis(1);
 		n_exemp_emprestados = 0;
+		this.img = img;
 	}
 
 	public String getNome() {
@@ -145,6 +158,22 @@ public class Item {
 
 	public void setLocal(String local) {
 		this.local = local;
+	}
+
+	public String getClassificacao() {
+		return classificacao;
+	}
+
+	public void setClassificacao(String classificacao) {
+		this.classificacao = classificacao;
+	}
+
+	public Image getImg() {
+		return img;
+	}
+
+	public void setImg(Image img) {
+		this.img = img;
 	}
 
 }
