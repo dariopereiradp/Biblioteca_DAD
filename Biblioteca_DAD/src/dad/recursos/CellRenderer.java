@@ -31,6 +31,7 @@ public class CellRenderer extends DefaultTableCellRenderer {
 		if (index == -1) {
 			return;
 		}
+		
 		String preMatch = getText().substring(0, index);
 		String match = getText().substring(preMatch.length(), preMatch.length() + filter.length());
 		int pmw = g.getFontMetrics().stringWidth(preMatch);

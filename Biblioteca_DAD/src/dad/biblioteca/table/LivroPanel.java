@@ -85,8 +85,12 @@ public class LivroPanel extends JPanel {
 					c.setBackground(Color.WHITE);
 				else
 					c.setBackground(MaterialColors.GRAY_100);
-				if (isCellSelected(data, columns))
-					c.setBackground(MaterialColors.GREEN_A100);
+				if (isCellSelected(data, columns)){
+					if (TableModelLivro.getInstance().getValueAt(data, 7).equals("Sim"))
+						c.setBackground(MaterialColors.GREEN_A100);
+					else
+						c.setBackground(MaterialColors.RED_300);
+				}
 				if (columns == 7) {
 					if (TableModelLivro.getInstance().getValueAt(data, columns).equals("Sim"))
 						c.setBackground(MaterialColors.GREEN_A100);
