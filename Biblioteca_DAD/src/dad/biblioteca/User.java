@@ -9,10 +9,13 @@ public class User {
 	private long cpf;
 	private ArrayList<Emprestimo> emprestimos = new ArrayList<>();
 
-	public User(String nome, int idade, long cpf) {
+	private User(String nome, int idade, long cpf, boolean adicionar) {
 		this.setNome(nome);
 		this.setIdade(idade);
 		this.setCpf(cpf);
+		if (adicionar) {
+			// TODO: salvar na base de dados
+		}
 	}
 
 	public String getNome() {
@@ -67,6 +70,25 @@ public class User {
 		if (cpf != other.cpf)
 			return false;
 		return true;
+	}
+
+	public static boolean existe(long cpf) {
+		// Ligação à base de dados
+		return true;
+	}
+
+	public static User getUser(long cpf) {
+		// Ligação à base de dados
+		String nome = "-";
+		int idade = 0;
+		return new User(nome, idade, cpf, false);
+	}
+
+	public static User newUser(String nome, int idade, long cpf) {
+		if (existe(cpf))
+			return getUser(cpf);
+		else
+			return new User(nome, idade, cpf, true);
 	}
 
 }
