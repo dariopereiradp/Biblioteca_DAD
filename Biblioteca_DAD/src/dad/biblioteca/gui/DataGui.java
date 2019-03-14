@@ -46,7 +46,7 @@ public class DataGui extends JFrame {
 	private static final long serialVersionUID = 5748160687318648477L;
 	private static DataGui INSTANCE;
 	private JTabbedPane tabbedPane;
-	private JTable media, revistas, outros, users;
+	private JTable media, outros, users;
 	private JMenu mnArquivo;
 	private JTable emprestimos;
 	private JMenu mnAjuda;

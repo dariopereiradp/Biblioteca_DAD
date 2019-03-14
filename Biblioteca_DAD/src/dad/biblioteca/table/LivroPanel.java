@@ -13,12 +13,15 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.List;
 import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
@@ -44,6 +47,7 @@ import dad.recursos.CellRendererBollean;
 import dad.recursos.CellRendererInt;
 import mdlaf.animation.MaterialUIMovement;
 import mdlaf.utils.MaterialColors;
+import net.miginfocom.swing.MigLayout;
 
 public class LivroPanel extends JPanel {
 
@@ -85,7 +89,7 @@ public class LivroPanel extends JPanel {
 					c.setBackground(Color.WHITE);
 				else
 					c.setBackground(MaterialColors.GRAY_100);
-				if (isCellSelected(data, columns)){
+				if (isCellSelected(data, columns)) {
 					if (TableModelLivro.getInstance().getValueAt(data, 7).equals("Sim"))
 						c.setBackground(MaterialColors.GREEN_A100);
 					else
@@ -193,6 +197,15 @@ public class LivroPanel extends JPanel {
 
 		inicializarPanelAdd();
 
+		JMenuItem abrirItem = new JMenuItem("Abrir");
+		abrirItem.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				abrir(modelLivro.getLivro(livros.convertRowIndexToModel(livros.getSelectedRow())));
+			}
+		});
+
 		JMenuItem deleteItem = new JMenuItem("Apagar");
 		deleteItem.addActionListener(new ActionListener() {
 
@@ -234,6 +247,7 @@ public class LivroPanel extends JPanel {
 						if (rowAtPoint > -1) {
 							int[] rows = convertRowsIndextoModel();
 							if (rows.length <= 1) {
+								abrirItem.setVisible(true);
 								livros.setRowSelectionInterval(rowAtPointOriginal, rowAtPointOriginal);
 								if (TableModelLivro.getInstance().getLivro(rowAtPoint).getNumero_exemplares() > 1) {
 									deleteItem.setVisible(false);
@@ -245,6 +259,7 @@ public class LivroPanel extends JPanel {
 									deleteItem.setVisible(true);
 								}
 							} else {
+								abrirItem.setVisible(false);
 								boolean exemplares = false;
 								for (int i = 0; i < rows.length; i++) {
 									if (TableModelLivro.getInstance().getLivro(rows[i]).getNumero_exemplares() > 1)
@@ -276,6 +291,7 @@ public class LivroPanel extends JPanel {
 			}
 		});
 
+		popupMenu.add(abrirItem);
 		popupMenu.add(deleteItem);
 		popupMenu.add(deleteOneItem);
 		popupMenu.add(deleteAllItem);
@@ -290,10 +306,42 @@ public class LivroPanel extends JPanel {
 		});
 		popupMenu.add(emprestimoItem);
 
+		popupMenu.setPopupSize(300, 150);
+
 		livros.setComponentPopupMenu(popupMenu);
 
 		livros.getInputMap().put(KeyStroke.getKeyStroke("DELETE"), "deleteRow");
 		livros.getActionMap().put("deleteRow", new DeleteAction());
+
+		livros.addMouseListener(new MouseAdapter() {
+			public void mousePressed(MouseEvent mouseEvent) {
+				JTable table = (JTable) mouseEvent.getSource();
+				Point point = mouseEvent.getPoint();
+				int column = table.columnAtPoint(point);
+				int row = table.convertRowIndexToModel(table.rowAtPoint(point));
+				if (mouseEvent.getClickCount() == 2 && !table.isCellEditable(row, column)
+						&& table.getSelectedRow() != -1) {
+					abrir(modelLivro.getLivro(row));
+				}
+			}
+		});
+
+		KeyStroke enter = KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0);
+		livros.getInputMap(JTable.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(enter, "solve");
+		livros.getActionMap().put("solve", new AbstractAction() {
+
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = -833616209546223519L;
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (livros.getSelectedRows().length == 1)
+					abrir(modelLivro.getLivro(livros.convertRowIndexToModel(livros.getSelectedRow())));
+
+			}
+		});
 
 	}
 
@@ -326,7 +374,7 @@ public class LivroPanel extends JPanel {
 
 	private void inicializarPanelAdd() {
 		panelAdd = new JPanel(new GridLayout(1, 5));
-		
+
 		JPanel panelTitulo = new JPanel(new BorderLayout());
 		JLabel lTitulo = new JLabel("Título: ");
 		lTitulo.setFont(new Font("Roboto", Font.BOLD, 15));
@@ -343,8 +391,7 @@ public class LivroPanel extends JPanel {
 		panelTitulo.add(titulo, BorderLayout.CENTER);
 
 		panelAdd.add(panelTitulo);
-		
-		
+
 		JPanel panelAutor = new JPanel(new BorderLayout());
 		JLabel lAutor = new JLabel("Autor: ");
 		lAutor.setFont(new Font("Roboto", Font.BOLD, 15));
@@ -360,7 +407,7 @@ public class LivroPanel extends JPanel {
 		});
 		panelAutor.add(autor, BorderLayout.CENTER);
 		panelAdd.add(panelAutor);
-		
+
 		JPanel last = new JPanel(new GridLayout(1, 6));
 
 		JPanel panelEditora = new JPanel(new BorderLayout());
@@ -394,7 +441,7 @@ public class LivroPanel extends JPanel {
 		});
 		panelClass.add(classificacao, BorderLayout.CENTER);
 		last.add(panelClass);
-		
+
 		JPanel panelLocal = new JPanel(new BorderLayout());
 		JLabel lLocal = new JLabel("Localização: ");
 		lLocal.setFont(new Font("Roboto", Font.BOLD, 15));
@@ -410,7 +457,6 @@ public class LivroPanel extends JPanel {
 		});
 		panelLocal.add(local, BorderLayout.CENTER);
 		last.add(panelLocal);
-		
 
 		addKeyListener(new KeyAdapter() {
 			@Override
@@ -419,7 +465,7 @@ public class LivroPanel extends JPanel {
 					adicionarLivro();
 			}
 		});
-		
+
 		JPanel both = new JPanel(new GridLayout(2, 1));
 		both.add(panelAdd);
 		both.add(last);
@@ -441,8 +487,8 @@ public class LivroPanel extends JPanel {
 					&& classificacao.getText().trim().equals(""))
 				modelLivro.addLivro(new Livro(titulo.getText()));
 			else
-				modelLivro.addLivro(
-						new Livro(titulo.getText(), autor.getText(), editora.getText(), classificacao.getText(), local.getText()));
+				modelLivro.addLivro(new Livro(titulo.getText(), autor.getText(), editora.getText(),
+						classificacao.getText(), local.getText()));
 		}
 	}
 
@@ -487,6 +533,149 @@ public class LivroPanel extends JPanel {
 
 	public JTable getLivros() {
 		return livros;
+	}
+
+	public void abrir(Livro l) {
+		int oldExemplares = l.getN_exemp_disponiveis();
+		System.out.println(l);
+		JDialog dial = new JDialog(DataGui.getInstance(), l.getNome());
+		dial.setSize(new Dimension(700, 500));
+		dial.getContentPane().setLayout(new BorderLayout());
+
+		JPanel principal = new JPanel(new BorderLayout());
+		JPanel botoesPrincipais = new JPanel();
+		JTable emprestimos = new JTable();
+		JPanel cimaPanel = new JPanel(new BorderLayout());
+		JPanel infoPanelWithButtons = new JPanel(new BorderLayout());
+		JPanel infoPanel = new JPanel(new GridLayout(10, 2));
+		JPanel rightPanel = new JPanel(new BorderLayout());
+		JPanel imagePanel = new JPanel(new BorderLayout());
+		JPanel botoesSecund = new JPanel(new BorderLayout());
+		botoesPrincipais.setLayout(new MigLayout("", "[79px][129px][45px][][][][][][][][][][150px][][][][][]", "[27px]"));
+		botoesSecund.setLayout(new MigLayout("", "[79px][100px][][240px][][][][][]", "[27px]"));
+		
+		JButton apagar = new JButton("Apagar");
+		botoesPrincipais.add(apagar, "cell 0 0,alignx left,aligny center");
+		apagar.setBackground(MaterialColors.RED_400);
+		personalizarBotao(apagar);
+		JButton emprestar = new JButton("Realizar Empréstimo");
+		emprestar.setBackground(MaterialColors.LIGHT_GREEN_500);
+		personalizarBotao(emprestar);
+		botoesPrincipais.add(emprestar, "cell 5 0,alignx left,aligny center");
+		JButton ok = new JButton("Ok");
+		ok.setBackground(MaterialColors.LIGHT_BLUE_200);
+		personalizarBotao(ok);
+		botoesPrincipais.add(ok, "cell 17 0,alignx left,aligny center");	
+		
+		JButton editar = new JButton("Editar");
+		editar.setBackground(MaterialColors.YELLOW_300);
+		personalizarBotao(editar);
+		botoesSecund.add(editar, "cell 0 0,alignx left,aligny center");
+		JButton salvar = new JButton("Salvar");
+		salvar.setBackground(MaterialColors.LIGHT_GREEN_300);
+		personalizarBotao(salvar);
+		botoesSecund.add(salvar, "cell 17 0,alignx left,aligny center");
+		
+		JTextField titulo = new JTextField(l.getNome());
+		titulo.setEditable(false);
+		JTextField autor = new JTextField(l.getAutor());
+		autor.setEditable(false);
+		JTextField editora = new JTextField(l.getEditora());
+		editora.setEditable(false);
+		JTextField classificacao = new JTextField(l.getClassificacao());
+		classificacao.setEditable(false);
+		JTextField local = new JTextField(l.getLocal());
+		local.setEditable(false);
+		JTextField exemp = new JTextField(String.valueOf(l.getNumero_exemplares()));
+		exemp.setEditable(false);
+		JTextField exempDisp = new JTextField(String.valueOf(l.getN_exemp_disponiveis()));
+		exempDisp.setEditable(false);
+		JTextField disp = new JTextField(l.isDisponivel() ? "Sim" : "Não");
+		disp.setEditable(false);
+		JTextField exempEmp = new JTextField(String.valueOf(l.getN_exemp_emprestados()));
+		exempEmp.setEditable(false);
+
+		infoPanel.add(new JLabel("Título: "));
+		infoPanel.add(titulo);
+		infoPanel.add(new JLabel("Autor: "));
+		infoPanel.add(autor);
+		infoPanel.add(new JLabel("Editora: "));
+		infoPanel.add(editora);
+		infoPanel.add(new JLabel("Classificação: "));
+		infoPanel.add(classificacao);
+		infoPanel.add(new JLabel("Localização: "));
+		infoPanel.add(local);
+		infoPanel.add(new JLabel("Número de Exemplares: "));
+		infoPanel.add(exemp);
+		infoPanel.add(new JLabel("Número de Exemplares Disponíveis: "));
+		infoPanel.add(exempDisp);
+		infoPanel.add(new JLabel("Disponível? "));
+		infoPanel.add(disp);
+		infoPanel.add(new JLabel("Número de Exemplares emprestados: "));
+		infoPanel.add(exempEmp);
+		
+		infoPanelWithButtons.add(infoPanel, BorderLayout.CENTER);
+		infoPanelWithButtons.add(botoesSecund, BorderLayout.SOUTH);
+		
+		JLabel image = new JLabel("         Sem Imagem         ");
+		image.setHorizontalAlignment(JLabel.CENTER);
+		image.setVerticalAlignment(JLabel.CENTER);
+		image.setSize(177, 236);
+		JButton addImage = new JButton("Alterar imagem");
+		addImage.setBackground(MaterialColors.BLUE_GRAY_500);
+		personalizarBotao(addImage);
+		imagePanel.add(image, BorderLayout.CENTER);
+		imagePanel.add(addImage, BorderLayout.SOUTH);
+
+		rightPanel.add(imagePanel, BorderLayout.CENTER);
+		//rightPanel.add(botoesSecund, BorderLayout.SOUTH);
+		
+		cimaPanel.add(infoPanelWithButtons, BorderLayout.CENTER);
+		cimaPanel.add(rightPanel, BorderLayout.EAST);
+		
+		principal.add(cimaPanel, BorderLayout.CENTER);
+		principal.add(emprestimos, BorderLayout.SOUTH);
+		
+		dial.getContentPane().add(principal, BorderLayout.CENTER);
+		dial.getContentPane().add(botoesPrincipais, BorderLayout.SOUTH);
+		
+		editar.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				titulo.setEditable(true);
+				autor.setEditable(true);
+				editora.setEditable(true);
+				classificacao.setEditable(true);
+				local.setEditable(true);
+				exemp.setEditable(true);	
+				
+			}
+		});
+		
+		salvar.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				titulo.setEditable(false);
+				autor.setEditable(false);
+				editora.setEditable(false);
+				classificacao.setEditable(false);
+				local.setEditable(false);
+				try{
+					Integer.parseInt(exemp.getText());
+				} catch(NumberFormatException e1){
+					exemp.setText(String.valueOf(oldExemplares));
+				}
+				exemp.setEditable(false);
+				
+			}
+		});
+
+		
+		dial.setVisible(true);
+		// TODO Auto-generated method stub
+
 	}
 
 	public void realizarEmprestimo() {
