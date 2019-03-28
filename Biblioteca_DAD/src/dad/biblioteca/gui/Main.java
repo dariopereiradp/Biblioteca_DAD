@@ -5,6 +5,7 @@ import java.io.File;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -14,12 +15,16 @@ import javax.swing.UIManager;
 
 import dad.biblioteca.table.TableModelLivro;
 import dad.recursos.ConexaoLivros;
+import dad.recursos.ConexaoLogin;
 import dad.recursos.ConexaoUser;
+import dad.recursos.CriptografiaAES;
 import dad.recursos.Log;
 import mdlaf.MaterialLookAndFeel;
 
 public class Main {
 
+	public static final String user = "admin";
+	public static final String pass = "dad";
 	public static long inicialTime;
 	private Connection con;
 
@@ -54,7 +59,7 @@ public class Main {
 			} catch (InterruptedException e) {
 				String message = "Ocorreu um erro ao abrir o programa. Tenta novamente!\n" + e.getMessage();
 				JOptionPane.showMessageDialog(null, message, "Erro", JOptionPane.ERROR_MESSAGE,
-						new ImageIcon(getClass().getResource("DAD_S.jpg")));
+						new ImageIcon(getClass().getResource("DAD_SS.jpg")));
 				Log.getInstance().printLog(message);
 			}
 
@@ -65,7 +70,8 @@ public class Main {
 				@Override
 				public void run() {
 					screen.setVisible(false);
-					Inicial.getInstance().open();
+					Login.getInstance().open();
+					//Inicial.getInstance().open();
 					inicialTime = System.currentTimeMillis();
 				}
 			});
@@ -75,7 +81,7 @@ public class Main {
 		} catch (Exception e1) {
 			String message = "Ocorreu um erro ao abrir o programa. Tenta novamente!\n" + e1.getMessage();
 			JOptionPane.showMessageDialog(null, message, "Erro", JOptionPane.ERROR_MESSAGE,
-					new ImageIcon(getClass().getResource("DAD_S.jpg")));
+					new ImageIcon(getClass().getResource("DAD_SS.jpg")));
 			Log.getInstance().printLog(message);
 			System.exit(1);
 			e1.printStackTrace();
@@ -117,6 +123,32 @@ public class Main {
 					}
 				}
 			}
+			
+			File logins = new File(ConexaoLogin.dbFile);
+			if (!logins.exists()) {
+				con = DriverManager
+						.getConnection("jdbc:ucanaccess://" + ConexaoLogin.dbFile + ";newdatabaseversion=V2003");
+				DatabaseMetaData dmd = con.getMetaData();
+				try (ResultSet rs = dmd.getTables(null, null, "Logins", new String[] { "TABLE" })) {
+					try (Statement s = con.createStatement()) {
+						s.executeUpdate("CREATE TABLE Logins (ID int NOT NULL,Nome varchar(255) NOT NULL,"
+								+ "Pass varchar(50) NOT NULL, Num_acessos int, CONSTRAINT PK_Logins PRIMARY KEY (Nome));");
+						Log.getInstance().printLog("Base de dados logins.mbd criada com sucesso");
+					}
+					CriptografiaAES.setKey(pass);
+					CriptografiaAES.encrypt(pass);
+					PreparedStatement pst = con.prepareStatement("insert into logins(ID,Nome,Pass,Num_acessos) values (?,?,?,?)");
+					pst.setInt(1, 0);
+					pst.setString(2, user);
+					pst.setString(3, CriptografiaAES.getEncryptedString());
+					pst.setInt(4, 0);
+					pst.execute();
+					Log.getInstance().printLog("Utilizador admin criado com sucesso!");
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
 
 			File users = new File(ConexaoUser.dbFile);
 			if (!users.exists()) {
@@ -136,7 +168,7 @@ public class Main {
 			String message = "Ocorreu um erro ao criar a base de dados... Tenta novamente!\n" + e.getMessage() + "\n"
 					+ this.getClass();
 			JOptionPane.showMessageDialog(null, message, "Erro", JOptionPane.ERROR_MESSAGE,
-					new ImageIcon(getClass().getResource("DAD_S.jpg")));
+					new ImageIcon(getClass().getResource("DAD_SS.jpg")));
 			Log.getInstance().printLog(message);
 			e.printStackTrace();
 		}

@@ -10,6 +10,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import javax.swing.Timer;
 import java.util.regex.Pattern;
 
 import javax.swing.JFrame;
@@ -35,8 +36,11 @@ import dad.recursos.DefaultCellRenderer;
 import dad.recursos.Log;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.ImageIcon;
 import javax.swing.JCheckBox;
+import javax.swing.JDialog;
 
 public class DataGui extends JFrame {
 
@@ -44,13 +48,14 @@ public class DataGui extends JFrame {
 	 * 
 	 */
 	private static final long serialVersionUID = 5748160687318648477L;
+	private static final int DELAY = 2200;
 	private static DataGui INSTANCE;
 	private JTabbedPane tabbedPane;
 	private JTable media, outros, users;
 	private JMenu mnArquivo;
 	private JTable emprestimos;
 	private JMenu mnAjuda;
-	private JMenuItem menuSobre, menuEstatisticas, menuVoltar, menuAnular, menuRefazer, menuImportar, menuBackup,
+	private JMenuItem menuSobre, menuEstatisticas, menuSair, menuAnular, menuRefazer, menuImportar, menuBackup,
 			menuOrdenar;
 	private JMenu mnEditar;
 	private JTextField pesquisa;
@@ -105,7 +110,7 @@ public class DataGui extends JFrame {
 		checkClassificacao = new JCheckBox("Classifica\u00E7\u00E3o");
 		checkClassificacao.setSelected(true);
 		filtrosPanel.add(checkClassificacao);
-		
+
 		checkLocal = new JCheckBox("Localiza\u00E7\u00E3o");
 		checkLocal.setSelected(true);
 		filtrosPanel.add(checkLocal);
@@ -142,12 +147,12 @@ public class DataGui extends JFrame {
 		menuBackup = new JMenuItem("Cópia de segurança");
 		mnArquivo.add(menuBackup);
 
-		menuVoltar = new JMenuItem("Voltar");
-		menuVoltar.addActionListener(new VoltarAction());
-		mnArquivo.add(menuVoltar);
-
 		menuConfig = new JMenuItem("Configura\u00E7\u00F5es");
 		mnArquivo.add(menuConfig);
+
+		menuSair = new JMenuItem("Sair");
+		menuSair.addActionListener(new SairAction());
+		mnArquivo.add(menuSair);
 
 		mnEditar = new JMenu("Editar");
 		menuBar.add(mnEditar);
@@ -244,6 +249,19 @@ public class DataGui extends JFrame {
 
 	public void open() {
 		setVisible(true);
+		JOptionPane pane = new JOptionPane("Bem vindo " + Login.NOME + "!", JOptionPane.INFORMATION_MESSAGE,
+				JOptionPane.DEFAULT_OPTION, new ImageIcon(getClass().getResource("DAD_SS.jpg")), new Object[] {}, null);
+		final JDialog dialog = pane.createDialog("Boas vindas");
+		dialog.setModal(true);
+		dialog.setIconImage(Toolkit.getDefaultToolkit().getImage((getClass().getResource("DAD.jpg"))));
+		Timer timer = new Timer(DELAY, new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				dialog.dispose();
+			}
+		});
+		timer.setRepeats(false);
+		timer.start();
+		dialog.setVisible(true);
 	}
 
 	public void visibleBoxes() {
@@ -295,14 +313,14 @@ public class DataGui extends JFrame {
 			count++;
 		if (checkClassificacao.isSelected())
 			count++;
-		if(checkLocal.isSelected())
+		if (checkLocal.isSelected())
 			count++;
 		return count;
 	}
 
 	public int[] checkBoxEnabled() {
 		int count = 0;
-		int[] columns = new int[num_checkboxEnabled()+3];
+		int[] columns = new int[num_checkboxEnabled() + 3];
 		if (checkID.isSelected())
 			columns[count++] = 0;
 		if (checkTitulo.isSelected())
@@ -375,15 +393,18 @@ public class DataGui extends JFrame {
 		else
 			tcl.getColumn(8).setCellRenderer(new DefaultCellRenderer());
 
-
 	}
 
-	private class VoltarAction implements ActionListener {
+	private class SairAction implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			setVisible(false);
-			Inicial.getInstance().open();
+			// Inicial.getInstance().open();
+			long time = System.currentTimeMillis() - Login.inicialTime;
+			Log.getInstance().printLog("Usuário " + Login.NOME + " saiu!\nTempo de Uso: "
+					+ DurationFormatUtils.formatDuration(time, "HH'h'mm'm'ss's"));
+			Login.getInstance().open();
 		}
 	}
 
@@ -391,50 +412,4 @@ public class DataGui extends JFrame {
 		return pesquisa;
 	}
 
-	// public TableCellRenderer getRenderer() {
-	// return new DefaultTableCellRenderer() {
-	// JTextField f = new JTextField();
-	//
-	// // @Override
-	// // public Component getTableCellRendererComponent(JTable arg0,
-	// // Object arg1, boolean arg2, boolean arg3, int arg4, int arg5) {
-	// // if(arg1 != null){
-	// // f.setText(arg1.toString());
-	// // String string = arg1.toString();
-	// // if(string.contains(pesquisa.getText().toLowerCase())){
-	// // int indexOf = string.indexOf(pesquisa.getText().toLowerCase());
-	// // try {
-	// //
-	// f.getHighlighter().addHighlight(indexOf,indexOf+pesquisa.getText().toLowerCase().length(),new
-	// //
-	// javax.swing.text.DefaultHighlighter.DefaultHighlightPainter(Color.RED));
-	// // } catch (BadLocationException e) {
-	// // e.printStackTrace();
-	// // }
-	// // }
-	// // } else {
-	// // f.setText("");
-	// // f.getHighlighter().removeAllHighlights();
-	// // }
-	// // return f;
-	// // }
-	// @Override
-	// public Component getTableCellRendererComponent(JTable table, Object
-	// value, boolean selected,
-	// boolean hasFocus, int row, int column) {
-	// DefaultTableCellRenderer d = new DefaultTableCellRenderer();
-	// Component c = this.getTableCellRendererComponent(table, value, selected,
-	// hasFocus, row, column);
-	// JLabel original = (JLabel) c;
-	// LabelHighlighted label = new LabelHighlighted();
-	// label.setFont(original.getFont());
-	// label.setText(original.getText());
-	// label.setBackground(original.getBackground());
-	// label.setForeground(original.getForeground());
-	// label.setHorizontalTextPosition(original.getHorizontalTextPosition());
-	// label.highlightText(pesquisa.getText().toLowerCase());
-	// return label;
-	// }
-	// };
-	// }
 }
