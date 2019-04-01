@@ -29,14 +29,14 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.ActionEvent;
 
-public class Inicial {
+public class Inicial_REMOVER {
 
-	private static Inicial INSTANCE;
+	private static Inicial_REMOVER INSTANCE;
 	private JFrame frame;
 	// private Object[] options = { "Sim", "Não", "Cancelar" };
 	private Object[] itemOptions = { "Livro", "Multimédia", "Jornal", "Revista" };
 
-	private Inicial() {
+	private Inicial_REMOVER() {
 		INSTANCE = this;
 		frame = new JFrame("Biblioteca - Dádiva de Deus");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -64,7 +64,7 @@ public class Inicial {
 		frame.setContentPane(panel);
 
 		JLabel titulo = new JLabel("BIBLIOTECA D\u00C1DIVA DE DEUS");
-		titulo.setIcon(new ImageIcon(Inicial.class.getResource("DAD_T.png")));
+		titulo.setIcon(new ImageIcon(Inicial_REMOVER.class.getResource("DAD_T.png")));
 		titulo.setHorizontalAlignment(SwingConstants.CENTER);
 		titulo.setBackground(Color.LIGHT_GRAY);
 		titulo.setForeground(Color.WHITE);
@@ -144,9 +144,9 @@ public class Inicial {
 		return frame;
 	}
 
-	public static Inicial getInstance() {
+	public static Inicial_REMOVER getInstance() {
 		if (INSTANCE == null) {
-			new Inicial();
+			new Inicial_REMOVER();
 		}
 		return INSTANCE;
 	}

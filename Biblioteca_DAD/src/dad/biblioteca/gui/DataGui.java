@@ -400,7 +400,6 @@ public class DataGui extends JFrame {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			setVisible(false);
-			// Inicial.getInstance().open();
 			long time = System.currentTimeMillis() - Login.inicialTime;
 			Log.getInstance().printLog("Usuário " + Login.NOME + " saiu!\nTempo de Uso: "
 					+ DurationFormatUtils.formatDuration(time, "HH'h'mm'm'ss's"));

@@ -39,12 +39,16 @@ import javax.swing.UIManager;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 import javax.swing.table.TableCellRenderer;
+
+import org.apache.commons.lang.time.DurationFormatUtils;
+
 import dad.biblioteca.Livro;
 import dad.biblioteca.gui.DataGui;
-import dad.biblioteca.gui.Inicial;
+import dad.biblioteca.gui.Login;
 import dad.recursos.CellRenderer;
 import dad.recursos.CellRendererBollean;
 import dad.recursos.CellRendererInt;
+import dad.recursos.Log;
 import mdlaf.animation.MaterialUIMovement;
 import mdlaf.utils.MaterialColors;
 import net.miginfocom.swing.MigLayout;
@@ -347,12 +351,12 @@ public class LivroPanel extends JPanel {
 
 	public void inicializarBotoes() {
 		pInferior.add(panel2, BorderLayout.WEST);
-		JButton bVoltar = new JButton("VOLTAR");
-		bVoltar.setBackground(new Color(247, 247, 255));
-		bVoltar.setForeground(MaterialColors.LIGHT_BLUE_400);
-		personalizarBotao(bVoltar);
-		bVoltar.addActionListener(new VoltarAction());
-		panel2.add(bVoltar);
+		JButton bSair = new JButton("SAIR");
+		bSair.setBackground(new Color(247, 247, 255));
+		bSair.setForeground(MaterialColors.LIGHT_BLUE_400);
+		personalizarBotao(bSair);
+		bSair.addActionListener(new SairAction());
+		panel2.add(bSair);
 
 		JPanel panel4 = new JPanel(new GridLayout(2, 1));
 		pInferior.add(panel4, BorderLayout.EAST);
@@ -687,12 +691,15 @@ public class LivroPanel extends JPanel {
 		return jtfTotal;
 	}
 
-	private class VoltarAction implements ActionListener {
+	private class SairAction implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			DataGui.getInstance().setVisible(false);
-			Inicial.getInstance().open();
+			long time = System.currentTimeMillis() - Login.inicialTime;
+			Log.getInstance().printLog("Usuário " + Login.NOME + " saiu!\nTempo de Uso: "
+					+ DurationFormatUtils.formatDuration(time, "HH'h'mm'm'ss's"));
+			Login.getInstance().open();
 		}
 	}
 
