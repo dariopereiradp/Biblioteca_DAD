@@ -632,7 +632,6 @@ public class LivroPanel extends JPanel {
 		imagePanel.add(addImage, BorderLayout.SOUTH);
 
 		rightPanel.add(imagePanel, BorderLayout.CENTER);
-		//rightPanel.add(botoesSecund, BorderLayout.SOUTH);
 		
 		cimaPanel.add(infoPanelWithButtons, BorderLayout.CENTER);
 		cimaPanel.add(rightPanel, BorderLayout.EAST);
@@ -672,7 +671,6 @@ public class LivroPanel extends JPanel {
 					exemp.setText(String.valueOf(oldExemplares));
 				}
 				exemp.setEditable(false);
-				
 			}
 		});
 

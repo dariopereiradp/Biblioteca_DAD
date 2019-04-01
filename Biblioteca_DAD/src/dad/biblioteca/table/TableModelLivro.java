@@ -209,7 +209,7 @@ public class TableModelLivro extends AbstractTableModel {
 										new RemoverLivro(rows)));
 							}
 						} else
-							undoManager.execute(new AtualizaLivro("Título", livro, valor));
+							undoManager.execute(new AtualizaLivro(this,"Título", livro, valor));
 					}
 					break;
 				case 2:
@@ -222,7 +222,7 @@ public class TableModelLivro extends AbstractTableModel {
 										new RemoverLivro(rows)));
 							}
 						} else
-							undoManager.execute(new AtualizaLivro("Autor", livro, valor));
+							undoManager.execute(new AtualizaLivro(this,"Autor", livro, valor));
 					}
 					break;
 				case 3:
@@ -235,7 +235,7 @@ public class TableModelLivro extends AbstractTableModel {
 										new RemoverLivro(rows)));
 							}
 						} else
-							undoManager.execute(new AtualizaLivro("Editora", livro, valor));
+							undoManager.execute(new AtualizaLivro(this,"Editora", livro, valor));
 					}
 					break;
 				case 4:
@@ -248,14 +248,14 @@ public class TableModelLivro extends AbstractTableModel {
 										new IncLivro(l), new RemoverLivro(rows)));
 							}
 						} else
-							undoManager.execute(new AtualizaLivro("Classificação", livro, valor));
+							undoManager.execute(new AtualizaLivro(this,"Classificação", livro, valor));
 					}
 					break;
 				case 5:
 					undoManager.execute(new AtualizaExemplares(disponivel, livro, valor));
 					break;
 				case 8:
-					undoManager.execute(new AtualizaLivro("Local", livro, valor));
+					undoManager.execute(new AtualizaLivro(this,"Local", livro, valor));
 					break;
 				default:
 					livros.get(rowIndex);
@@ -264,6 +264,7 @@ public class TableModelLivro extends AbstractTableModel {
 				fireTableDataChanged();
 			}
 		} catch (Exception e) {
+			e.printStackTrace();
 			Log.getInstance().printLog("Erro no setValue()\n" + e.getMessage() + "\n" + getClass());
 		}
 	}
@@ -527,113 +528,7 @@ public class TableModelLivro extends AbstractTableModel {
 		}
 	}
 
-	private class AtualizaLivro implements Command {
-
-		private Livro livro;
-		private String coluna;
-		private Object valor;
-		private String old;
-
-		public AtualizaLivro(String coluna, Livro livro, Object valor) {
-			this.coluna = coluna;
-			this.livro = livro;
-			this.valor = valor;
-			switch (coluna) {
-			case "Título":
-				old = livro.getNome();
-				break;
-			case "Autor":
-				old = livro.getAutor();
-				break;
-			case "Editora":
-				old = livro.getEditora();
-				break;
-			case "Classificação":
-				old = livro.getClassificacao();
-				break;
-			case "Local":
-				old = livro.getLocal();
-			default:
-				break;
-			}
-		}
-
-		@Override
-		public void execute() {
-			switch (coluna) {
-			case "Título":
-				livro.setNome((String) valor);
-				break;
-			case "Autor":
-				livro.setAutor((String) valor);
-				break;
-			case "Editora":
-				livro.setEditora((String) valor);
-				break;
-			case "Classificação":
-				livro.setClassificacao((String) valor);
-				break;
-			case "Local":
-				livro.setLocal((String) valor);
-				break;
-			default:
-				break;
-			}
-			try {
-				pst = con.prepareStatement("update livros set " + coluna + "=? where ID=" + livro.getId());
-				pst.setString(1, (String) valor);
-				pst.execute();
-			} catch (SQLException e) {
-				Log.getInstance().printLog("Erro ao atualizar " + coluna);
-				e.printStackTrace();
-			}
-
-		}
-
-		@Override
-		public void undo() {
-			try {
-				pst = con.prepareStatement("update livros set " + coluna + "=? where ID=" + livro.getId());
-				pst.setString(1, old);
-				pst.execute();
-				switch (coluna) {
-				case "Título":
-					livro.setNome(old);
-					break;
-				case "Autor":
-					livro.setAutor(old);
-					break;
-				case "Editora":
-					livro.setEditora(old);
-					break;
-				case "Classificação":
-					livro.setClassificacao(old);
-					break;
-				case "Local":
-					livro.setLocal(old);
-					break;
-				default:
-					break;
-				}
-				fireTableDataChanged();
-			} catch (SQLException e) {
-				Log.getInstance().printLog("Erro ao anular a ação!\n" + e.getMessage());
-				e.printStackTrace();
-			}
-
-		}
-
-		@Override
-		public void redo() {
-			execute();
-			fireTableDataChanged();
-		}
-
-		@Override
-		public String getName() {
-			return "Editar " + coluna;
-		}
-	}
+	
 
 	private class AtualizaExemplares implements Command {
 
