@@ -21,12 +21,13 @@ public class Log {
 		INSTANCE = this;
 		String logFormatName = "log_"
 				+ LocalDateTime.now().format(DateTimeFormatter.ofPattern("ddMMMyyyy-HH'h'mm'm'ss's'"));
+		String month_year = LocalDateTime.now().format(DateTimeFormatter.ofPattern("MMMyyyy")).toUpperCase();
 		logger = Logger.getLogger(logFormatName);
 		try {
-			File dir = new File(System.getenv("APPDATA") + "/BibliotecaDAD/Logs/");
+			File dir = new File(System.getenv("APPDATA") + "/BibliotecaDAD/Logs/" + month_year + "/");
 			if (!dir.exists())
 				dir.mkdirs();
-			fh = new FileHandler(System.getenv("APPDATA") + "/BibliotecaDAD/Logs/" + logFormatName + ".log");
+			fh = new FileHandler(dir.getAbsolutePath() + "/" + logFormatName + ".log");
 			logger.addHandler(fh);
 			logger.setUseParentHandlers(true);
 			SimpleFormatter formatter = new SimpleFormatter();

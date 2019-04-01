@@ -71,7 +71,6 @@ public class Main {
 				public void run() {
 					screen.setVisible(false);
 					Login.getInstance().open();
-					//Inicial.getInstance().open();
 					inicialTime = System.currentTimeMillis();
 				}
 			});
@@ -131,17 +130,16 @@ public class Main {
 				DatabaseMetaData dmd = con.getMetaData();
 				try (ResultSet rs = dmd.getTables(null, null, "Logins", new String[] { "TABLE" })) {
 					try (Statement s = con.createStatement()) {
-						s.executeUpdate("CREATE TABLE Logins (ID int NOT NULL,Nome varchar(255) NOT NULL,"
+						s.executeUpdate("CREATE TABLE Logins (Nome varchar(255) NOT NULL,"
 								+ "Pass varchar(50) NOT NULL, Num_acessos int, CONSTRAINT PK_Logins PRIMARY KEY (Nome));");
 						Log.getInstance().printLog("Base de dados logins.mbd criada com sucesso");
 					}
 					CriptografiaAES.setKey(pass);
 					CriptografiaAES.encrypt(pass);
-					PreparedStatement pst = con.prepareStatement("insert into logins(ID,Nome,Pass,Num_acessos) values (?,?,?,?)");
-					pst.setInt(1, 0);
-					pst.setString(2, user);
-					pst.setString(3, CriptografiaAES.getEncryptedString());
-					pst.setInt(4, 0);
+					PreparedStatement pst = con.prepareStatement("insert into logins(Nome,Pass,Num_acessos) values (?,?,?)");
+					pst.setString(1, user);
+					pst.setString(2, CriptografiaAES.getEncryptedString());
+					pst.setInt(3, 0);
 					pst.execute();
 					Log.getInstance().printLog("Utilizador admin criado com sucesso!");
 				} catch (Exception e) {

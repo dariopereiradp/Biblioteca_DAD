@@ -1,8 +1,10 @@
-package dad.biblioteca.gui;
+package dad.recursos;
 
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
@@ -16,10 +18,11 @@ import javax.swing.JFrame;
 
 import org.apache.commons.lang.time.DurationFormatUtils;
 
+import dad.biblioteca.gui.Login;
+import dad.biblioteca.gui.Main;
 import dad.recursos.ConexaoLogin;
 import dad.recursos.CriptografiaAES;
 import dad.recursos.Log;
-import dad.recursos.RegistoLogin;
 import mdlaf.animation.MaterialUIMovement;
 import mdlaf.utils.MaterialColors;
 
@@ -32,8 +35,10 @@ import javax.swing.ImageIcon;
 import javax.swing.JTextField;
 import javax.swing.JPasswordField;
 import javax.swing.JButton;
+import java.awt.Color;
+import javax.swing.JCheckBox;
 
-public class Login {
+public class RegistoLogin {
 
 	private JFrame frame;
 	private JTextField user;
@@ -41,16 +46,15 @@ public class Login {
 	private Connection con;
 	private PreparedStatement pst;
 	private ResultSet rs;
-	public static String NOME;
-	public static long inicialTime;
-	private static Login INSTANCE;
+	private boolean login;
+	private static RegistoLogin INSTANCE;
 
-	private Login() {
+	private RegistoLogin() {
 		INSTANCE = this;
-		frame = new JFrame("Biblioteca Dádiva de Deus - Login");
+		frame = new JFrame("Biblioteca Dádiva de Deus - Registo");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setIconImage(Toolkit.getDefaultToolkit().getImage((getClass().getResource("DAD.jpg"))));
-		frame.setBounds(100, 100, 400, 300);
+		frame.setBounds(100, 100, 500, 300);
 		frame.setLocationRelativeTo(null);
 		frame.setResizable(false);
 		frame.getContentPane().setLayout(null);
@@ -68,46 +72,72 @@ public class Login {
 		JLabel titulo = new JLabel("BIBLIOTECA D\u00C1DIVA DE DEUS");
 		titulo.setFont(new Font("Roboto Black", Font.PLAIN, 20));
 		titulo.setHorizontalAlignment(SwingConstants.CENTER);
-		titulo.setBounds(10, 93, 380, 39);
+		titulo.setBounds(10, 93, 480, 39);
 		frame.getContentPane().add(titulo);
 
 		JLabel image = new JLabel("");
 		image.setHorizontalAlignment(SwingConstants.CENTER);
-		image.setIcon(new ImageIcon(Login.class.getResource("/dad/biblioteca/gui/DAD_T.png")));
-		image.setBounds(100, 11, 200, 87);
+		image.setIcon(new ImageIcon(RegistoLogin.class.getResource("/dad/biblioteca/gui/DAD_T.png")));
+		image.setBounds(150, 11, 200, 87);
 		frame.getContentPane().add(image);
 
 		user = new JTextField();
 		user.setFont(new Font("Roboto", Font.PLAIN, 13));
-		user.setBounds(85, 163, 295, 20);
+		user.setBounds(85, 163, 399, 20);
 		frame.getContentPane().add(user);
 		user.setColumns(10);
 
 		pass = new JPasswordField();
-		pass.setBounds(85, 198, 295, 20);
+		pass.setFont(new Font("Roboto", Font.PLAIN, 13));
+		pass.setBounds(85, 198, 399, 20);
 		frame.getContentPane().add(pass);
 
-		JButton entrar = new JButton("ENTRAR");
-		entrar.setFont(new Font("Roboto", Font.BOLD, 12));
-		entrar.setBounds(155, 237, 90, 23);
-		entrar.setBackground(MaterialColors.LIGHT_BLUE_600);
-		MaterialUIMovement.add(entrar, MaterialColors.GRAY_300, 5, 1000 / 30);
-		frame.getContentPane().add(entrar);
-		entrar.addActionListener(new ActionListener() {
+		JButton registar = new JButton("REGISTRAR");
+		registar.setFont(new Font("Roboto", Font.BOLD, 12));
+		registar.setBounds(200, 245, 100, 23);
+		registar.setBackground(MaterialColors.LIGHT_BLUE_600);
+		MaterialUIMovement.add(registar, MaterialColors.GRAY_300, 5, 1000 / 30);
+		frame.getContentPane().add(registar);
+		registar.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				login();
+				registo();
 
 			}
 		});
 
 		JLabel texto = new JLabel(
-				"Escreva o seu nome de utilizador e senha e clique no bot\u00E3o abaixo para entrar no programa");
+				"Escreva o nome de utilizador e a senha que vai ficar associada e clique no bot\u00E3o abaixo para fazer o registro");
 		texto.setHorizontalAlignment(SwingConstants.CENTER);
-		texto.setFont(new Font("Roboto", Font.PLAIN, 9));
-		texto.setBounds(5, 126, 390, 20);
+		texto.setFont(new Font("Roboto", Font.PLAIN, 10));
+		texto.setBounds(5, 126, 490, 20);
 		frame.getContentPane().add(texto);
+
+		JLabel warning = new JLabel(
+				"ATEN\u00C7\u00C3O: N\u00E3o esque\u00E7a da senha! \u00C9 imposs\u00EDvel recuper\u00E1-la!");
+		warning.setFont(new Font("Roboto", Font.PLAIN, 12));
+		warning.setForeground(Color.RED);
+		warning.setHorizontalAlignment(SwingConstants.CENTER);
+		warning.setBounds(85, 225, 399, 14);
+		frame.getContentPane().add(warning);
+
+		JCheckBox showPass = new JCheckBox("Mostrar senha");
+		pass.setEchoChar('*');
+		showPass.setFont(new Font("Roboto", Font.PLAIN, 10));
+		showPass.setBounds(10, 241, 110, 23);
+		frame.getContentPane().add(showPass);
+		showPass.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent e) {
+				if (e.getStateChange() == ItemEvent.SELECTED) {
+					pass.setEchoChar((char) 0);
+
+				} else {
+					pass.setEchoChar('*');
+				}
+			}
+		});
+
 		frame.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
 				long time = System.currentTimeMillis() - Main.inicialTime;
@@ -122,7 +152,7 @@ public class Login {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				if (e.getKeyCode() == KeyEvent.VK_ENTER)
-					login();
+					registo();
 			}
 
 		});
@@ -132,7 +162,7 @@ public class Login {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				if (e.getKeyCode() == KeyEvent.VK_ENTER)
-					login();
+					registo();
 			}
 
 		});
@@ -142,24 +172,24 @@ public class Login {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				if (e.getKeyCode() == KeyEvent.VK_ENTER)
-					login();
+					registo();
 			}
 
 		});
 	}
 
-	public static Login getInstance() {
+	public static RegistoLogin getInstance() {
 		if (INSTANCE == null) {
-			new Login();
+			new RegistoLogin();
 		}
 		return INSTANCE;
 	}
 
-	public void login() {
+	public void registo() {
 		String username = user.getText();
 		String password = String.valueOf(pass.getPassword());
 		if (username.trim().equals("") || password.trim().equals("")) {
-			JOptionPane.showMessageDialog(frame, "Preencha os campos de login!", "ERRO", JOptionPane.ERROR_MESSAGE,
+			JOptionPane.showMessageDialog(frame, "Preencha os campos de registo", "ERRO", JOptionPane.ERROR_MESSAGE,
 					new ImageIcon(getClass().getResource("DAD_SS.jpg")));
 		} else {
 			con = ConexaoLogin.getConnection();
@@ -168,13 +198,13 @@ public class Login {
 				pst.setString(1, username);
 				rs = pst.executeQuery();
 				if (!rs.next()) {
-					JOptionPane.showMessageDialog(frame, "O usuário não existe!", "ERRO", JOptionPane.ERROR_MESSAGE,
-							new ImageIcon(getClass().getResource("DAD_SS.jpg")));
+					inserir(username, password);
 				} else
-					checkPassword(username, password);
+					JOptionPane.showMessageDialog(frame, "O usuário '" + username + "' já existe!", "ERRO",
+							JOptionPane.ERROR_MESSAGE, new ImageIcon(getClass().getResource("DAD_SS.jpg")));
 			} catch (SQLException e) {
 				e.printStackTrace();
-				Log.getInstance().printLog("Login - " + e.getMessage());
+				Log.getInstance().printLog("RegistoLogin - " + e.getMessage());
 			} finally {
 				try {
 					rs.close();
@@ -182,81 +212,41 @@ public class Login {
 					con.close();
 				} catch (SQLException e) {
 					e.printStackTrace();
-					Log.getInstance().printLog("Login - " + e.getMessage());
+					Log.getInstance().printLog("RegistoLogin - " + e.getMessage());
 				}
 			}
 		}
 
 	}
 
-	private void checkPassword(String username, String password) {
+	private void inserir(String username, String password) {
 		try {
 			CriptografiaAES.setKey(password);
 			CriptografiaAES.encrypt(password);
 			password = CriptografiaAES.getEncryptedString();
 
 			con = ConexaoLogin.getConnection();
-			pst = con.prepareStatement("select * from logins where nome = ? and pass = ?");
+			pst = con.prepareStatement("insert into logins(Nome,Pass,Num_acessos) values (?,?,?)");
 			pst.setString(1, username);
 			pst.setString(2, password);
-			rs = pst.executeQuery();
-			if (!rs.next()) {
-				JOptionPane.showMessageDialog(frame, "Senha errada!", "ERRO", JOptionPane.ERROR_MESSAGE,
-						new ImageIcon(getClass().getResource("DAD_SS.jpg")));
-			} else {
-				Log.getInstance().printLog("Usuário: " + username + " - Conectado com sucesso!");
-				pst = con.prepareStatement("update logins set Num_acessos = Num_acessos + 1 where nome = ?");
-				pst.setString(1, username);
-				pst.execute();
-				NOME = username;
-				inicialTime = System.currentTimeMillis();
-				frame.setVisible(false);
-				DataGui.getInstance().open();
-			}
+			pst.setInt(3, 0);
+			pst.execute();
+			JOptionPane.showMessageDialog(frame, "O usuário '" + username + "' foi criado com sucesso!",
+					"USUÁRIO CRIADO", JOptionPane.INFORMATION_MESSAGE,
+					new ImageIcon(getClass().getResource("DAD_SS.jpg")));
+			Log.getInstance().printLog("O usuário '" + username + "' foi criado com sucesso!");
+			if (login)
+				Login.getInstance().openDirect();
+			frame.dispose();
 		} catch (Exception e) {
 			e.printStackTrace();
-			Log.getInstance().printLog("Login - " + e.getMessage());
+			Log.getInstance().printLog("RegistoLogin - " + e.getMessage());
 		}
 
 	}
 
-	public boolean registo() {
-		con = ConexaoLogin.getConnection();
-		try {
-			pst = con.prepareStatement("select count(*) from logins");
-			rs = pst.executeQuery();
-			rs.next();
-			if (rs.getInt(1) == 1) {
-				return true;
-			} else
-				return false;
-		} catch (SQLException e) {
-			e.printStackTrace();
-			Log.getInstance().printLog("Login - " + e.getMessage());
-			return false;
-		} finally {
-			try {
-				rs.close();
-				pst.close();
-				con.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-				Log.getInstance().printLog("Login - " + e.getMessage());
-			}
-		}
-	}
-
-	public void open() {
-		if (registo())
-			RegistoLogin.getInstance().open(true);
-		else {
-			frame.setVisible(true);
-			user.setText("");
-			pass.setText("");
-		}
-	}
-
-	public void openDirect() {
+	public void open(boolean login) {
+		this.login = login;
 		frame.setVisible(true);
 		user.setText("");
 		pass.setText("");
