@@ -1,9 +1,17 @@
 package dad.biblioteca;
 
-import java.awt.Image;
+import java.io.IOException;
+import javax.swing.ImageIcon;
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import dad.biblioteca.gui.DataGui;
+import dad.recursos.ImageCompression;
+import dad.recursos.Log;
 
 public class Item {
 
+	public static final String imgPath = System.getenv("APPDATA") + "/BibliotecaDAD/Databases/Imagens/";
 	public static int countID = 0;
 	private int id;
 	private String nome;
@@ -13,7 +21,7 @@ public class Item {
 	private int numero_exemplares;
 	private int n_exemp_disponiveis;
 	private int n_exemp_emprestados;
-	private Image img;
+	private ImageIcon img;
 
 	public Item(String nome) {
 		this.nome = nome;
@@ -26,7 +34,7 @@ public class Item {
 		n_exemp_emprestados = 0;
 	}
 
-	public Item(String nome, String classificacao, String local, Image img) {
+	public Item(String nome, String classificacao, String local, ImageIcon img) {
 		this.nome = nome;
 		if (!local.trim().equals(""))
 			this.local = local;
@@ -168,12 +176,30 @@ public class Item {
 		this.classificacao = classificacao;
 	}
 
-	public Image getImg() {
+	public ImageIcon getImg() {
 		return img;
 	}
 
-	public void setImg(Image img) {
+	public void setImg(ImageIcon img) {
 		this.img = img;
+	}
+
+	public void addImg() {
+		JFileChooser jfc = new JFileChooser(
+				System.getProperty("user.home") + System.getProperty("file.separator") + "Pictures");
+		FileFilter imageFilter = new FileNameExtensionFilter("Ficheiro de Imagem (JPG)", "jpg");
+		jfc.addChoosableFileFilter(imageFilter);
+		jfc.setAcceptAllFileFilterUsed(false);
+		jfc.setMultiSelectionEnabled(false);
+		jfc.setFileSelectionMode(JFileChooser.FILES_ONLY);
+		if (jfc.showOpenDialog(DataGui.getInstance()) == JFileChooser.APPROVE_OPTION) {
+			try {
+				ImageCompression.compress(jfc.getSelectedFile(), this);
+			} catch (IOException e) {
+				e.printStackTrace();
+				Log.getInstance().printLog("Item - addImg: Erro ao copiar a imagem!");
+			}
+		}
 	}
 
 }

@@ -13,6 +13,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 
+import dad.biblioteca.Item;
 import dad.biblioteca.table.TableModelLivro;
 import dad.recursos.ConexaoLivros;
 import dad.recursos.ConexaoLogin;
@@ -122,7 +123,7 @@ public class Main {
 					}
 				}
 			}
-			
+
 			File logins = new File(ConexaoLogin.dbFile);
 			if (!logins.exists()) {
 				con = DriverManager
@@ -136,7 +137,8 @@ public class Main {
 					}
 					CriptografiaAES.setKey(pass);
 					CriptografiaAES.encrypt(pass);
-					PreparedStatement pst = con.prepareStatement("insert into logins(Nome,Pass,Num_acessos) values (?,?,?)");
+					PreparedStatement pst = con
+							.prepareStatement("insert into logins(Nome,Pass,Num_acessos) values (?,?,?)");
 					pst.setString(1, user);
 					pst.setString(2, CriptografiaAES.getEncryptedString());
 					pst.setInt(3, 0);
@@ -161,6 +163,10 @@ public class Main {
 					}
 				}
 			}
+
+			File imgs = new File(Item.imgPath);
+			if (!imgs.exists())
+				imgs.mkdirs();
 
 		} catch (SQLException e) {
 			String message = "Ocorreu um erro ao criar a base de dados... Tenta novamente!\n" + e.getMessage() + "\n"

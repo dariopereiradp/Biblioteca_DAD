@@ -6,6 +6,7 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.Image;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -555,31 +556,35 @@ public class LivroPanel extends JPanel {
 		JPanel rightPanel = new JPanel(new BorderLayout());
 		JPanel imagePanel = new JPanel(new BorderLayout());
 		JPanel botoesSecund = new JPanel(new BorderLayout());
-		botoesPrincipais.setLayout(new MigLayout("", "[79px][129px][45px][][][][][][][][][][150px][][][][][]", "[27px]"));
+		botoesPrincipais
+				.setLayout(new MigLayout("", "[79px][129px][45px][][][][][][][][][][150px][][][][][]", "[27px]"));
 		botoesSecund.setLayout(new MigLayout("", "[79px][100px][][240px][][][][][]", "[27px]"));
-		
+
 		JButton apagar = new JButton("Apagar");
 		botoesPrincipais.add(apagar, "cell 0 0,alignx left,aligny center");
 		apagar.setBackground(MaterialColors.RED_400);
 		personalizarBotao(apagar);
+
 		JButton emprestar = new JButton("Realizar Empréstimo");
 		emprestar.setBackground(MaterialColors.LIGHT_GREEN_500);
 		personalizarBotao(emprestar);
 		botoesPrincipais.add(emprestar, "cell 5 0,alignx left,aligny center");
+
 		JButton ok = new JButton("Ok");
 		ok.setBackground(MaterialColors.LIGHT_BLUE_200);
 		personalizarBotao(ok);
-		botoesPrincipais.add(ok, "cell 17 0,alignx left,aligny center");	
-		
+		botoesPrincipais.add(ok, "cell 17 0,alignx left,aligny center");
+
 		JButton editar = new JButton("Editar");
 		editar.setBackground(MaterialColors.YELLOW_300);
 		personalizarBotao(editar);
 		botoesSecund.add(editar, "cell 0 0,alignx left,aligny center");
+
 		JButton salvar = new JButton("Salvar");
 		salvar.setBackground(MaterialColors.LIGHT_GREEN_300);
 		personalizarBotao(salvar);
 		botoesSecund.add(salvar, "cell 17 0,alignx left,aligny center");
-		
+
 		JTextField titulo = new JTextField(l.getNome());
 		titulo.setEditable(false);
 		JTextField autor = new JTextField(l.getAutor());
@@ -617,14 +622,19 @@ public class LivroPanel extends JPanel {
 		infoPanel.add(disp);
 		infoPanel.add(new JLabel("Número de Exemplares emprestados: "));
 		infoPanel.add(exempEmp);
-		
+
 		infoPanelWithButtons.add(infoPanel, BorderLayout.CENTER);
 		infoPanelWithButtons.add(botoesSecund, BorderLayout.SOUTH);
-		
-		JLabel image = new JLabel("         Sem Imagem         ");
+
+		JLabel image = new JLabel();
 		image.setHorizontalAlignment(JLabel.CENTER);
 		image.setVerticalAlignment(JLabel.CENTER);
 		image.setSize(177, 236);
+		if (l.getImg() != null)
+			image.setIcon(new ImageIcon(l.getImg().getImage().getScaledInstance(177, 236, Image.SCALE_DEFAULT)));
+		else
+			image.setText("         Sem Imagem         ");
+
 		JButton addImage = new JButton("Alterar imagem");
 		addImage.setBackground(MaterialColors.BLUE_GRAY_500);
 		personalizarBotao(addImage);
@@ -632,18 +642,18 @@ public class LivroPanel extends JPanel {
 		imagePanel.add(addImage, BorderLayout.SOUTH);
 
 		rightPanel.add(imagePanel, BorderLayout.CENTER);
-		
+
 		cimaPanel.add(infoPanelWithButtons, BorderLayout.CENTER);
 		cimaPanel.add(rightPanel, BorderLayout.EAST);
-		
+
 		principal.add(cimaPanel, BorderLayout.CENTER);
 		principal.add(emprestimos, BorderLayout.SOUTH);
-		
+
 		dial.getContentPane().add(principal, BorderLayout.CENTER);
 		dial.getContentPane().add(botoesPrincipais, BorderLayout.SOUTH);
-		
+
 		editar.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				titulo.setEditable(true);
@@ -651,13 +661,13 @@ public class LivroPanel extends JPanel {
 				editora.setEditable(true);
 				classificacao.setEditable(true);
 				local.setEditable(true);
-				exemp.setEditable(true);	
-				
+				exemp.setEditable(true);
+
 			}
 		});
-		
+
 		salvar.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				titulo.setEditable(false);
@@ -665,16 +675,30 @@ public class LivroPanel extends JPanel {
 				editora.setEditable(false);
 				classificacao.setEditable(false);
 				local.setEditable(false);
-				try{
+				try {
 					Integer.parseInt(exemp.getText());
-				} catch(NumberFormatException e1){
+				} catch (NumberFormatException e1) {
 					exemp.setText(String.valueOf(oldExemplares));
 				}
 				exemp.setEditable(false);
 			}
 		});
 
-		
+		addImage.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				l.addImg();
+				if (l.getImg() != null){
+					image.setText(null);
+					image.setIcon(
+							new ImageIcon(l.getImg().getImage().getScaledInstance(177, 236, Image.SCALE_DEFAULT)));
+					
+				}
+
+			}
+		});
+
 		dial.setVisible(true);
 		// TODO Auto-generated method stub
 

@@ -12,6 +12,7 @@ import dad.recursos.ConexaoLivros;
 import dad.recursos.Log;
 import dad.recursos.UndoManager;
 
+import java.io.File;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -61,6 +62,9 @@ public class TableModelLivro extends AbstractTableModel {
 					l.setDisponivel(disponivel);
 					l.setN_exemp_disponiveis(Integer.parseInt(disponiveis));
 					l.setId(Integer.parseInt(rs.getString(1)));
+					File f = new File(Item.imgPath + l.getId() + ".jpg");
+					if(f.exists())
+						l.setImg(new ImageIcon(f.getPath()));
 					if (l.getId() > maior)
 						maior = l.getId();
 					livros.add(l);

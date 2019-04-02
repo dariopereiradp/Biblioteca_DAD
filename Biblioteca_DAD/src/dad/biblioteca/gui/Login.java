@@ -78,12 +78,13 @@ public class Login {
 		frame.getContentPane().add(image);
 
 		user = new JTextField();
-		user.setFont(new Font("Roboto", Font.PLAIN, 13));
+		user.setFont(new Font("Roboto", Font.PLAIN, 15));
 		user.setBounds(85, 163, 295, 20);
 		frame.getContentPane().add(user);
 		user.setColumns(10);
 
 		pass = new JPasswordField();
+		pass.setFont(new Font("Roboto", Font.PLAIN, 14));
 		pass.setBounds(85, 198, 295, 20);
 		frame.getContentPane().add(pass);
 
