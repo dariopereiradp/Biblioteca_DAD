@@ -1,10 +1,9 @@
 package dad.biblioteca;
 
+import java.awt.FileDialog;
+import java.io.File;
 import java.io.IOException;
 import javax.swing.ImageIcon;
-import javax.swing.JFileChooser;
-import javax.swing.filechooser.FileFilter;
-import javax.swing.filechooser.FileNameExtensionFilter;
 import dad.biblioteca.gui.DataGui;
 import dad.recursos.ImageCompression;
 import dad.recursos.Log;
@@ -185,21 +184,18 @@ public class Item {
 	}
 
 	public void addImg() {
-		JFileChooser jfc = new JFileChooser(
-				System.getProperty("user.home") + System.getProperty("file.separator") + "Pictures");
-		FileFilter imageFilter = new FileNameExtensionFilter("Ficheiro de Imagem (JPG)", "jpg");
-		jfc.addChoosableFileFilter(imageFilter);
-		jfc.setAcceptAllFileFilterUsed(false);
-		jfc.setMultiSelectionEnabled(false);
-		jfc.setFileSelectionMode(JFileChooser.FILES_ONLY);
-		if (jfc.showOpenDialog(DataGui.getInstance()) == JFileChooser.APPROVE_OPTION) {
+		FileDialog fd = new FileDialog(DataGui.getInstance(), "Escolher uma imagem", FileDialog.LOAD);
+		fd.setDirectory(System.getProperty("user.home") + System.getProperty("file.separator") + "Pictures");
+		fd.setFile("*.jpg");
+		fd.setVisible(true);
+		String filename = fd.getFile();
+		if (filename != null)
 			try {
-				ImageCompression.compress(jfc.getSelectedFile(), this);
+				ImageCompression.compress(new File(fd.getDirectory() + filename), this);
 			} catch (IOException e) {
 				e.printStackTrace();
 				Log.getInstance().printLog("Item - addImg: Erro ao copiar a imagem!");
 			}
-		}
 	}
 
 }

@@ -6,7 +6,6 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
-import java.awt.Image;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -17,12 +16,12 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
+
 import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
@@ -45,6 +44,7 @@ import org.apache.commons.lang.time.DurationFormatUtils;
 
 import dad.biblioteca.Livro;
 import dad.biblioteca.gui.DataGui;
+import dad.biblioteca.gui.LivroDetail;
 import dad.biblioteca.gui.Login;
 import dad.recursos.CellRenderer;
 import dad.recursos.CellRendererBollean;
@@ -52,7 +52,6 @@ import dad.recursos.CellRendererInt;
 import dad.recursos.Log;
 import mdlaf.animation.MaterialUIMovement;
 import mdlaf.utils.MaterialColors;
-import net.miginfocom.swing.MigLayout;
 
 public class LivroPanel extends JPanel {
 
@@ -486,7 +485,7 @@ public class LivroPanel extends JPanel {
 	public void adicionarLivro() {
 		if (titulo.getText().trim().equals(""))
 			JOptionPane.showMessageDialog(this, "Deve inserir pelo menos o título!", "ADICIONAR",
-					JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource("DAD_S.jpg")));
+					JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource("DAD_SS.jpg")));
 		else {
 			if (autor.getText().trim().equals("") && editora.getText().trim().equals("")
 					&& classificacao.getText().trim().equals(""))
@@ -517,7 +516,7 @@ public class LivroPanel extends JPanel {
 		if (rows.length > 0) {
 			int ok = JOptionPane.showConfirmDialog(this, "Tem certeza que quer apagar o(s) livro(s) selecionado(s)?",
 					"APAGAR", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE,
-					new ImageIcon(getClass().getResource("DAD_S.jpg")));
+					new ImageIcon(getClass().getResource("DAD_SS.jpg")));
 			if (ok == JOptionPane.OK_OPTION) {
 				modelLivro.removeLivros(rows);
 			}
@@ -529,7 +528,7 @@ public class LivroPanel extends JPanel {
 		if (rows.length > 0) {
 			int ok = JOptionPane.showConfirmDialog(this, "Tem certeza que quer apagar o exemplar selecionado?",
 					"APAGAR", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE,
-					new ImageIcon(getClass().getResource("DAD_S.jpg")));
+					new ImageIcon(getClass().getResource("DAD_SS.jpg")));
 			if (ok == JOptionPane.OK_OPTION) {
 				modelLivro.removeExemplar(rows);
 			}
@@ -541,167 +540,7 @@ public class LivroPanel extends JPanel {
 	}
 
 	public void abrir(Livro l) {
-		int oldExemplares = l.getN_exemp_disponiveis();
-		System.out.println(l);
-		JDialog dial = new JDialog(DataGui.getInstance(), l.getNome());
-		dial.setSize(new Dimension(700, 500));
-		dial.getContentPane().setLayout(new BorderLayout());
-
-		JPanel principal = new JPanel(new BorderLayout());
-		JPanel botoesPrincipais = new JPanel();
-		JTable emprestimos = new JTable();
-		JPanel cimaPanel = new JPanel(new BorderLayout());
-		JPanel infoPanelWithButtons = new JPanel(new BorderLayout());
-		JPanel infoPanel = new JPanel(new GridLayout(10, 2));
-		JPanel rightPanel = new JPanel(new BorderLayout());
-		JPanel imagePanel = new JPanel(new BorderLayout());
-		JPanel botoesSecund = new JPanel(new BorderLayout());
-		botoesPrincipais
-				.setLayout(new MigLayout("", "[79px][129px][45px][][][][][][][][][][150px][][][][][]", "[27px]"));
-		botoesSecund.setLayout(new MigLayout("", "[79px][100px][][240px][][][][][]", "[27px]"));
-
-		JButton apagar = new JButton("Apagar");
-		botoesPrincipais.add(apagar, "cell 0 0,alignx left,aligny center");
-		apagar.setBackground(MaterialColors.RED_400);
-		personalizarBotao(apagar);
-
-		JButton emprestar = new JButton("Realizar Empréstimo");
-		emprestar.setBackground(MaterialColors.LIGHT_GREEN_500);
-		personalizarBotao(emprestar);
-		botoesPrincipais.add(emprestar, "cell 5 0,alignx left,aligny center");
-
-		JButton ok = new JButton("Ok");
-		ok.setBackground(MaterialColors.LIGHT_BLUE_200);
-		personalizarBotao(ok);
-		botoesPrincipais.add(ok, "cell 17 0,alignx left,aligny center");
-
-		JButton editar = new JButton("Editar");
-		editar.setBackground(MaterialColors.YELLOW_300);
-		personalizarBotao(editar);
-		botoesSecund.add(editar, "cell 0 0,alignx left,aligny center");
-
-		JButton salvar = new JButton("Salvar");
-		salvar.setBackground(MaterialColors.LIGHT_GREEN_300);
-		personalizarBotao(salvar);
-		botoesSecund.add(salvar, "cell 17 0,alignx left,aligny center");
-
-		JTextField titulo = new JTextField(l.getNome());
-		titulo.setEditable(false);
-		JTextField autor = new JTextField(l.getAutor());
-		autor.setEditable(false);
-		JTextField editora = new JTextField(l.getEditora());
-		editora.setEditable(false);
-		JTextField classificacao = new JTextField(l.getClassificacao());
-		classificacao.setEditable(false);
-		JTextField local = new JTextField(l.getLocal());
-		local.setEditable(false);
-		JTextField exemp = new JTextField(String.valueOf(l.getNumero_exemplares()));
-		exemp.setEditable(false);
-		JTextField exempDisp = new JTextField(String.valueOf(l.getN_exemp_disponiveis()));
-		exempDisp.setEditable(false);
-		JTextField disp = new JTextField(l.isDisponivel() ? "Sim" : "Não");
-		disp.setEditable(false);
-		JTextField exempEmp = new JTextField(String.valueOf(l.getN_exemp_emprestados()));
-		exempEmp.setEditable(false);
-
-		infoPanel.add(new JLabel("Título: "));
-		infoPanel.add(titulo);
-		infoPanel.add(new JLabel("Autor: "));
-		infoPanel.add(autor);
-		infoPanel.add(new JLabel("Editora: "));
-		infoPanel.add(editora);
-		infoPanel.add(new JLabel("Classificação: "));
-		infoPanel.add(classificacao);
-		infoPanel.add(new JLabel("Localização: "));
-		infoPanel.add(local);
-		infoPanel.add(new JLabel("Número de Exemplares: "));
-		infoPanel.add(exemp);
-		infoPanel.add(new JLabel("Número de Exemplares Disponíveis: "));
-		infoPanel.add(exempDisp);
-		infoPanel.add(new JLabel("Disponível? "));
-		infoPanel.add(disp);
-		infoPanel.add(new JLabel("Número de Exemplares emprestados: "));
-		infoPanel.add(exempEmp);
-
-		infoPanelWithButtons.add(infoPanel, BorderLayout.CENTER);
-		infoPanelWithButtons.add(botoesSecund, BorderLayout.SOUTH);
-
-		JLabel image = new JLabel();
-		image.setHorizontalAlignment(JLabel.CENTER);
-		image.setVerticalAlignment(JLabel.CENTER);
-		image.setSize(177, 236);
-		if (l.getImg() != null)
-			image.setIcon(new ImageIcon(l.getImg().getImage().getScaledInstance(177, 236, Image.SCALE_DEFAULT)));
-		else
-			image.setText("         Sem Imagem         ");
-
-		JButton addImage = new JButton("Alterar imagem");
-		addImage.setBackground(MaterialColors.BLUE_GRAY_500);
-		personalizarBotao(addImage);
-		imagePanel.add(image, BorderLayout.CENTER);
-		imagePanel.add(addImage, BorderLayout.SOUTH);
-
-		rightPanel.add(imagePanel, BorderLayout.CENTER);
-
-		cimaPanel.add(infoPanelWithButtons, BorderLayout.CENTER);
-		cimaPanel.add(rightPanel, BorderLayout.EAST);
-
-		principal.add(cimaPanel, BorderLayout.CENTER);
-		principal.add(emprestimos, BorderLayout.SOUTH);
-
-		dial.getContentPane().add(principal, BorderLayout.CENTER);
-		dial.getContentPane().add(botoesPrincipais, BorderLayout.SOUTH);
-
-		editar.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				titulo.setEditable(true);
-				autor.setEditable(true);
-				editora.setEditable(true);
-				classificacao.setEditable(true);
-				local.setEditable(true);
-				exemp.setEditable(true);
-
-			}
-		});
-
-		salvar.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				titulo.setEditable(false);
-				autor.setEditable(false);
-				editora.setEditable(false);
-				classificacao.setEditable(false);
-				local.setEditable(false);
-				try {
-					Integer.parseInt(exemp.getText());
-				} catch (NumberFormatException e1) {
-					exemp.setText(String.valueOf(oldExemplares));
-				}
-				exemp.setEditable(false);
-			}
-		});
-
-		addImage.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				l.addImg();
-				if (l.getImg() != null){
-					image.setText(null);
-					image.setIcon(
-							new ImageIcon(l.getImg().getImage().getScaledInstance(177, 236, Image.SCALE_DEFAULT)));
-					
-				}
-
-			}
-		});
-
-		dial.setVisible(true);
-		// TODO Auto-generated method stub
-
+		new LivroDetail(l).open();
 	}
 
 	public void realizarEmprestimo() {

@@ -3,22 +3,29 @@ package dad.recursos;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import java.awt.BorderLayout;
+import javax.swing.border.LineBorder;
+
+import dad.biblioteca.gui.DataGui;
+import net.miginfocom.swing.MigLayout;
+
+import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Image;
+import java.awt.Toolkit;
 
-public class ImageViewer extends JFrame {
+public class ImageViewer {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -7707938657446823751L;
-
-	public ImageViewer(ImageIcon img) {
-		setSize(177*3, 263*2);
+	public static void show(ImageIcon img) {
+		JFrame frame = new JFrame();
+		frame.getContentPane().setLayout(new MigLayout("al center center, wrap, gapy 15"));
+		frame.setIconImage(Toolkit.getDefaultToolkit().getImage((DataGui.getInstance().getClass().getResource("DAD.jpg"))));
+		frame.setMinimumSize(new Dimension(177*2, 263*2));
 		JLabel imageView = new JLabel("");
-		imageView.setSize(177*3, 263*2);
-		imageView.setIcon(new ImageIcon(img.getImage().getScaledInstance(177*3, 236*3, Image.SCALE_SMOOTH)));
-		getContentPane().add(imageView, BorderLayout.CENTER);
+		imageView.setMinimumSize(new Dimension(177*2, 263*2));
+		imageView.setBorder(new LineBorder(Color.BLACK, 2));
+		imageView.setIcon(new ImageIcon(img.getImage().getScaledInstance(177*2, 236*2, Image.SCALE_AREA_AVERAGING)));
+		frame.getContentPane().add(imageView, "center");
+		frame.setVisible(true);
 	}
 	
 }
