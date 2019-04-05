@@ -20,6 +20,7 @@ public class ImageViewer {
 		frame.getContentPane().setLayout(new MigLayout("al center center, wrap, gapy 15"));
 		frame.setIconImage(Toolkit.getDefaultToolkit().getImage((DataGui.getInstance().getClass().getResource("DAD.jpg"))));
 		frame.setMinimumSize(new Dimension(177*2, 263*2));
+		frame.setResizable(false);
 		JLabel imageView = new JLabel("");
 		imageView.setMinimumSize(new Dimension(177*2, 263*2));
 		imageView.setBorder(new LineBorder(Color.BLACK, 2));

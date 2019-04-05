@@ -33,20 +33,24 @@ import javax.swing.event.PopupMenuListener;
 
 import dad.biblioteca.Item;
 import dad.biblioteca.Livro;
+import dad.biblioteca.table.AtualizaExemplares;
+import dad.biblioteca.table.AtualizaLivro;
+import dad.biblioteca.table.CompositeCommand;
+import dad.biblioteca.table.TableModelLivro;
 import dad.recursos.ImageViewer;
 import mdlaf.animation.MaterialUIMovement;
 import mdlaf.utils.MaterialColors;
 import net.miginfocom.swing.MigLayout;
 
 public class LivroDetail {
-	
+
 	private Livro l;
 	private JTextField titulo, autor, editora, classificacao, local, exemp, exempDisp, disp, exempEmp;
 	private JDialog dial;
 
 	public LivroDetail(Livro l) {
 		this.l = l;
-		int oldExemplares = l.getN_exemp_disponiveis();
+		int oldExemplares = l.getNumero_exemplares();
 		System.out.println(l);
 		dial = new JDialog(DataGui.getInstance(), l.getNome());
 		dial.setSize(new Dimension(700, 500));
@@ -90,6 +94,7 @@ public class LivroDetail {
 		salvar.setBackground(MaterialColors.LIGHT_GREEN_300);
 		personalizarBotao(salvar);
 		botoesSecund.add(salvar, "cell 17 0,alignx left,aligny center");
+		salvar.setEnabled(false);
 
 		titulo = new JTextField(l.getNome());
 		titulo.setEditable(false);
@@ -160,8 +165,9 @@ public class LivroDetail {
 
 			public void apagar() {
 				int ok = JOptionPane.showConfirmDialog(DataGui.getInstance(),
-						"Tem certeza que quer apagar a imagem do livro?", "APAGAR", JOptionPane.OK_CANCEL_OPTION,
-						JOptionPane.WARNING_MESSAGE, new ImageIcon(getClass().getResource("DAD_SS.jpg")));
+						"Tem certeza que quer apagar a imagem do livro?\n(Não é possível voltar atrás, a não ser adicionando uma nova imagem!)",
+						"APAGAR", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE,
+						new ImageIcon(getClass().getResource("DAD_SS.jpg")));
 				if (ok == JOptionPane.OK_OPTION) {
 					l.setImg(null);
 					image.setIcon(null);
@@ -277,6 +283,8 @@ public class LivroDetail {
 				classificacao.setEditable(true);
 				local.setEditable(true);
 				exemp.setEditable(true);
+				editar.setEnabled(false);
+				salvar.setEnabled(true);
 
 			}
 		});
@@ -284,37 +292,46 @@ public class LivroDetail {
 		final class Salvar implements ActionListener {
 
 			private boolean close;
-			
-			public Salvar(boolean close){
+
+			public Salvar(boolean close) {
 				this.close = close;
 			}
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				save(oldExemplares, close);
+				editar.setEnabled(true);
+				salvar.setEnabled(false);
+				if (close && titulo.isEditable())
+					save(oldExemplares, close);
+				else if (close && !titulo.isEditable())
+					dial.dispose();
+				else
+					save(oldExemplares, close);
 			}
 		}
 
 		salvar.addActionListener(new Salvar(false));
 
 		ok.addActionListener(new Salvar(true));
-		
+
 		dial.addWindowListener(new WindowAdapter() {
 
 			@Override
 			public void windowClosing(WindowEvent e) {
-				save(oldExemplares, true);
+				if (titulo.isEditable())
+					save(oldExemplares, true);
+				else
+					dial.dispose();
 			}
-			
+
 		});
 
 		addImage.addActionListener(new Add());
 
-		
 		// TODO Auto-generated method stub
 
 	}
-	
+
 	public void save(int oldExemplares, boolean close) {
 		titulo.setEditable(false);
 		autor.setEditable(false);
@@ -322,14 +339,36 @@ public class LivroDetail {
 		classificacao.setEditable(false);
 		local.setEditable(false);
 		try {
-			Integer.parseInt(exemp.getText());
+			int n = Integer.parseInt(exemp.getText());
+			int d = Integer.parseInt(exempDisp.getText());
+			if (n <= 0)
+				exemp.setText(String.valueOf(oldExemplares));
+			else {
+				exempDisp.setText(String.valueOf(n - l.getN_exemp_emprestados()));
+				if (d == 0) {
+					disp.setText("Não");
+				} else if (d > 0)
+					disp.setText("Sim");
+			}
+
 		} catch (NumberFormatException e1) {
 			exemp.setText(String.valueOf(oldExemplares));
 		}
 		exemp.setEditable(false);
-		if(close)
+
+		TableModelLivro.getInstance().getUndoManager()
+				.execute(new CompositeCommand("Atualizar Livro",
+						new AtualizaLivro(TableModelLivro.getInstance(), "Título", l, titulo.getText()),
+						new AtualizaLivro(TableModelLivro.getInstance(), "Autor", l, autor.getText()),
+						new AtualizaLivro(TableModelLivro.getInstance(), "Editora", l, editora.getText()),
+						new AtualizaLivro(TableModelLivro.getInstance(), "Classificação", l, classificacao.getText()),
+						new AtualizaLivro(TableModelLivro.getInstance(), "Local", l, local.getText()),
+						new AtualizaExemplares(l.isDisponivel(), l, Integer.parseInt(exemp.getText()))));
+		TableModelLivro.getInstance().fireTableDataChanged();
+
+		if (close)
 			dial.dispose();
-		
+
 	}
 
 	public void personalizarBotao(JButton jb) {
@@ -339,7 +378,7 @@ public class LivroDetail {
 
 	public void open() {
 		dial.setVisible(true);
-		
+
 	}
 
 }

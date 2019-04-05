@@ -236,6 +236,16 @@ public class LivroPanel extends JPanel {
 				removerLivros();
 			}
 		});
+		
+		JMenuItem info = new JMenuItem("Informações");
+		info.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				abrir(modelLivro.getLivro(livros.convertRowIndexToModel(livros.getSelectedRow())));
+				
+			}
+		});
 
 		JPopupMenu popupMenu = new JPopupMenu();
 		popupMenu.addPopupMenuListener(new PopupMenuListener() {
@@ -295,6 +305,7 @@ public class LivroPanel extends JPanel {
 			}
 		});
 
+		popupMenu.add(info);
 		popupMenu.add(abrirItem);
 		popupMenu.add(deleteItem);
 		popupMenu.add(deleteOneItem);

@@ -89,10 +89,7 @@ public class Item {
 	public void setNumero_exemplares(int numero_exemplares) {
 		if (numero_exemplares > 0) {
 			this.numero_exemplares = numero_exemplares;
-			if (n_exemp_disponiveis > numero_exemplares)
-				setN_exemp_disponiveis(numero_exemplares);
-			else
-				setN_exemp_disponiveis(numero_exemplares - n_exemp_emprestados);
+			setN_exemp_disponiveis(numero_exemplares - n_exemp_emprestados);
 		}
 	}
 
