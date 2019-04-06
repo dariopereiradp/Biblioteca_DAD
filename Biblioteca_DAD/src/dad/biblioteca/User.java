@@ -2,6 +2,8 @@ package dad.biblioteca;
 
 import java.util.ArrayList;
 
+import org.apache.commons.lang.WordUtils;
+
 public class User {
 
 	private String nome;
@@ -10,6 +12,7 @@ public class User {
 	private ArrayList<Emprestimo> emprestimos = new ArrayList<>();
 
 	private User(String nome, int idade, long cpf, boolean adicionar) {
+		nome = WordUtils.capitalize(nome);
 		this.setNome(nome);
 		this.setIdade(idade);
 		this.setCpf(cpf);
@@ -89,6 +92,11 @@ public class User {
 			return getUser(cpf);
 		else
 			return new User(nome, idade, cpf, true);
+	}
+	
+	@Override
+	public String toString(){
+		return nome;
 	}
 
 }

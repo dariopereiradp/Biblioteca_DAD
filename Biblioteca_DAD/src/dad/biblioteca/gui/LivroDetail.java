@@ -53,8 +53,8 @@ public class LivroDetail {
 		int oldExemplares = l.getNumero_exemplares();
 		System.out.println(l);
 		dial = new JDialog(DataGui.getInstance(), l.getNome());
-		dial.setSize(new Dimension(700, 500));
-		dial.setMinimumSize(new Dimension(700, 500));
+		dial.setSize(new Dimension(750, 500));
+		dial.setMinimumSize(new Dimension(750, 500));
 		dial.getContentPane().setLayout(new BorderLayout());
 
 		JPanel principal = new JPanel(new BorderLayout());
@@ -327,6 +327,15 @@ public class LivroDetail {
 		});
 
 		addImage.addActionListener(new Add());
+		
+		emprestar.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				new RealizarEmprestimo(l).open();
+				
+			}
+		});
 
 		// TODO Auto-generated method stub
 

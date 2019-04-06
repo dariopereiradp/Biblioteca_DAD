@@ -76,6 +76,10 @@ public class Emprestimo {
 		this.entregue = entregue;
 	}
 	
+	public static int getCountId() {
+		return countId;
+	}
+	
 	
 	
 	

@@ -6,13 +6,13 @@ public class Livro extends Item implements Comparable<Livro> {
 	private String editora;
 
 	public Livro(String nome) {
-		super(nome);
+		super(nome, "Livro");
 		autor = "-";
 		editora = "-";
 	}
 	
 	public Livro(String nome, String autor, String editora, String classificacao, String local) {
-		super(nome, classificacao, local, null);
+		super(nome, classificacao, local, null, "Livro");
 		if (!autor.trim().equals(""))
 			this.autor = autor;
 		else

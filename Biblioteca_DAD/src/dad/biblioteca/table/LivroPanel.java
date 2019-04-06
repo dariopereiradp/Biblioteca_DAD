@@ -22,6 +22,7 @@ import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
@@ -46,6 +47,7 @@ import dad.biblioteca.Livro;
 import dad.biblioteca.gui.DataGui;
 import dad.biblioteca.gui.LivroDetail;
 import dad.biblioteca.gui.Login;
+import dad.biblioteca.gui.RealizarEmprestimo;
 import dad.recursos.CellRenderer;
 import dad.recursos.CellRendererBollean;
 import dad.recursos.CellRendererInt;
@@ -316,7 +318,7 @@ public class LivroPanel extends JPanel {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				realizarEmprestimo();
+				realizarEmprestimo(modelLivro.getLivro(livros.convertRowIndexToModel(livros.getSelectedRow())));
 			}
 		});
 		popupMenu.add(emprestimoItem);
@@ -554,8 +556,8 @@ public class LivroPanel extends JPanel {
 		new LivroDetail(l).open();
 	}
 
-	public void realizarEmprestimo() {
-		// TODO Auto-generated method stub
+	public void realizarEmprestimo(Livro l) {
+		new RealizarEmprestimo(l).open();
 
 	}
 
