@@ -1,5 +1,8 @@
 package dad.biblioteca;
 
+import com.qoppa.pdfWriter.PDFDocument;
+import dad.recursos.PDFGenerator;
+
 public class Emprestimo {
 	
 	public static double MULTA = 0.5;
@@ -78,6 +81,10 @@ public class Emprestimo {
 	
 	public static int getCountId() {
 		return countId;
+	}
+	
+	public PDFDocument toPdf(){
+		return new PDFGenerator(this).generatePDF();
 	}
 	
 	
