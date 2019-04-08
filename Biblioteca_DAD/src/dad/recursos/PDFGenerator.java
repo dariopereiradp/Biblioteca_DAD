@@ -9,21 +9,16 @@ import java.awt.print.PageFormat;
 import java.awt.print.Paper;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
-
 import javax.swing.ImageIcon;
 import com.qoppa.pdfWriter.PDFDocument;
 import com.qoppa.pdfWriter.PDFGraphics;
 import com.qoppa.pdfWriter.PDFPage;
 
 import dad.biblioteca.Emprestimo;
-import dad.biblioteca.Item;
 import dad.biblioteca.Livro;
 import dad.biblioteca.Multimedia;
 import dad.biblioteca.Outros;
-import dad.biblioteca.User;
 import dad.biblioteca.gui.Login;
 
 /**
@@ -270,8 +265,8 @@ public class PDFGenerator {
 		g2d.setFont(PDFGraphics.COURIER.deriveFont(10f).deriveFont(Font.PLAIN));
 
 		g2d.setFont(PDFGraphics.COURIER.deriveFont(9f).deriveFont(Font.PLAIN));
-		text = "Atenção: Após a data limite de entrega será cobrado um valor de " + Emprestimo.MULTA
-				+ "R$ por cada dia de atraso!";
+		text = "Atenção: Após a data limite de entrega será cobrado um valor de R$" + Emprestimo.MULTA
+				+ " por cada dia de atraso!";
 		sWidth = g2d.getFontMetrics(PDFGraphics.COURIER.deriveFont(9f).deriveFont(Font.PLAIN)).stringWidth(text);
 		g2d.drawString(text, (int) (width / 2) - sWidth / 2, 590);
 
@@ -314,7 +309,7 @@ public class PDFGenerator {
 		sWidth = g2d.getFontMetrics(PDFGraphics.COURIER.deriveFont(8f).deriveFont(Font.PLAIN)).stringWidth(text);
 		g2d.drawString(text, (int) (width / 8) + 5, 220 + 350 + 60 + 70);
 		
-		text = "_________R$";
+		text = "R$_________";
 		g2d.drawString(text, (int) (width / 8) + 5 + 3 + sWidth, 220 + 350 + 60 + 70);
 		
 		text = "Funcionário: ";
