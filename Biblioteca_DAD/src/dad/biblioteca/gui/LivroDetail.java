@@ -332,8 +332,11 @@ public class LivroDetail {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (l.getN_exemp_disponiveis() > 0)
+				if (l.getN_exemp_disponiveis() > 0){
 					new RealizarEmprestimo(l).open();
+					dial.dispose();
+				}
+				
 				else
 					JOptionPane.showMessageDialog(DataGui.getInstance(),
 							"Não há exemplares disponíveis para empréstimo...", "Realiza Empréstimo",

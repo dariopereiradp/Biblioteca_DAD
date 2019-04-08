@@ -34,6 +34,7 @@ import com.toedter.calendar.JDateChooser;
 import dad.biblioteca.Emprestimo;
 import dad.biblioteca.Item;
 import dad.biblioteca.User;
+import dad.biblioteca.table.TableModelLivro;
 import dad.recursos.CpfValidator;
 import dad.recursos.Log;
 import dad.recursos.PDFGenerator;
@@ -120,7 +121,7 @@ public class RealizarEmprestimo {
 			image.setIcon(
 					new ImageIcon(item.getImg().getImage().getScaledInstance(177 / 2, 236 / 2, Image.SCALE_DEFAULT)));
 		else
-			image.setText("         Sem Imagem         ");
+			image.setText("Sem Imagem");
 		image.setBorder(new LineBorder(Color.BLACK, 3));
 		dial.getContentPane().add(image);
 
@@ -241,6 +242,8 @@ public class RealizarEmprestimo {
 				Emprestimo emprestimo = new Emprestimo(User.getUser(cpf.getText().replace(".", "").replace("-", "")), item,
 						date_emp.getDate(), date_entrega.getDate());
 				// TODO salvar na base de dados
+				emprestimo.getItem().inc_exemp_emprestados(); //salvar na base de dados
+				TableModelLivro.getInstance().fireTableDataChanged();
 				save(emprestimo);
 			}
 		});

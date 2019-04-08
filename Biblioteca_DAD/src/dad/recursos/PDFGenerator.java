@@ -328,14 +328,6 @@ public class PDFGenerator {
 		g2d.drawString(text, (int) (width / 8) + 170/2- sWidth/2, 220 + 350 + 60 + 170 - 15);
 		
 
-		try {
-			pdfDoc.saveDocument("teste.pdf");
-			System.out.println("success");
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
 		return pdfDoc;
 	}
 }

@@ -156,6 +156,16 @@ public class Item {
 	public void setN_exemp_emprestados() {
 		n_exemp_emprestados = numero_exemplares - n_exemp_disponiveis;
 	}
+	
+	public void inc_exemp_emprestados(){
+		n_exemp_emprestados++;
+		n_exemp_disponiveis = numero_exemplares - n_exemp_emprestados;
+	}
+	
+	public void dec_exemp_emprestados(){
+		n_exemp_emprestados--;
+		n_exemp_disponiveis = numero_exemplares - n_exemp_emprestados;
+	}
 
 	@Override
 	public int hashCode() {
