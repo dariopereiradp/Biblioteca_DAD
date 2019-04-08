@@ -106,6 +106,10 @@ public class Main {
 		File dir = new File(System.getenv("APPDATA") + "/BibliotecaDAD/Databases/");
 		if (!dir.exists())
 			dir.mkdirs();
+		
+		File docDir = new File(RealizarEmprestimo.EMPRESTIMOS_PATH);
+		if(!docDir.exists())
+			docDir.mkdirs();
 
 		try {
 
@@ -157,8 +161,8 @@ public class Main {
 				DatabaseMetaData dmd = con.getMetaData();
 				try (ResultSet rs = dmd.getTables(null, null, "Usuários", new String[] { "TABLE" })) {
 					try (Statement s = con.createStatement()) {
-						s.executeUpdate("CREATE TABLE Usuarios (ID int NOT NULL,Nome varchar(255) NOT NULL,"
-								+ "Idade int,CPF bigint);");
+						s.executeUpdate("CREATE TABLE Usuarios (CPF bigint NOT NULL, Nome varchar(255) NOT NULL,"
+								+ "Data_Nascimento date(), CONSTRAINT PK_Usuarios PRIMARY KEY (CPF));");
 						Log.getInstance().printLog("Base de dados users.mbd criada com sucesso");
 					}
 				}

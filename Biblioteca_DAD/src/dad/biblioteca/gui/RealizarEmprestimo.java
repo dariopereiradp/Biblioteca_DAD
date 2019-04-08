@@ -6,7 +6,7 @@ import java.awt.Font;
 import java.awt.Image;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.text.SimpleDateFormat;
+import java.io.IOException;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.Locale;
@@ -18,14 +18,20 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.border.LineBorder;
 
+import com.qoppa.pdfWriter.PDFDocument;
 import com.toedter.calendar.JDateChooser;
 
 import dad.biblioteca.Emprestimo;
 import dad.biblioteca.Item;
+import dad.biblioteca.User;
+import dad.recursos.PDFGenerator;
+
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class RealizarEmprestimo {
 	
-	private Item item;
+	public static final String EMPRESTIMOS_PATH = System.getProperty("user.home") + System.getProperty("file.separator") + "Documents/BibliotecaDAD/Comprovantes/";
 	private JDialog dial;
 	private JTextField id;
 	private JTextField tipo;
@@ -33,11 +39,9 @@ public class RealizarEmprestimo {
 	private JTextField cpf;
 	private JTextField idEmp;
 	private JTextField nome;
-	private JTextField dataEmp;
 	private JTextField dias;
 	
 	public RealizarEmprestimo(Item item){
-		this.item = item;
 		dial = new JDialog(DataGui.getInstance(), "Realizar Empréstimo");
 		dial.getContentPane().setFont(new Font("Roboto", Font.PLAIN, 12));
 		dial.setMinimumSize(new Dimension(500, 400));
@@ -64,9 +68,9 @@ public class RealizarEmprestimo {
 		lCPF.setBounds(24, 164, 46, 14);
 		dial.getContentPane().add(lCPF);
 		
-		JLabel lDataLimite = new JLabel("Data Limite:");
+		JLabel lDataLimite = new JLabel("Data limite para devolu\u00E7\u00E3o:");
 		lDataLimite.setFont(new Font("Roboto", Font.PLAIN, 12));
-		lDataLimite.setBounds(24, 239, 68, 14);
+		lDataLimite.setBounds(24, 239, 152, 14);
 		dial.getContentPane().add(lDataLimite);
 		
 		JLabel lIDEmp = new JLabel("ID do Empr\u00E9stimo:");
@@ -151,14 +155,6 @@ public class RealizarEmprestimo {
 		dial.getContentPane().add(nome);
 		nome.setColumns(10);
 		
-		dataEmp = new JTextField();
-		dataEmp.setEditable(false);
-		dataEmp.setFont(new Font("Roboto", Font.PLAIN, 12));
-		dataEmp.setBounds(153, 308, 113, 20);
-		dial.getContentPane().add(dataEmp);
-		dataEmp.setText(new SimpleDateFormat("dd/MMM/yyy").format(new Date()));
-		dataEmp.setColumns(10);
-		
 		dias = new JTextField();
 		dias.setEditable(false);
 		dias.setFont(new Font("Roboto", Font.PLAIN, 12));
@@ -172,24 +168,53 @@ public class RealizarEmprestimo {
 		bConf.setBounds(380, 332, 88, 23);
 		dial.getContentPane().add(bConf);
 		
-		JDateChooser dateChooser = new JDateChooser();
-		dateChooser.setLocale(new Locale("PT", "BR"));
-		dateChooser.setDateFormatString("dd/MMM/yyyy");
-		dateChooser.setMinSelectableDate(new Date());
-		dateChooser.setDate(new Date());
-		dateChooser.setBounds(153, 239, 151, 20);
-		dial.getContentPane().add(dateChooser);
+		JDateChooser date_emp = new JDateChooser();
+		date_emp.setLocale(new Locale("pt", "BR"));
+		date_emp.setDateFormatString("dd/MMM/yyyy");
+		date_emp.setMaxSelectableDate(new Date());
+		date_emp.setDate(new Date());
+		date_emp.setBounds(153, 308, 113, 20);
+		dial.getContentPane().add(date_emp);
 		
-		dateChooser.getDateEditor().addPropertyChangeListener(new PropertyChangeListener() {
+		JDateChooser date_entrega = new JDateChooser();
+		date_entrega.setLocale(new Locale("PT", "BR"));
+		date_entrega.setDateFormatString("dd/MMM/yyyy");
+		date_entrega.setMinSelectableDate(new Date());
+		date_entrega.setDate(new Date());
+		date_entrega.setBounds(186, 239, 103, 20);
+		dial.getContentPane().add(date_entrega);
+		
+		
+		date_entrega.getDateEditor().addPropertyChangeListener(new PropertyChangeListener() {
 			
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
-				dias.setText(String.valueOf(ChronoUnit.DAYS.between(new Date().toInstant(), dateChooser.getDate().toInstant())+1));
+				dias.setText(String.valueOf(ChronoUnit.DAYS.between(date_emp.getDate().toInstant(), date_entrega.getDate().toInstant())+1));
 			}
 		});
 		
+		bConf.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Emprestimo emprestimo = new Emprestimo(User.getUser(Long.valueOf(cpf.getText())), item, date_emp.getDate(), date_entrega.getDate());
+				save(emprestimo);
+			}
+		});
+		
+		
+		
 	}
 	
+	private void save(Emprestimo emprestimo) {
+		PDFDocument pdf = new PDFGenerator(emprestimo).generatePDF();
+		try {
+			pdf.saveDocument(EMPRESTIMOS_PATH + emprestimo.toString() + ".pdf");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+
 	public void open(){
 		dial.setVisible(true);
 	}

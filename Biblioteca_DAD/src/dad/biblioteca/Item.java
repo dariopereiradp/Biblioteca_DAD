@@ -16,6 +16,7 @@ public class Item {
 	private String nome;
 	private String local;
 	private String classificacao;
+	private String autor;
 	private boolean disponivel;
 	private int numero_exemplares;
 	private int n_exemp_disponiveis;
@@ -27,6 +28,7 @@ public class Item {
 		this.nome = nome;
 		this.tipo = tipo;
 		local = "-";
+		autor = "-";
 		setClassificacao("-");
 		disponivel = true;
 		id = ++countID;
@@ -35,9 +37,17 @@ public class Item {
 		n_exemp_emprestados = 0;
 	}
 
-	public Item(String nome, String classificacao, String local, ImageIcon img, String tipo) {
+	public Item(String nome, String autor, String classificacao, String local, ImageIcon img, String tipo) {
 		this.nome = nome;
-		this.tipo = tipo;
+		if (!tipo.trim().equals(""))
+			this.tipo = tipo;
+		else
+			this.tipo = "-";
+		
+		if (!autor.trim().equals(""))
+			this.autor = autor;
+		else
+			this.autor = "-";
 		if (!local.trim().equals(""))
 			this.local = local;
 		else
@@ -72,6 +82,14 @@ public class Item {
 	
 	public void setTipo(String tipo) {
 		this.tipo = tipo;
+	}
+	
+	public String getAutor() {
+		return autor;
+	}
+	
+	public void setAutor(String autor) {
+		this.autor = autor;
 	}
 
 	public boolean isDisponivel() {

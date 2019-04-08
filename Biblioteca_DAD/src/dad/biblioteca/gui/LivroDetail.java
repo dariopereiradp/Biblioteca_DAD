@@ -327,13 +327,18 @@ public class LivroDetail {
 		});
 
 		addImage.addActionListener(new Add());
-		
+
 		emprestar.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				new RealizarEmprestimo(l).open();
-				
+				if (l.getN_exemp_disponiveis() > 0)
+					new RealizarEmprestimo(l).open();
+				else
+					JOptionPane.showMessageDialog(DataGui.getInstance(),
+							"Não há exemplares disponíveis para empréstimo...", "Realiza Empréstimo",
+							JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource("DAD_SS.jpg")));
+
 			}
 		});
 

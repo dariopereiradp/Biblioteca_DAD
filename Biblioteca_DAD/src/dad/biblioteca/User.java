@@ -1,20 +1,21 @@
 package dad.biblioteca;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 import org.apache.commons.lang.WordUtils;
 
 public class User {
 
 	private String nome;
-	private int idade;
+	private Date data_nascimento;
 	private long cpf;
 	private ArrayList<Emprestimo> emprestimos = new ArrayList<>();
 
-	private User(String nome, int idade, long cpf, boolean adicionar) {
+	private User(String nome, Date data_nascimento, long cpf, boolean adicionar) {
 		nome = WordUtils.capitalize(nome);
 		this.setNome(nome);
-		this.setIdade(idade);
+		this.setData_nascimento(data_nascimento);
 		this.setCpf(cpf);
 		if (adicionar) {
 			// TODO: salvar na base de dados
@@ -37,12 +38,12 @@ public class User {
 		this.cpf = cpf;
 	}
 
-	public int getIdade() {
-		return idade;
+	public Date getData_nascimento() {
+		return data_nascimento;
 	}
 
-	public void setIdade(int idade) {
-		this.idade = idade;
+	public void setData_nascimento(Date data_nascimento) {
+		this.data_nascimento = data_nascimento;
 	}
 
 	public ArrayList<Emprestimo> getEmprestimos() {
@@ -77,21 +78,21 @@ public class User {
 
 	public static boolean existe(long cpf) {
 		// Ligação à base de dados
-		return true;
+		return false;
 	}
 
 	public static User getUser(long cpf) {
 		// Ligação à base de dados
 		String nome = "-";
-		int idade = 0;
-		return new User(nome, idade, cpf, false);
+		Date data_nascimento = new Date();
+		return new User(nome, data_nascimento, cpf, false);
 	}
 
-	public static User newUser(String nome, int idade, long cpf) {
+	public static User newUser(String nome, Date data_nascimento, long cpf) {
 		if (existe(cpf))
 			return getUser(cpf);
 		else
-			return new User(nome, idade, cpf, true);
+			return new User(nome, data_nascimento, cpf, true);
 	}
 	
 	@Override

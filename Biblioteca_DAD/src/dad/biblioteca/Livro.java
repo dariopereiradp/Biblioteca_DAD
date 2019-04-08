@@ -2,33 +2,19 @@ package dad.biblioteca;
 
 public class Livro extends Item implements Comparable<Livro> {
 
-	private String autor;
 	private String editora;
 
 	public Livro(String nome) {
 		super(nome, "Livro");
-		autor = "-";
 		editora = "-";
 	}
 	
 	public Livro(String nome, String autor, String editora, String classificacao, String local) {
-		super(nome, classificacao, local, null, "Livro");
-		if (!autor.trim().equals(""))
-			this.autor = autor;
-		else
-			this.autor = "-";
+		super(nome, autor, classificacao, local, null, "Livro");
 		if (!editora.trim().equals(""))
 			this.editora = editora;
 		else
 			this.editora = "-";
-	}
-
-	public String getAutor() {
-		return autor;
-	}
-
-	public void setAutor(String autor) {
-		this.autor = autor;
 	}
 
 	public String getEditora() {
@@ -41,7 +27,7 @@ public class Livro extends Item implements Comparable<Livro> {
 
 	@Override
 	public String toString() {
-		return super.getNome() + " | " + autor + " | " + editora + " | " + getClassificacao() + " | " + isDisponivel()
+		return super.getNome() + " | " + getAutor() + " | " + editora + " | " + getClassificacao() + " | " + isDisponivel()
 				+ " | " + getNumero_exemplares();
 	}
 
@@ -49,7 +35,7 @@ public class Livro extends Item implements Comparable<Livro> {
 	public int hashCode() {
 		final int prime = 31;
 		int result = super.hashCode();
-		result = prime * result + ((autor == null) ? 0 : autor.hashCode());
+		result = prime * result + ((getAutor() == null) ? 0 : getAutor().hashCode());
 		result = prime * result + ((getClassificacao() == null) ? 0 : getClassificacao().hashCode());
 		result = prime * result + ((editora == null) ? 0 : editora.hashCode());
 		return result;

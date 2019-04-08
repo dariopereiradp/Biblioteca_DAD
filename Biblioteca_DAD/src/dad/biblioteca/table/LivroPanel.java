@@ -22,7 +22,6 @@ import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
@@ -238,14 +237,14 @@ public class LivroPanel extends JPanel {
 				removerLivros();
 			}
 		});
-		
+
 		JMenuItem info = new JMenuItem("Informações");
 		info.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				abrir(modelLivro.getLivro(livros.convertRowIndexToModel(livros.getSelectedRow())));
-				
+
 			}
 		});
 
@@ -318,7 +317,13 @@ public class LivroPanel extends JPanel {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				realizarEmprestimo(modelLivro.getLivro(livros.convertRowIndexToModel(livros.getSelectedRow())));
+				Livro l = modelLivro.getLivro(livros.convertRowIndexToModel(livros.getSelectedRow()));
+				if (l.getN_exemp_disponiveis() > 0)
+					realizarEmprestimo(l);
+				else
+					JOptionPane.showMessageDialog(DataGui.getInstance(),
+							"Não há exemplares disponíveis para empréstimo...", "Realiza Empréstimo",
+							JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource("DAD_SS.jpg")));
 			}
 		});
 		popupMenu.add(emprestimoItem);
