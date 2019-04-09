@@ -20,7 +20,7 @@ public class Item {
 	private boolean disponivel;
 	private int numero_exemplares;
 	private int n_exemp_disponiveis;
-	private int n_exemp_emprestados;
+	// private int n_exemp_emprestados;
 	private ImageIcon img;
 	private String tipo;
 
@@ -34,7 +34,7 @@ public class Item {
 		id = ++countID;
 		numero_exemplares = 1;
 		setN_exemp_disponiveis(1);
-		n_exemp_emprestados = 0;
+		// n_exemp_emprestados = 0;
 	}
 
 	public Item(String nome, String autor, String classificacao, String local, ImageIcon img, String tipo) {
@@ -43,7 +43,7 @@ public class Item {
 			this.tipo = tipo;
 		else
 			this.tipo = "-";
-		
+
 		if (!autor.trim().equals(""))
 			this.autor = autor;
 		else
@@ -60,7 +60,7 @@ public class Item {
 		id = ++countID;
 		numero_exemplares = 1;
 		setN_exemp_disponiveis(1);
-		n_exemp_emprestados = 0;
+		// n_exemp_emprestados = 0;
 		this.img = img;
 	}
 
@@ -75,19 +75,19 @@ public class Item {
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
-	
+
 	public String getTipo() {
 		return tipo;
 	}
-	
+
 	public void setTipo(String tipo) {
 		this.tipo = tipo;
 	}
-	
+
 	public String getAutor() {
 		return autor;
 	}
-	
+
 	public void setAutor(String autor) {
 		this.autor = autor;
 	}
@@ -118,7 +118,7 @@ public class Item {
 	public void setNumero_exemplares(int numero_exemplares) {
 		if (numero_exemplares > 0) {
 			this.numero_exemplares = numero_exemplares;
-			setN_exemp_disponiveis(numero_exemplares - n_exemp_emprestados);
+			setN_exemp_disponiveis(numero_exemplares - getN_exemp_emprestados());
 		}
 	}
 
@@ -150,21 +150,15 @@ public class Item {
 	}
 
 	public int getN_exemp_emprestados() {
-		return n_exemp_emprestados;
+		return getNumero_exemplares() - getN_exemp_disponiveis();
 	}
 
-	public void setN_exemp_emprestados() {
-		n_exemp_emprestados = numero_exemplares - n_exemp_disponiveis;
+	public void inc_exemp_emprestados() {
+		n_exemp_disponiveis--;
 	}
-	
-	public void inc_exemp_emprestados(){
-		n_exemp_emprestados++;
-		n_exemp_disponiveis = numero_exemplares - n_exemp_emprestados;
-	}
-	
-	public void dec_exemp_emprestados(){
-		n_exemp_emprestados--;
-		n_exemp_disponiveis = numero_exemplares - n_exemp_emprestados;
+
+	public void dec_exemp_emprestados() {
+		n_exemp_disponiveis++;
 	}
 
 	@Override
