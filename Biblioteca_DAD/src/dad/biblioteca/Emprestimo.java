@@ -7,6 +7,11 @@ import java.util.Date;
 import com.qoppa.pdfWriter.PDFDocument;
 import dad.recursos.PDFGenerator;
 
+/**
+ * 
+ * @author Dário Pereira
+ *
+ */
 public class Emprestimo {
 
 	public static double MULTA = 0.5;
