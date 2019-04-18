@@ -8,6 +8,11 @@ import dad.biblioteca.gui.DataGui;
 import dad.recursos.ImageCompression;
 import dad.recursos.Log;
 
+/**
+ * 
+ * @author Dário Pereira
+ *
+ */
 public class Item {
 
 	public static final String imgPath = System.getenv("APPDATA") + "/BibliotecaDAD/Databases/Imagens/";
