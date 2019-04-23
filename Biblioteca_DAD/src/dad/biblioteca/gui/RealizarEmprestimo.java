@@ -37,8 +37,8 @@ import dad.biblioteca.User;
 import dad.biblioteca.table.TableModelLivro;
 import dad.recursos.CpfValidator;
 import dad.recursos.Log;
+import dad.recursos.NovoCliente;
 import dad.recursos.PDFGenerator;
-
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
@@ -48,13 +48,9 @@ public class RealizarEmprestimo {
 			+ "Documents/BibliotecaDAD/Comprovantes/";
 	private String dirPath;
 	private JDialog dial;
-	private JTextField id;
-	private JTextField tipo;
-	private JTextField titulo;
+	JButton bValidar, alterar, bConf;
+	private JTextField id, tipo, titulo, idEmp, nome, dias;
 	private JFormattedTextField cpf;
-	private JTextField idEmp;
-	private JTextField nome;
-	private JTextField dias;
 	private MaskFormatter mascaraCpf;
 	private Connection con;
 	private PreparedStatement pst;
@@ -141,7 +137,7 @@ public class RealizarEmprestimo {
 		tipo.setText(item.getTipo());
 		tipo.setColumns(10);
 
-		JButton bConf = new JButton("Confirmar");
+		bConf = new JButton("Confirmar");
 		bConf.setEnabled(false);
 		bConf.setFont(new Font("Roboto", Font.PLAIN, 12));
 		bConf.setBounds(365, 332, 103, 23);
@@ -169,15 +165,10 @@ public class RealizarEmprestimo {
 		dial.getContentPane().add(cpf);
 		cpf.setColumns(10);
 
-		JButton bValidar = new JButton("Validar");
+		bValidar = new JButton("Validar");
 		bValidar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (validar()) {
-					// Procurar o nome na base de dados e atualizar o campo Nome
-					bConf.setEnabled(true);
-					cpf.setEditable(false);
-					bValidar.setEnabled(false);
-				}
+				validar();
 			}
 		});
 		bValidar.setFont(new Font("Roboto", Font.PLAIN, 12));
@@ -198,6 +189,7 @@ public class RealizarEmprestimo {
 		dial.getContentPane().add(lNome);
 
 		nome = new JTextField();
+		nome.setText("");
 		nome.setEditable(false);
 		nome.setFont(new Font("Roboto", Font.PLAIN, 12));
 		nome.setBounds(90, 193, 280, 20);
@@ -226,6 +218,22 @@ public class RealizarEmprestimo {
 		date_entrega.setDate(new Date());
 		date_entrega.setBounds(186, 239, 139, 20);
 		dial.getContentPane().add(date_entrega);
+		
+		alterar = new JButton("Alterar");
+		alterar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				cpf.setText("");
+				cpf.setEditable(true);
+				nome.setText("");
+				bConf.setEnabled(false);
+				alterar.setEnabled(false);
+				bValidar.setEnabled(true);
+			}
+		});
+		alterar.setEnabled(false);
+		alterar.setFont(new Font("Roboto", Font.PLAIN, 12));
+		alterar.setBounds(379, 161, 89, 23);
+		dial.getContentPane().add(alterar);
 
 		date_entrega.getDateEditor().addPropertyChangeListener(new PropertyChangeListener() {
 
@@ -239,10 +247,11 @@ public class RealizarEmprestimo {
 
 		bConf.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Emprestimo emprestimo = new Emprestimo(User.getUser(cpf.getText().replace(".", "").replace("-", "")), item,
-						date_emp.getDate(), date_entrega.getDate());
+				Emprestimo emprestimo = new Emprestimo(User.getUser(cpf.getText().replace(".", "").replace("-", "")),
+						item, date_emp.getDate(), date_entrega.getDate());
 				// TODO salvar na base de dados
-				emprestimo.getItem().inc_exemp_emprestados(); //salvar na base de dados
+				emprestimo.getItem().inc_exemp_emprestados(); // salvar na base
+																// de dados
 				TableModelLivro.getInstance().fireTableDataChanged();
 				save(emprestimo);
 			}
@@ -255,8 +264,17 @@ public class RealizarEmprestimo {
 		cpfString = cpf.getText();
 		cpfString = cpfString.replace(".", "").replace("-", "");
 		if (CpfValidator.isCPF(cpfString)) {
-			// TODO procurar na base de dados
-			return true;
+			if (User.existe(cpfString)) {
+				nome.setText(User.getUser(cpfString).getNome());
+				bConf.setEnabled(true);
+				cpf.setEditable(false);
+				bValidar.setEnabled(false);
+				alterar.setEnabled(true);
+				return true;
+			} else{
+				NovoCliente.novoCliente(cpfString, this);
+				return true;
+			}
 		} else {
 			JOptionPane.showMessageDialog(dial, "Número de CPF inválido!", "Erro", JOptionPane.ERROR_MESSAGE,
 					new ImageIcon(getClass().getResource("DAD_SS.jpg")));
@@ -289,4 +307,28 @@ public class RealizarEmprestimo {
 	public void open() {
 		dial.setVisible(true);
 	}
+
+	public JTextField getNome() {
+		return nome;
+	}
+
+	public JFormattedTextField getCpf() {
+		return cpf;
+	}
+
+	public JButton getbValidar() {
+		return bValidar;
+	}
+
+	public JButton getAlterar() {
+		return alterar;
+	}
+
+	public JButton getbConf() {
+		return bConf;
+	}
+	
+	
+	
+	
 }

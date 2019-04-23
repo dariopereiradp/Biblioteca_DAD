@@ -26,8 +26,12 @@ import mdlaf.utils.MaterialColors;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
+import java.awt.Color;
 import java.awt.Font;
+import java.awt.Insets;
+
 import javax.swing.SwingConstants;
+import javax.swing.border.LineBorder;
 import javax.swing.ImageIcon;
 import javax.swing.JTextField;
 import javax.swing.JPasswordField;
@@ -55,14 +59,14 @@ public class Login {
 		frame.setResizable(false);
 		frame.getContentPane().setLayout(null);
 
-		JLabel txUser = new JLabel("USU\u00C1RIO:");
+		JLabel txUser = new JLabel("USUÁRIO:");
 		txUser.setFont(new Font("Roboto", Font.PLAIN, 13));
-		txUser.setBounds(20, 165, 60, 15);
+		txUser.setBounds(10, 165, 70, 15);
 		frame.getContentPane().add(txUser);
 
 		JLabel txSenha = new JLabel("SENHA:");
 		txSenha.setFont(new Font("Roboto", Font.PLAIN, 13));
-		txSenha.setBounds(20, 200, 60, 15);
+		txSenha.setBounds(10, 200, 70, 15);
 		frame.getContentPane().add(txSenha);
 
 		JLabel titulo = new JLabel("BIBLIOTECA D\u00C1DIVA DE DEUS");
@@ -80,6 +84,8 @@ public class Login {
 		user = new JTextField();
 		user.setFont(new Font("Roboto", Font.PLAIN, 15));
 		user.setBounds(85, 163, 295, 20);
+		user.setBorder(new LineBorder(Color.WHITE, 1));
+		user.setMargin(new Insets(0, 0, 20, 0));
 		frame.getContentPane().add(user);
 		user.setColumns(10);
 

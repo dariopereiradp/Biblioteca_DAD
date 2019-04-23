@@ -159,7 +159,7 @@ public class Main {
 				DatabaseMetaData dmd = con.getMetaData();
 				try (ResultSet rs = dmd.getTables(null, null, "Usuários", new String[] { "TABLE" })) {
 					try (Statement s = con.createStatement()) {
-						s.executeUpdate("CREATE TABLE Usuarios (CPF bigint NOT NULL, Nome varchar(255) NOT NULL,"
+						s.executeUpdate("CREATE TABLE Usuarios (CPF varchar(255) NOT NULL, Nome varchar(255) NOT NULL,"
 								+ "Data_Nascimento date, N_Emprestimos int, CONSTRAINT PK_Usuarios PRIMARY KEY (CPF));");
 						Log.getInstance().printLog("Base de dados users.mbd criada com sucesso");
 					}

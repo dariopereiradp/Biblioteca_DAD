@@ -3,7 +3,6 @@ package dad.biblioteca;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -32,15 +31,16 @@ public class User {
 		this.setData_nascimento(data_nascimento);
 		this.setCpf(cpf);
 		if (adicionar) {
-			
+
 			try {
 				CriptografiaAES.setKey(key);
 				CriptografiaAES.encrypt(cpf);
-				PreparedStatement pst = con
-						.prepareStatement("insert into usuarios(CPF,Nome,Data_Nascimento,N_Emprestimos) values (?,?,?,?)");
+				pst = con.prepareStatement(
+						"insert into usuarios(CPF,Nome,Data_Nascimento,N_Emprestimos) values (?,?,?,?)");
 				pst.setString(1, CriptografiaAES.getEncryptedString());
 				pst.setString(2, getNome());
-				pst.setString(3, "#" + new SimpleDateFormat("dd/MM/yyyy").format(data_nascimento)+"#");
+				String data = new SimpleDateFormat("yyyy-M-d").format(data_nascimento);
+				pst.setDate(3, java.sql.Date.valueOf(data));
 				pst.setInt(4, 0);
 				pst.execute();
 			} catch (Exception e) {
@@ -85,8 +85,6 @@ public class User {
 		this.emprestimos = emprestimos;
 	}
 
-	
-
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -113,16 +111,42 @@ public class User {
 	}
 
 	public static boolean existe(String cpf) {
-		con = ConexaoUser.getConnection();
-		// Ligação à base de dados
-		return false;
+		try {
+			CriptografiaAES.setKey(key);
+			CriptografiaAES.encrypt(cpf);
+			cpf = CriptografiaAES.getEncryptedString();
+			con = ConexaoUser.getConnection();
+			pst = con.prepareStatement("select * from usuarios where cpf = ?");
+			pst.setString(1, cpf);
+			rs = pst.executeQuery();
+			if (rs.next())
+				return true;
+			else
+				return false;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+
 	}
 
 	public static User getUser(String cpf) {
-		con = ConexaoUser.getConnection();
-		// Ligação à base de dados
-		String nome = "John";
+		String nome = "";
 		Date data_nascimento = new Date();
+		try {
+			CriptografiaAES.setKey(key);
+			CriptografiaAES.encrypt(cpf);
+			con = ConexaoUser.getConnection();
+			pst = con.prepareStatement("select * from usuarios where cpf=?");
+			pst.setString(1, CriptografiaAES.getEncryptedString());
+			rs = pst.executeQuery();
+			rs.next();
+			nome = rs.getString(2);
+			data_nascimento = rs.getDate(3);
+//			data_nascimento = DateFormat.getDateInstance().parse(rs.getString(3));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return new User(nome, data_nascimento, cpf, false);
 	}
 
@@ -132,10 +156,15 @@ public class User {
 		else
 			return new User(nome, data_nascimento, cpf, true);
 	}
-	
+
 	@Override
-	public String toString(){
+	public String toString() {
 		return nome;
+	}
+
+	public String toText() {
+		return nome + " | " + cpf + " | " + new SimpleDateFormat("dd/MM/yyyy").format(data_nascimento)
+				+ " | Nº de empréstimos: " + emprestimos.size();
 	}
 
 }
