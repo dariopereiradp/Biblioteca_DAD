@@ -18,7 +18,7 @@ public class ImageViewer {
 	public static void show(ImageIcon img) {
 		JFrame frame = new JFrame();
 		frame.getContentPane().setLayout(new MigLayout("al center center, wrap, gapy 15"));
-		frame.setIconImage(Toolkit.getDefaultToolkit().getImage((DataGui.getInstance().getClass().getResource("DAD.jpg"))));
+		frame.setIconImage(Toolkit.getDefaultToolkit().getImage((DataGui.getInstance().getClass().getResource("/DAD.jpg"))));
 		frame.setMinimumSize(new Dimension(177*2, 263*2));
 		frame.setResizable(false);
 		JLabel imageView = new JLabel("");

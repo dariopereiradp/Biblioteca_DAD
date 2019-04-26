@@ -7,7 +7,6 @@ import java.awt.Image;
 import java.awt.MediaTracker;
 import java.awt.print.PageFormat;
 import java.awt.print.Paper;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.swing.ImageIcon;
@@ -53,7 +52,7 @@ public class PDFGenerator {
 		PDFGraphics g2d = (PDFGraphics) page.createGraphics();
 
 		ImageIcon dad_icon;
-		dad_icon = new ImageIcon(getClass().getResource("DAD.jpg"));
+		dad_icon = new ImageIcon(getClass().getResource("/DAD.jpg"));
 		g2d.drawImage(dad_icon.getImage(), (int) (width / 2) - dad_icon.getIconWidth() / 12, 10,
 				dad_icon.getIconWidth() / 6, dad_icon.getIconHeight() / 6, null);
 

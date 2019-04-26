@@ -46,11 +46,11 @@ import dad.biblioteca.Livro;
 import dad.biblioteca.gui.DataGui;
 import dad.biblioteca.gui.LivroDetail;
 import dad.biblioteca.gui.Login;
-import dad.biblioteca.gui.RealizarEmprestimo;
 import dad.recursos.CellRenderer;
 import dad.recursos.CellRendererBollean;
 import dad.recursos.CellRendererInt;
 import dad.recursos.Log;
+import dad.recursos.RealizarEmprestimo;
 import mdlaf.animation.MaterialUIMovement;
 import mdlaf.utils.MaterialColors;
 
@@ -136,7 +136,7 @@ public class LivroPanel extends JPanel {
 			private Icon getSortIcon(JTable table, int column) {
 				SortOrder sortOrder = getColumnSortOrder(table, column);
 				if (SortOrder.UNSORTED == sortOrder) {
-					return new ImageIcon(getClass().getResource("sort.png"));
+					return new ImageIcon(getClass().getResource("/sort.png"));
 				}
 				return SortOrder.ASCENDING == sortOrder ? ascendingIcon : descendingIcon;
 			}
@@ -323,7 +323,7 @@ public class LivroPanel extends JPanel {
 				else
 					JOptionPane.showMessageDialog(DataGui.getInstance(),
 							"Não há exemplares disponíveis para empréstimo...", "Realiza Empréstimo",
-							JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource("DAD_SS.jpg")));
+							JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource("/DAD_SS.jpg")));
 			}
 		});
 		popupMenu.add(emprestimoItem);
@@ -503,7 +503,7 @@ public class LivroPanel extends JPanel {
 	public void adicionarLivro() {
 		if (titulo.getText().trim().equals(""))
 			JOptionPane.showMessageDialog(this, "Deve inserir pelo menos o título!", "ADICIONAR",
-					JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource("DAD_SS.jpg")));
+					JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource("/DAD_SS.jpg")));
 		else {
 			if (autor.getText().trim().equals("") && editora.getText().trim().equals("")
 					&& classificacao.getText().trim().equals(""))
@@ -534,7 +534,7 @@ public class LivroPanel extends JPanel {
 		if (rows.length > 0) {
 			int ok = JOptionPane.showConfirmDialog(this, "Tem certeza que quer apagar o(s) livro(s) selecionado(s)?",
 					"APAGAR", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE,
-					new ImageIcon(getClass().getResource("DAD_SS.jpg")));
+					new ImageIcon(getClass().getResource("/DAD_SS.jpg")));
 			if (ok == JOptionPane.OK_OPTION) {
 				modelLivro.removeLivros(rows);
 			}
@@ -546,7 +546,7 @@ public class LivroPanel extends JPanel {
 		if (rows.length > 0) {
 			int ok = JOptionPane.showConfirmDialog(this, "Tem certeza que quer apagar o exemplar selecionado?",
 					"APAGAR", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE,
-					new ImageIcon(getClass().getResource("DAD_SS.jpg")));
+					new ImageIcon(getClass().getResource("/DAD_SS.jpg")));
 			if (ok == JOptionPane.OK_OPTION) {
 				modelLivro.removeExemplar(rows);
 			}

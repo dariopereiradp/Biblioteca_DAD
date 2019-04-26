@@ -53,7 +53,7 @@ public class Login {
 		INSTANCE = this;
 		frame = new JFrame("Biblioteca Dádiva de Deus - Login");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setIconImage(Toolkit.getDefaultToolkit().getImage((getClass().getResource("DAD.jpg"))));
+		frame.setIconImage(Toolkit.getDefaultToolkit().getImage((getClass().getResource("/DAD.jpg"))));
 		frame.setBounds(100, 100, 400, 300);
 		frame.setLocationRelativeTo(null);
 		frame.setResizable(false);
@@ -77,7 +77,7 @@ public class Login {
 
 		JLabel image = new JLabel("");
 		image.setHorizontalAlignment(SwingConstants.CENTER);
-		image.setIcon(new ImageIcon(Login.class.getResource("/dad/biblioteca/gui/DAD_T.png")));
+		image.setIcon(new ImageIcon(Login.class.getResource("/DAD_T.png")));
 		image.setBounds(100, 11, 200, 87);
 		frame.getContentPane().add(image);
 
@@ -167,7 +167,7 @@ public class Login {
 		String password = String.valueOf(pass.getPassword());
 		if (username.trim().equals("") || password.trim().equals("")) {
 			JOptionPane.showMessageDialog(frame, "Preencha os campos de login!", "ERRO", JOptionPane.ERROR_MESSAGE,
-					new ImageIcon(getClass().getResource("DAD_SS.jpg")));
+					new ImageIcon(getClass().getResource("/DAD_SS.jpg")));
 		} else {
 			con = ConexaoLogin.getConnection();
 			try {
@@ -176,7 +176,7 @@ public class Login {
 				rs = pst.executeQuery();
 				if (!rs.next()) {
 					JOptionPane.showMessageDialog(frame, "O usuário não existe!", "ERRO", JOptionPane.ERROR_MESSAGE,
-							new ImageIcon(getClass().getResource("DAD_SS.jpg")));
+							new ImageIcon(getClass().getResource("/DAD_SS.jpg")));
 				} else
 					checkPassword(username, password);
 			} catch (SQLException e) {
@@ -209,7 +209,7 @@ public class Login {
 			rs = pst.executeQuery();
 			if (!rs.next()) {
 				JOptionPane.showMessageDialog(frame, "Senha errada!", "ERRO", JOptionPane.ERROR_MESSAGE,
-						new ImageIcon(getClass().getResource("DAD_SS.jpg")));
+						new ImageIcon(getClass().getResource("/DAD_SS.jpg")));
 			} else {
 				Log.getInstance().printLog("Usuário: " + username + " - Conectado com sucesso!");
 				pst = con.prepareStatement("update logins set Num_acessos = Num_acessos + 1 where nome = ?");

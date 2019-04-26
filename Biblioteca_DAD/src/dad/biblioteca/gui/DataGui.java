@@ -67,7 +67,7 @@ public class DataGui extends JFrame {
 		INSTANCE = this;
 		setTitle("Biblioteca - Dádiva de Deus");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setIconImage(Toolkit.getDefaultToolkit().getImage((getClass().getResource("DAD.jpg"))));
+		setIconImage(Toolkit.getDefaultToolkit().getImage((getClass().getResource("/DAD.jpg"))));
 		setMinimumSize(new Dimension(800, 600));
 		setExtendedState(MAXIMIZED_BOTH);
 		addWindowListener(new WindowAdapter() {
@@ -250,10 +250,10 @@ public class DataGui extends JFrame {
 	public void open() {
 		setVisible(true);
 		JOptionPane pane = new JOptionPane("Bem vindo " + Login.NOME + "!", JOptionPane.INFORMATION_MESSAGE,
-				JOptionPane.DEFAULT_OPTION, new ImageIcon(getClass().getResource("DAD_SS.jpg")), new Object[] {}, null);
+				JOptionPane.DEFAULT_OPTION, new ImageIcon(getClass().getResource("/DAD_SS.jpg")), new Object[] {}, null);
 		final JDialog dialog = pane.createDialog("Boas vindas");
 		dialog.setModal(true);
-		dialog.setIconImage(Toolkit.getDefaultToolkit().getImage((getClass().getResource("DAD.jpg"))));
+		dialog.setIconImage(Toolkit.getDefaultToolkit().getImage((getClass().getResource("/DAD.jpg"))));
 		Timer timer = new Timer(DELAY, new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				dialog.dispose();

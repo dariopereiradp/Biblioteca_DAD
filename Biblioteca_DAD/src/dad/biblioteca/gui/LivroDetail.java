@@ -38,6 +38,7 @@ import dad.biblioteca.table.AtualizaLivro;
 import dad.biblioteca.table.CompositeCommand;
 import dad.biblioteca.table.TableModelLivro;
 import dad.recursos.ImageViewer;
+import dad.recursos.RealizarEmprestimo;
 import mdlaf.animation.MaterialUIMovement;
 import mdlaf.utils.MaterialColors;
 import net.miginfocom.swing.MigLayout;
@@ -167,7 +168,7 @@ public class LivroDetail {
 				int ok = JOptionPane.showConfirmDialog(DataGui.getInstance(),
 						"Tem certeza que quer apagar a imagem do livro?\n(Não é possível voltar atrás, a não ser adicionando uma nova imagem!)",
 						"APAGAR", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE,
-						new ImageIcon(getClass().getResource("DAD_SS.jpg")));
+						new ImageIcon(getClass().getResource("/DAD_SS.jpg")));
 				if (ok == JOptionPane.OK_OPTION) {
 					l.setImg(null);
 					image.setIcon(null);
@@ -340,7 +341,7 @@ public class LivroDetail {
 				else
 					JOptionPane.showMessageDialog(DataGui.getInstance(),
 							"Não há exemplares disponíveis para empréstimo...", "Realiza Empréstimo",
-							JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource("DAD_SS.jpg")));
+							JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource("/DAD_SS.jpg")));
 
 			}
 		});

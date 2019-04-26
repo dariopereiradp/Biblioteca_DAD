@@ -120,7 +120,7 @@ public class TableModelLivro extends AbstractTableModel {
 		int ok = JOptionPane.showConfirmDialog(DataGui.getInstance(),
 				"Esse livro já existe! Deseja aumentar uma unidade ao livro já existente?", "Livro já existe",
 				JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE,
-				new ImageIcon(getClass().getResource("DAD_S.jpg")));
+				new ImageIcon(getClass().getResource("/DAD_SS.jpg")));
 		if (ok == JOptionPane.OK_OPTION)
 			return true;
 		else

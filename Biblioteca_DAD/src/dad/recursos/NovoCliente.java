@@ -21,7 +21,6 @@ import com.toedter.calendar.JDateChooser;
 
 import dad.biblioteca.User;
 import dad.biblioteca.gui.DataGui;
-import dad.biblioteca.gui.RealizarEmprestimo;
 import mdlaf.animation.MaterialUIMovement;
 import mdlaf.utils.MaterialColors;
 
@@ -33,7 +32,7 @@ public class NovoCliente {
 		int ok = JOptionPane.showConfirmDialog(DataGui.getInstance(),
 				"O cliente ainda não existe! Deseja criar um novo cliente com esse CPF?", "Criar cliente",
 				JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE,
-				new ImageIcon(NovoCliente.class.getResource("DAD_SS.jpg")));
+				new ImageIcon(NovoCliente.class.getResource("/DAD_SS.jpg")));
 		if (ok == JOptionPane.YES_OPTION) {
 			JDialog novo = new JDialog();
 			novo.setTitle("Criar novo cliente");
@@ -96,7 +95,7 @@ public class NovoCliente {
 				public void actionPerformed(ActionEvent e) {
 					if (nomeN.getText().trim().equals(""))
 						JOptionPane.showMessageDialog(novo, "Escreva um nome!", "Nome vazio", JOptionPane.ERROR_MESSAGE,
-								new ImageIcon(getClass().getResource("DAD_SS.jpg")));
+								new ImageIcon(getClass().getResource("/DAD_SS.jpg")));
 					else {
 						User user = User.newUser(nomeN.getText(), date_nasc.getDate(), cpfString);
 						Log.getInstance().printLog("Novo cliente criado com sucesso:\n" + user.toText());

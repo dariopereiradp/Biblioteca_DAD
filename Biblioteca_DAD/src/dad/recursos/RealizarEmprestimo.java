@@ -1,4 +1,4 @@
-package dad.biblioteca.gui;
+package dad.recursos;
 
 import java.awt.Color;
 import java.awt.Desktop;
@@ -34,11 +34,9 @@ import com.toedter.calendar.JDateChooser;
 import dad.biblioteca.Emprestimo;
 import dad.biblioteca.Item;
 import dad.biblioteca.User;
+import dad.biblioteca.gui.DataGui;
 import dad.biblioteca.table.TableModelLivro;
-import dad.recursos.CpfValidator;
-import dad.recursos.Log;
-import dad.recursos.NovoCliente;
-import dad.recursos.PDFGenerator;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
@@ -277,7 +275,7 @@ public class RealizarEmprestimo {
 			}
 		} else {
 			JOptionPane.showMessageDialog(dial, "Número de CPF inválido!", "Erro", JOptionPane.ERROR_MESSAGE,
-					new ImageIcon(getClass().getResource("DAD_SS.jpg")));
+					new ImageIcon(getClass().getResource("/DAD_SS.jpg")));
 			return false;
 		}
 	}
@@ -290,7 +288,7 @@ public class RealizarEmprestimo {
 					+ " foi criado com sucesso!\nFoi salvo um recibo (que pode ser impresso) na pasta:\n" + dirPath
 					+ "\nVocê quer abrir o recibo agora?";
 			int ok = JOptionPane.showConfirmDialog(dial, message, "Criado com sucesso", JOptionPane.YES_NO_OPTION,
-					JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource("DAD_SS.jpg")));
+					JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource("/DAD_SS.jpg")));
 			Log.getInstance().printLog(message);
 			if (ok == JOptionPane.YES_OPTION) {
 				Desktop.getDesktop().open(new File(dirPath));

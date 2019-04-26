@@ -60,7 +60,7 @@ public class Main {
 			} catch (InterruptedException e) {
 				String message = "Ocorreu um erro ao abrir o programa. Tenta novamente!\n" + e.getMessage();
 				JOptionPane.showMessageDialog(null, message, "Erro", JOptionPane.ERROR_MESSAGE,
-						new ImageIcon(getClass().getResource("DAD_SS.jpg")));
+						new ImageIcon(getClass().getResource("/DAD_SS.jpg")));
 				Log.getInstance().printLog(message);
 			}
 
@@ -79,12 +79,13 @@ public class Main {
 			Log.getInstance().printLog("O programa iniciou");
 
 		} catch (Exception e1) {
+			e1.printStackTrace();
 			String message = "Ocorreu um erro ao abrir o programa. Tenta novamente!\n" + e1.getMessage();
 			JOptionPane.showMessageDialog(null, message, "Erro", JOptionPane.ERROR_MESSAGE,
-					new ImageIcon(getClass().getResource("DAD_SS.jpg")));
+					new ImageIcon(getClass().getResource("/DAD_SS.jpg")));
 			Log.getInstance().printLog(message);
 			System.exit(1);
-			e1.printStackTrace();
+			
 		}
 	}
 
@@ -174,7 +175,7 @@ public class Main {
 			String message = "Ocorreu um erro ao criar a base de dados... Tenta novamente!\n" + e.getMessage() + "\n"
 					+ this.getClass();
 			JOptionPane.showMessageDialog(null, message, "Erro", JOptionPane.ERROR_MESSAGE,
-					new ImageIcon(getClass().getResource("DAD_SS.jpg")));
+					new ImageIcon(getClass().getResource("/DAD_SS.jpg")));
 			Log.getInstance().printLog(message);
 			e.printStackTrace();
 		}

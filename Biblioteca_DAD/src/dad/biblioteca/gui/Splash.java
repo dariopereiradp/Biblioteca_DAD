@@ -37,7 +37,7 @@ public class Splash extends JWindow {
 		
 		JLabel lblNewLabel_1 = new JLabel("");
 		lblNewLabel_1.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel_1.setIcon(new ImageIcon(Splash.class.getResource("splash_gif.gif")));
+		lblNewLabel_1.setIcon(new ImageIcon(Splash.class.getResource("/splash_gif.gif")));
 		lblNewLabel_1.setBounds(0, 0, 450, 181);
 		getContentPane().add(lblNewLabel_1);
 		

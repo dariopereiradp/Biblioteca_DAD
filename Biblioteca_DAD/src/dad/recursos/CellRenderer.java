@@ -16,7 +16,7 @@ public class CellRenderer extends DefaultTableCellRenderer {
 	 * 
 	 */
 	private static final long serialVersionUID = 9064760396702211972L;
-	private final ImageIcon editIcon = new ImageIcon(getClass().getResource("edit.png"));
+	private final ImageIcon editIcon = new ImageIcon(getClass().getResource("/edit.png"));
 
 	@Override
 	public void paint(Graphics g) {
