@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.IOException;
 import javax.swing.ImageIcon;
 import dad.biblioteca.gui.DataGui;
+import dad.biblioteca.table.TableModelLivro;
 import dad.recursos.ImageCompression;
 import dad.recursos.Log;
 
@@ -160,6 +161,9 @@ public class Item {
 
 	public void inc_exemp_emprestados() {
 		n_exemp_disponiveis--;
+		if(this instanceof Livro){
+			TableModelLivro.getInstance().atualizaExemplares((Livro) this);
+		}
 	}
 
 	public void dec_exemp_emprestados() {

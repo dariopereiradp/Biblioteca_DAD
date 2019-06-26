@@ -1,8 +1,11 @@
 package dad.recursos;
 
+import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 
+import javax.swing.ImageIcon;
+import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 
 import dad.biblioteca.gui.DataGui;
@@ -12,6 +15,7 @@ public class CellRendererInt extends DefaultTableCellRenderer {
 	/**
 	 * 
 	 */
+	private final ImageIcon editIcon = new ImageIcon(getClass().getResource("/edit.png"));
 	private static final long serialVersionUID = 2740715982114928328L;
 
 	@Override
@@ -36,5 +40,13 @@ public class CellRendererInt extends DefaultTableCellRenderer {
 		g.setColor(getForeground());
 		Rectangle r = g.getFontMetrics().getStringBounds(match, g).getBounds();
 		g.drawString(match, pmw + 1, -r.y + 6);
+	}
+	
+	@Override
+	public Component getTableCellRendererComponent(JTable table, Object value, boolean selected, boolean hasFocus,
+			int row, int column) {
+		super.getTableCellRendererComponent(table, value, selected, hasFocus, row, column);
+		this.setIcon(table.isCellEditable(row, column) ? editIcon : null);
+		return this;
 	}
 }

@@ -80,6 +80,10 @@ public class LivroDetail {
 		emprestar.setBackground(MaterialColors.LIGHT_GREEN_500);
 		personalizarBotao(emprestar);
 		botoesPrincipais.add(emprestar, "cell 5 0,alignx left,aligny center");
+		if(!l.isDisponivel()){
+			emprestar.setEnabled(false);
+			emprestar.setToolTipText("Não há exemplares disponíveis para empréstimo!");
+		}		
 
 		JButton ok = new JButton("Ok");
 		ok.setBackground(MaterialColors.LIGHT_BLUE_200);

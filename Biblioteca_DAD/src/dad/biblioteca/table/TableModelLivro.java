@@ -63,7 +63,7 @@ public class TableModelLivro extends AbstractTableModel {
 					l.setN_exemp_disponiveis(Integer.parseInt(disponiveis));
 					l.setId(Integer.parseInt(rs.getString(1)));
 					File f = new File(Item.imgPath + l.getId() + ".jpg");
-					if(f.exists())
+					if (f.exists())
 						l.setImg(new ImageIcon(f.getPath()));
 					if (l.getId() > maior)
 						maior = l.getId();
@@ -213,7 +213,7 @@ public class TableModelLivro extends AbstractTableModel {
 										new RemoverLivro(rows)));
 							}
 						} else
-							undoManager.execute(new AtualizaLivro(this,"Título", livro, valor));
+							undoManager.execute(new AtualizaLivro(this, "Título", livro, valor));
 					}
 					break;
 				case 2:
@@ -226,7 +226,7 @@ public class TableModelLivro extends AbstractTableModel {
 										new RemoverLivro(rows)));
 							}
 						} else
-							undoManager.execute(new AtualizaLivro(this,"Autor", livro, valor));
+							undoManager.execute(new AtualizaLivro(this, "Autor", livro, valor));
 					}
 					break;
 				case 3:
@@ -239,7 +239,7 @@ public class TableModelLivro extends AbstractTableModel {
 										new RemoverLivro(rows)));
 							}
 						} else
-							undoManager.execute(new AtualizaLivro(this,"Editora", livro, valor));
+							undoManager.execute(new AtualizaLivro(this, "Editora", livro, valor));
 					}
 					break;
 				case 4:
@@ -252,14 +252,14 @@ public class TableModelLivro extends AbstractTableModel {
 										new IncLivro(l), new RemoverLivro(rows)));
 							}
 						} else
-							undoManager.execute(new AtualizaLivro(this,"Classificação", livro, valor));
+							undoManager.execute(new AtualizaLivro(this, "Classificação", livro, valor));
 					}
 					break;
 				case 5:
 					undoManager.execute(new AtualizaExemplares(disponivel, livro, valor));
 					break;
 				case 8:
-					undoManager.execute(new AtualizaLivro(this,"Local", livro, valor));
+					undoManager.execute(new AtualizaLivro(this, "Local", livro, valor));
 					break;
 				default:
 					livros.get(rowIndex);
@@ -277,6 +277,25 @@ public class TableModelLivro extends AbstractTableModel {
 		if (INSTANCE == null)
 			INSTANCE = new TableModelLivro();
 		return INSTANCE;
+	}
+
+	public void atualizaExemplares(Livro livro) {
+		try {
+			pst = con.prepareStatement("update livros set Disponíveis=? where ID=" + livro.getId());
+			pst.setString(1, String.valueOf(livro.getN_exemp_disponiveis()));
+			pst.execute();
+			pst = con.prepareStatement("update livros set Disponível=? where ID=" + livro.getId());
+			if (livro.isDisponivel())
+				pst.setString(1, "Sim");
+			else
+				pst.setString(1, "Não");
+			pst.execute();		
+			TableModelLivro.getInstance().fireTableDataChanged();
+		} catch (
+
+		SQLException e) {
+			Log.getInstance().printLog("Erro ao atualizar número de exemplares");
+		}
 	}
 
 	@Override
@@ -531,7 +550,6 @@ public class TableModelLivro extends AbstractTableModel {
 			return "Remover Exemplar";
 		}
 	}
-
 
 	public void ordenar() {
 		livros.sort(null);
