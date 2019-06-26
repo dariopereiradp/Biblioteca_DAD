@@ -15,6 +15,7 @@ import javax.swing.UIManager;
 
 import dad.biblioteca.Item;
 import dad.biblioteca.table.TableModelLivro;
+import dad.recursos.ConexaoEmprestimos;
 import dad.recursos.ConexaoLivros;
 import dad.recursos.ConexaoLogin;
 import dad.recursos.ConexaoUser;
@@ -167,6 +168,21 @@ public class Main {
 				}
 			}
 
+			File emprestimos = new File(ConexaoEmprestimos.dbFile);
+			if (!emprestimos.exists()) {
+				con = DriverManager
+						.getConnection("jdbc:ucanaccess://" + ConexaoEmprestimos.dbFile + ";newdatabaseversion=V2003");
+				DatabaseMetaData dmd = con.getMetaData();
+				try (ResultSet rs = dmd.getTables(null, null, "Empréstimos", new String[] { "TABLE" })) {
+					try (Statement s = con.createStatement()) {
+						s.executeUpdate("CREATE TABLE Emprestimos (ID int NOT NULL,ID_Item int NOT NULL,Título varchar(255) NOT NULL,"
+								+ "Data_Emprestimo date,Data_Devolucao date, Cliente int,Funcionario varchar(255),Ativo varchar(5),"
+								+ "Multa double,CONSTRAINT PK_Emprestimos PRIMARY KEY (ID));");
+						Log.getInstance().printLog("Base de dados emprestimos.mbd criada com sucesso");
+					}
+				}
+			}
+			
 			File imgs = new File(Item.imgPath);
 			if (!imgs.exists())
 				imgs.mkdirs();

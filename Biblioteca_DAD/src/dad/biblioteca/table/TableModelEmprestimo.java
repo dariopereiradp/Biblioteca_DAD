@@ -1,10 +1,14 @@
 package dad.biblioteca.table;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.ArrayList;
 
 import javax.swing.table.AbstractTableModel;
 
 import dad.biblioteca.Emprestimo;
+import dad.recursos.UndoManager;
 
 public class TableModelEmprestimo extends AbstractTableModel {
 
@@ -16,6 +20,15 @@ public class TableModelEmprestimo extends AbstractTableModel {
 	private ArrayList<Emprestimo> emprestimos;
 	private String[] colunas = { "ID", "ID do Item", "Título", "Data do Empréstimo", "Data de Devolução", "Cliente", "Funcionário",
 			"Ativo", "Multa" };
+	private Connection con;
+	private PreparedStatement pst;
+	private ResultSet rs;
+	private UndoManager undoManager;
+	
+	private TableModelEmprestimo() {
+		INSTANCE = this;
+		undoManager = new UndoManager();
+	}
 
 	@Override
 	public int getRowCount() {
