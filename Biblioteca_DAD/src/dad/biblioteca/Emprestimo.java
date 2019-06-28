@@ -5,6 +5,8 @@ import java.time.temporal.ChronoUnit;
 import java.util.Date;
 
 import com.qoppa.pdfWriter.PDFDocument;
+
+import dad.biblioteca.gui.Login;
 import dad.recursos.PDFGenerator;
 
 /**
@@ -23,6 +25,7 @@ public class Emprestimo {
 	private Date data_entrega;
 	private int num_dias;
 	private boolean entregue;
+	private String funcionario;
 
 	public Emprestimo(User user, Item item, Date data_emprestimo, Date data_entrega) {
 		id = ++countId;
@@ -32,6 +35,7 @@ public class Emprestimo {
 		this.data_entrega = data_entrega;
 		this.num_dias = Math.toIntExact(ChronoUnit.DAYS.between(data_emprestimo.toInstant(), data_entrega.toInstant())) + 1;
 		entregue = false;
+		this.setFuncionario(Login.NOME);
 	}
 
 	public static void setMULTA(double multa) {
@@ -109,6 +113,20 @@ public class Emprestimo {
 	@Override
 	public String toString() {
 		return id + "-" + item.getNome() + "-" + user.getNome() + "-" + new SimpleDateFormat("dd_MMM_yyyy").format(data_emprestimo);
+	}
+
+	public String getFuncionario() {
+		return funcionario;
+	}
+
+	public void setFuncionario(String funcionario) {
+		this.funcionario = funcionario;
+	}
+	
+	public double getMulta(){
+		Date hoje = new Date();
+		long days = ChronoUnit.DAYS.between(data_entrega.toInstant(), hoje.toInstant());
+		return MULTA * days;
 	}
 	
 	

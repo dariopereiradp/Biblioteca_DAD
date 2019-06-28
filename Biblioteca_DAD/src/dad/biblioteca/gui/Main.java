@@ -14,6 +14,7 @@ import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 
 import dad.biblioteca.Item;
+import dad.biblioteca.table.TableModelEmprestimo;
 import dad.biblioteca.table.TableModelLivro;
 import dad.recursos.ConexaoEmprestimos;
 import dad.recursos.ConexaoLivros;
@@ -48,6 +49,7 @@ public class Main {
 				public void run() {
 					createTables();
 					TableModelLivro.getInstance().uploadDataBase();
+					TableModelEmprestimo.getInstance().uploadDatabase();
 				}
 			});
 			t1.start();

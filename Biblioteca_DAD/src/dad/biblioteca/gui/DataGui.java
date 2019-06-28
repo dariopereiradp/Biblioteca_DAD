@@ -28,6 +28,7 @@ import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableRowSorter;
 import org.apache.commons.lang.time.DurationFormatUtils;
 
+import dad.biblioteca.table.EmprestimoPanel;
 import dad.biblioteca.table.LivroPanel;
 import dad.biblioteca.table.TableModelLivro;
 import dad.recursos.CellRenderer;
@@ -53,7 +54,6 @@ public class DataGui extends JFrame {
 	private JTabbedPane tabbedPane;
 	private JTable media, outros, users;
 	private JMenu mnArquivo;
-	private JTable emprestimos;
 	private JMenu mnAjuda;
 	private JMenuItem menuSobre, menuEstatisticas, menuSair, menuAnular, menuRefazer, menuImportar, menuBackup,
 			menuOrdenar;
@@ -126,8 +126,7 @@ public class DataGui extends JFrame {
 		outros = new JTable();
 		tabbedPane.addTab("Outros", null, outros, null);
 
-		emprestimos = new JTable();
-		tabbedPane.addTab("Empréstimos", null, emprestimos, null);
+		tabbedPane.addTab("Empréstimos", EmprestimoPanel.getInstance());
 
 		users = new JTable();
 		tabbedPane.addTab("Usuários", null, users, null);

@@ -29,6 +29,17 @@ public class TableModelEmprestimo extends AbstractTableModel {
 		INSTANCE = this;
 		undoManager = new UndoManager();
 	}
+	
+	public void uploadDatabase(){
+		emprestimos = new ArrayList<>();
+	}
+	
+	public static TableModelEmprestimo getInstance(){
+		if(INSTANCE == null){
+			INSTANCE = new TableModelEmprestimo();
+		}
+		return INSTANCE;
+	}
 
 	@Override
 	public int getRowCount() {
@@ -39,11 +50,47 @@ public class TableModelEmprestimo extends AbstractTableModel {
 	public int getColumnCount() {
 		return colunas.length;
 	}
+	
+	@Override
+	public String getColumnName(int columnIndex) {
+		return colunas[columnIndex];
+	}
+	
+	public Emprestimo getEmprestimo(int rowIndex){
+		return emprestimos.get(rowIndex);
+	}
+	
+	public void removeEmprestimos(int[] rows) {
+//		undoManager.execute(new RemoverExemplar(rows));
+	}
 
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
-		// TODO Auto-generated method stub
-		return null;
+		switch (columnIndex) {
+		case 0:
+			return emprestimos.get(rowIndex).getId();
+		case 1:
+			return emprestimos.get(rowIndex).getItem().getId();
+		case 2:
+			return emprestimos.get(rowIndex).getItem().getNome();
+		case 3:
+			return emprestimos.get(rowIndex).getData_emprestimo();
+		case 4:
+			return emprestimos.get(rowIndex).getData_entrega();
+		case 5:
+			return emprestimos.get(rowIndex).getUser().getCpf();
+		case 6:
+			return emprestimos.get(rowIndex).getFuncionario();
+		case 7:
+			if (!emprestimos.get(rowIndex).isEntregue())
+				return "Sim";
+			else
+				return "Não";
+		case 8:
+			return emprestimos.get(rowIndex).getMulta();
+		default:
+			return emprestimos.get(rowIndex);
+		}
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
@@ -60,5 +107,7 @@ public class TableModelEmprestimo extends AbstractTableModel {
 			return String.class;
 		}
 	}
+	
+	
 
 }

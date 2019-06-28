@@ -11,7 +11,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
-import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -42,9 +41,9 @@ import javax.swing.table.TableCellRenderer;
 
 import org.apache.commons.lang.time.DurationFormatUtils;
 
+import dad.biblioteca.Emprestimo;
 import dad.biblioteca.Livro;
 import dad.biblioteca.gui.DataGui;
-import dad.biblioteca.gui.LivroDetail;
 import dad.biblioteca.gui.Login;
 import dad.recursos.CellRenderer;
 import dad.recursos.CellRendererBollean;
@@ -54,27 +53,25 @@ import dad.recursos.RealizarEmprestimo;
 import mdlaf.animation.MaterialUIMovement;
 import mdlaf.utils.MaterialColors;
 
-public class LivroPanel extends JPanel {
+public class EmprestimoPanel extends JPanel {
 
-	private static LivroPanel INSTANCE;
-	private JTable livros;
-	private TableModelLivro modelLivro;
-	private JPanel panelAdd, pInferior, panel2, panel3;
-	private JTextField titulo, autor, editora, classificacao, local;
+	private static EmprestimoPanel INSTANCE;
+	private JTable emprestimos;
+	private TableModelEmprestimo modelEmprestimo;
+	private JPanel pInferior, panel2, panel3;
 	private JTextField jtfTotal;
-	private JButton bAdd;
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -5439324224974968781L;
 
-	public LivroPanel() {
+	public EmprestimoPanel() {
 		super();
 		INSTANCE = this;
 		setLayout(new BorderLayout());
-		modelLivro = TableModelLivro.getInstance();
-		livros = new JTable(modelLivro) {
+		modelEmprestimo = TableModelEmprestimo.getInstance();
+		emprestimos = new JTable(modelEmprestimo) {
 			/**
 			 * 
 			 */
@@ -82,9 +79,7 @@ public class LivroPanel extends JPanel {
 
 			@Override
 			public boolean isCellEditable(int data, int columns) {
-				if (columns == 0 || columns == 6 || columns == 7)
-					return false;
-				return true;
+				return false;
 			}
 
 			@Override
@@ -109,8 +104,8 @@ public class LivroPanel extends JPanel {
 				return c;
 			}
 		};
-		TableCellRenderer tcr = livros.getTableHeader().getDefaultRenderer();
-		livros.getTableHeader().setDefaultRenderer(new TableCellRenderer() {
+		TableCellRenderer tcr = emprestimos.getTableHeader().getDefaultRenderer();
+		emprestimos.getTableHeader().setDefaultRenderer(new TableCellRenderer() {
 
 			private Icon ascendingIcon = UIManager.getIcon("Table.ascendingSortIcon");
 			private Icon descendingIcon = UIManager.getIcon("Table.descendingSortIcon");
@@ -156,33 +151,34 @@ public class LivroPanel extends JPanel {
 			}
 		});
 
-		livros.setPreferredScrollableViewportSize(new Dimension(800, 600));
-		livros.setFillsViewportHeight(true);
-		livros.setAutoCreateRowSorter(true);
-		livros.getTableHeader().setReorderingAllowed(false);
-		livros.setRowHeight(30);
-		livros.getColumnModel().getColumn(0).setMaxWidth(100);
-		livros.getColumnModel().getColumn(5).setMaxWidth(120);
-		livros.getColumnModel().getColumn(6).setMaxWidth(120);
-		livros.getColumnModel().getColumn(7).setMaxWidth(120);
-		livros.getColumnModel().getColumn(5).setMinWidth(120);
-		livros.getColumnModel().getColumn(6).setMinWidth(120);
-		livros.getColumnModel().getColumn(7).setMinWidth(120);
-		livros.setDefaultRenderer(Object.class, new CellRenderer());
+		emprestimos.setPreferredScrollableViewportSize(new Dimension(800, 600));
+		emprestimos.setFillsViewportHeight(true);
+		emprestimos.setAutoCreateRowSorter(true);
+		emprestimos.getTableHeader().setReorderingAllowed(false);
+		emprestimos.setRowHeight(30);
+		emprestimos.getColumnModel().getColumn(0).setMaxWidth(90);
+		emprestimos.getColumnModel().getColumn(1).setMaxWidth(120);
+		emprestimos.getColumnModel().getColumn(7).setMaxWidth(120);
+		emprestimos.getColumnModel().getColumn(8).setMaxWidth(80);
+		emprestimos.getColumnModel().getColumn(0).setMinWidth(90);
+		emprestimos.getColumnModel().getColumn(1).setMinWidth(120);
+		emprestimos.getColumnModel().getColumn(7).setMinWidth(120);
+		emprestimos.getColumnModel().getColumn(8).setMinWidth(80);
+		emprestimos.setDefaultRenderer(Object.class, new CellRenderer());
 
-		livros.getColumnModel().getColumn(7).setCellRenderer(new CellRendererBollean());
-		livros.getColumnModel().getColumn(0).setCellRenderer(new CellRendererInt());
-		livros.getColumnModel().getColumn(5).setCellRenderer(new CellRendererInt());
-		livros.getColumnModel().getColumn(6).setCellRenderer(new CellRendererInt());
+		emprestimos.getColumnModel().getColumn(7).setCellRenderer(new CellRendererBollean());
+		emprestimos.getColumnModel().getColumn(0).setCellRenderer(new CellRendererInt());
+		emprestimos.getColumnModel().getColumn(5).setCellRenderer(new CellRendererInt());
+		emprestimos.getColumnModel().getColumn(6).setCellRenderer(new CellRendererInt());
 
-		JScrollPane jsLivros = new JScrollPane(livros);
-		add(jsLivros, BorderLayout.CENTER);
+		JScrollPane jsEmprestimos = new JScrollPane(emprestimos);
+		add(jsEmprestimos, BorderLayout.CENTER);
 
-		livros.addComponentListener(new ComponentAdapter() {
+		emprestimos.addComponentListener(new ComponentAdapter() {
 
 			@Override
 			public void componentResized(ComponentEvent e) {
-				livros.scrollRectToVisible(livros.getCellRect(livros.getRowCount() - 1, 0, true));
+				emprestimos.scrollRectToVisible(emprestimos.getCellRect(emprestimos.getRowCount() - 1, 0, true));
 			}
 
 		});
@@ -192,7 +188,7 @@ public class LivroPanel extends JPanel {
 		panel2 = new JPanel(new GridLayout(2, 1));
 		panel3 = new JPanel();
 		JLabel total = new JLabel("Total: ");
-		jtfTotal = new JTextField(String.valueOf(modelLivro.getRowCount()));
+		jtfTotal = new JTextField(String.valueOf(modelEmprestimo.getRowCount()));
 		jtfTotal.setEditable(false);
 		panel3.add(total);
 		panel3.add(jtfTotal);
@@ -200,14 +196,13 @@ public class LivroPanel extends JPanel {
 
 		inicializarBotoes();
 
-		inicializarPanelAdd();
 
 		JMenuItem abrirItem = new JMenuItem("Abrir");
 		abrirItem.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				abrir(modelLivro.getLivro(livros.convertRowIndexToModel(livros.getSelectedRow())));
+				abrir(modelEmprestimo.getEmprestimo(emprestimos.convertRowIndexToModel(emprestimos.getSelectedRow())));
 			}
 		});
 
@@ -220,30 +215,12 @@ public class LivroPanel extends JPanel {
 			}
 		});
 
-		JMenuItem deleteOneItem = new JMenuItem("Apagar apenas 1 exemplar desse livro");
-		deleteOneItem.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				removerExemplar();
-			}
-		});
-
-		JMenuItem deleteAllItem = new JMenuItem("Apagar todos os exemplares desse livro");
-		deleteAllItem.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				removerLivros();
-			}
-		});
-
 		JMenuItem info = new JMenuItem("Informações");
 		info.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				abrir(modelLivro.getLivro(livros.convertRowIndexToModel(livros.getSelectedRow())));
+				abrir(modelEmprestimo.getEmprestimo(emprestimos.convertRowIndexToModel(emprestimos.getSelectedRow())));
 
 			}
 		});
@@ -256,21 +233,17 @@ public class LivroPanel extends JPanel {
 				SwingUtilities.invokeLater(new Runnable() {
 					@Override
 					public void run() {
-						int rowAtPointOriginal = livros
-								.rowAtPoint(SwingUtilities.convertPoint(popupMenu, new Point(0, 0), livros));
-						int rowAtPoint = livros.convertRowIndexToModel(rowAtPointOriginal);
+						int rowAtPointOriginal = emprestimos
+								.rowAtPoint(SwingUtilities.convertPoint(popupMenu, new Point(0, 0), emprestimos));
+						int rowAtPoint = emprestimos.convertRowIndexToModel(rowAtPointOriginal);
 						if (rowAtPoint > -1) {
 							int[] rows = convertRowsIndextoModel();
 							if (rows.length <= 1) {
 								abrirItem.setVisible(true);
-								livros.setRowSelectionInterval(rowAtPointOriginal, rowAtPointOriginal);
+								emprestimos.setRowSelectionInterval(rowAtPointOriginal, rowAtPointOriginal);
 								if (TableModelLivro.getInstance().getLivro(rowAtPoint).getNumero_exemplares() > 1) {
 									deleteItem.setVisible(false);
-									deleteOneItem.setVisible(true);
-									deleteAllItem.setVisible(true);
 								} else {
-									deleteOneItem.setVisible(false);
-									deleteAllItem.setVisible(false);
 									deleteItem.setVisible(true);
 								}
 							} else {
@@ -282,11 +255,7 @@ public class LivroPanel extends JPanel {
 								}
 								if (exemplares) {
 									deleteItem.setVisible(false);
-									deleteOneItem.setVisible(true);
-									deleteAllItem.setVisible(true);
 								} else {
-									deleteOneItem.setVisible(false);
-									deleteAllItem.setVisible(false);
 									deleteItem.setVisible(true);
 								}
 							}
@@ -309,33 +278,15 @@ public class LivroPanel extends JPanel {
 		popupMenu.add(info);
 		popupMenu.add(abrirItem);
 		popupMenu.add(deleteItem);
-		popupMenu.add(deleteOneItem);
-		popupMenu.add(deleteAllItem);
-
-		JMenuItem emprestimoItem = new JMenuItem("Realizar Emprésitimo");
-		emprestimoItem.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				Livro l = modelLivro.getLivro(livros.convertRowIndexToModel(livros.getSelectedRow()));
-				if (l.getN_exemp_disponiveis() > 0)
-					realizarEmprestimo(l);
-				else
-					JOptionPane.showMessageDialog(DataGui.getInstance(),
-							"Não há exemplares disponíveis para empréstimo...", "Realiza Empréstimo",
-							JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource("/DAD_SS.jpg")));
-			}
-		});
-		popupMenu.add(emprestimoItem);
 
 		popupMenu.setPopupSize(300, 150);
 
-		livros.setComponentPopupMenu(popupMenu);
+		emprestimos.setComponentPopupMenu(popupMenu);
 
-		livros.getInputMap().put(KeyStroke.getKeyStroke("DELETE"), "deleteRow");
-		livros.getActionMap().put("deleteRow", new DeleteAction());
+		emprestimos.getInputMap().put(KeyStroke.getKeyStroke("DELETE"), "deleteRow");
+		emprestimos.getActionMap().put("deleteRow", new DeleteAction());
 
-		livros.addMouseListener(new MouseAdapter() {
+		emprestimos.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent mouseEvent) {
 				JTable table = (JTable) mouseEvent.getSource();
 				Point point = mouseEvent.getPoint();
@@ -345,15 +296,15 @@ public class LivroPanel extends JPanel {
 					int row = table.convertRowIndexToModel(rowAtPoint);
 					if (mouseEvent.getClickCount() == 2 && !table.isCellEditable(row, column)
 							&& table.getSelectedRow() != -1) {
-						abrir(modelLivro.getLivro(row));
+						abrir(modelEmprestimo.getEmprestimo(row));
 					}
 				}
 			}
 		});
 
 		KeyStroke enter = KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0);
-		livros.getInputMap(JTable.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(enter, "solve");
-		livros.getActionMap().put("solve", new AbstractAction() {
+		emprestimos.getInputMap(JTable.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(enter, "solve");
+		emprestimos.getActionMap().put("solve", new AbstractAction() {
 
 			/**
 			 * 
@@ -362,8 +313,9 @@ public class LivroPanel extends JPanel {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (livros.getSelectedRows().length == 1)
-					abrir(modelLivro.getLivro(livros.convertRowIndexToModel(livros.getSelectedRow())));
+				if (emprestimos.getSelectedRows().length == 1)
+					abrir(modelEmprestimo
+							.getEmprestimo(emprestimos.convertRowIndexToModel(emprestimos.getSelectedRow())));
 
 			}
 		});
@@ -382,154 +334,21 @@ public class LivroPanel extends JPanel {
 		JPanel panel4 = new JPanel(new GridLayout(2, 1));
 		pInferior.add(panel4, BorderLayout.EAST);
 
-		bAdd = new JButton("ADICIONAR");
-		bAdd.setForeground(MaterialColors.WHITE);
-		bAdd.setBackground(MaterialColors.LIGHT_GREEN_500);
-		personalizarBotao(bAdd);
-		bAdd.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				adicionarLivro();
-
-			}
-		});
-		panel4.add(bAdd);
 	}
 
-	private void inicializarPanelAdd() {
-		panelAdd = new JPanel(new GridLayout(1, 5));
-
-		JPanel panelTitulo = new JPanel(new BorderLayout());
-		JLabel lTitulo = new JLabel("Título: ");
-		lTitulo.setFont(new Font("Roboto", Font.BOLD, 15));
-		panelTitulo.add(lTitulo, BorderLayout.WEST);
-
-		titulo = new JTextField();
-		titulo.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyPressed(KeyEvent e) {
-				if (e.getKeyCode() == KeyEvent.VK_ENTER)
-					adicionarLivro();
-			}
-		});
-		panelTitulo.add(titulo, BorderLayout.CENTER);
-
-		panelAdd.add(panelTitulo);
-
-		JPanel panelAutor = new JPanel(new BorderLayout());
-		JLabel lAutor = new JLabel("Autor: ");
-		lAutor.setFont(new Font("Roboto", Font.BOLD, 15));
-		panelAutor.add(lAutor, BorderLayout.WEST);
-
-		autor = new JTextField();
-		autor.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyPressed(KeyEvent e) {
-				if (e.getKeyCode() == KeyEvent.VK_ENTER)
-					adicionarLivro();
-			}
-		});
-		panelAutor.add(autor, BorderLayout.CENTER);
-		panelAdd.add(panelAutor);
-
-		JPanel last = new JPanel(new GridLayout(1, 6));
-
-		JPanel panelEditora = new JPanel(new BorderLayout());
-		JLabel lEditora = new JLabel("Editora: ");
-		lEditora.setFont(new Font("Roboto", Font.BOLD, 15));
-		panelEditora.add(lEditora, BorderLayout.WEST);
-
-		editora = new JTextField();
-		editora.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyPressed(KeyEvent e) {
-				if (e.getKeyCode() == KeyEvent.VK_ENTER)
-					adicionarLivro();
-			}
-		});
-		panelEditora.add(editora, BorderLayout.CENTER);
-		last.add(panelEditora);
-
-		JPanel panelClass = new JPanel(new BorderLayout());
-		JLabel lClassificacao = new JLabel("Classificação: ");
-		lClassificacao.setFont(new Font("Roboto", Font.BOLD, 15));
-		panelClass.add(lClassificacao, BorderLayout.WEST);
-
-		classificacao = new JTextField();
-		classificacao.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyPressed(KeyEvent e) {
-				if (e.getKeyCode() == KeyEvent.VK_ENTER)
-					adicionarLivro();
-			}
-		});
-		panelClass.add(classificacao, BorderLayout.CENTER);
-		last.add(panelClass);
-
-		JPanel panelLocal = new JPanel(new BorderLayout());
-		JLabel lLocal = new JLabel("Localização: ");
-		lLocal.setFont(new Font("Roboto", Font.BOLD, 15));
-		panelLocal.add(lLocal, BorderLayout.WEST);
-
-		local = new JTextField();
-		local.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyPressed(KeyEvent e) {
-				if (e.getKeyCode() == KeyEvent.VK_ENTER)
-					adicionarLivro();
-			}
-		});
-		panelLocal.add(local, BorderLayout.CENTER);
-		last.add(panelLocal);
-
-		addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyPressed(KeyEvent e) {
-				if (e.getKeyCode() == KeyEvent.VK_ENTER)
-					adicionarLivro();
-			}
-		});
-
-		JPanel both = new JPanel(new GridLayout(2, 1));
-		both.add(panelAdd);
-		both.add(last);
-
-		pInferior.add(both, BorderLayout.CENTER);
-	}
+	
 
 	public void personalizarBotao(JButton jb) {
 		jb.setFont(new Font("Roboto", Font.PLAIN, 15));
 		MaterialUIMovement.add(jb, MaterialColors.GRAY_300, 5, 1000 / 30);
 	}
 
-	public void adicionarLivro() {
-		if (titulo.getText().trim().equals(""))
-			JOptionPane.showMessageDialog(this, "Deve inserir pelo menos o título!", "ADICIONAR",
-					JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource("/DAD_SS.jpg")));
-		else {
-			if (autor.getText().trim().equals("") && editora.getText().trim().equals("")
-					&& classificacao.getText().trim().equals(""))
-				modelLivro.addLivro(new Livro(titulo.getText()));
-			else
-				modelLivro.addLivro(new Livro(titulo.getText(), autor.getText(), editora.getText(),
-						classificacao.getText(), local.getText()));
-		}
-	}
-
 	public int[] convertRowsIndextoModel() {
-		int[] rows = livros.getSelectedRows();
+		int[] rows = emprestimos.getSelectedRows();
 		for (int i = 0; i < rows.length; i++) {
-			rows[i] = livros.convertRowIndexToModel(rows[i]);
+			rows[i] = emprestimos.convertRowIndexToModel(rows[i]);
 		}
 		return rows;
-	}
-
-	public void clearTextFields() {
-		titulo.setText("");
-		autor.setText("");
-		editora.setText("");
-		classificacao.setText("");
 	}
 
 	public void removerLivros() {
@@ -539,29 +358,17 @@ public class LivroPanel extends JPanel {
 					"APAGAR", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE,
 					new ImageIcon(getClass().getResource("/DAD_SS.jpg")));
 			if (ok == JOptionPane.OK_OPTION) {
-				modelLivro.removeLivros(rows);
-			}
-		}
-	}
-
-	public void removerExemplar() {
-		int[] rows = convertRowsIndextoModel();
-		if (rows.length > 0) {
-			int ok = JOptionPane.showConfirmDialog(this, "Tem certeza que quer apagar o exemplar selecionado?",
-					"APAGAR", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE,
-					new ImageIcon(getClass().getResource("/DAD_SS.jpg")));
-			if (ok == JOptionPane.OK_OPTION) {
-				modelLivro.removeExemplar(rows);
+				modelEmprestimo.removeEmprestimos(rows);
 			}
 		}
 	}
 
 	public JTable getLivros() {
-		return livros;
+		return emprestimos;
 	}
 
-	public void abrir(Livro l) {
-		new LivroDetail(l).open();
+	public void abrir(Emprestimo emp) {
+		new RealizarEmprestimo(emp).open();
 	}
 
 	public void realizarEmprestimo(Livro l) {
@@ -598,14 +405,9 @@ public class LivroPanel extends JPanel {
 		}
 	}
 
-	public static LivroPanel getInstance() {
+	public static EmprestimoPanel getInstance() {
 		if (INSTANCE == null)
-			INSTANCE = new LivroPanel();
+			INSTANCE = new EmprestimoPanel();
 		return INSTANCE;
 	}
-
-	public JButton getbAdd() {
-		return bAdd;
-	}
-
 }

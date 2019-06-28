@@ -46,15 +46,36 @@ public class RealizarEmprestimo {
 			+ "Documents/BibliotecaDAD/Comprovantes/";
 	private String dirPath;
 	private JDialog dial;
-	JButton bValidar, alterar, bConf;
+	private JButton bValidar, alterar, bConf;
 	private JTextField id, tipo, titulo, idEmp, nome, dias;
 	private JFormattedTextField cpf;
 	private MaskFormatter mascaraCpf;
+	private JDateChooser date_emp, date_entrega;
 	private Connection con;
 	private PreparedStatement pst;
 	private ResultSet rs;
 
+	/**
+	 * 	@wbp.parser.constructor 
+	 *
+	 */
 	public RealizarEmprestimo(Item item) {
+		inicializar(item);
+	}
+	
+	public RealizarEmprestimo(Emprestimo emp){
+		inicializar(emp.getItem());
+		cpf.setText(emp.getUser().getCpf());
+		cpf.setEditable(false);
+		date_emp.setDate(emp.getData_emprestimo());
+		date_entrega.setDate(emp.getData_entrega());
+		nome.setText(emp.getUser().getNome());
+		bValidar.setEnabled(false);
+		alterar.setEnabled(true);
+		
+	}
+	
+	public void inicializar(Item item){
 		String month_year = LocalDateTime.now().format(DateTimeFormatter.ofPattern("MMMyyyy")).toUpperCase();
 		dirPath = RealizarEmprestimo.EMPRESTIMOS_PATH + month_year + "/";
 		File docDir = new File(dirPath);
@@ -201,7 +222,7 @@ public class RealizarEmprestimo {
 		dial.getContentPane().add(dias);
 		dias.setColumns(10);
 
-		JDateChooser date_emp = new JDateChooser();
+		date_emp = new JDateChooser();
 		date_emp.setLocale(new Locale("pt", "BR"));
 		date_emp.setDateFormatString("dd/MMM/yyyy");
 		date_emp.setMaxSelectableDate(new Date());
@@ -209,7 +230,7 @@ public class RealizarEmprestimo {
 		date_emp.setBounds(153, 308, 139, 20);
 		dial.getContentPane().add(date_emp);
 
-		JDateChooser date_entrega = new JDateChooser();
+		date_entrega = new JDateChooser();
 		date_entrega.setLocale(new Locale("PT", "BR"));
 		date_entrega.setDateFormatString("dd/MMM/yyyy");
 		date_entrega.setMinSelectableDate(new Date());
@@ -254,7 +275,6 @@ public class RealizarEmprestimo {
 				save(emprestimo);
 			}
 		});
-
 	}
 
 	public boolean validar() {
