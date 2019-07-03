@@ -37,6 +37,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
+import javax.swing.table.JTableHeader;
 import javax.swing.table.TableCellRenderer;
 
 import org.apache.commons.lang.time.DurationFormatUtils;
@@ -65,6 +66,11 @@ public class EmprestimoPanel extends JPanel {
 	 * 
 	 */
 	private static final long serialVersionUID = -5439324224974968781L;
+	private String[] columnToolTips = { "ID do empréstimo", "ID do item", "Título do item",
+			"Data em que o empréstimo foi realizado", "Data máxima de devolução do empréstimo",
+			"CPF do cliente a quem foi feito o empréstimo", "Funcionário que realizou o empréstimo",
+			"O empréstimo está ativo? (Ou seja, o item ainda não foi devolvido?)",
+			"Valor da multa a ser paga, caso esteja em atraso" };
 
 	public EmprestimoPanel() {
 		super();
@@ -102,6 +108,34 @@ public class EmprestimoPanel extends JPanel {
 						c.setBackground(MaterialColors.RED_300);
 				}
 				return c;
+			}
+
+			// Implement table cell tool tips.
+			public String getToolTipText(MouseEvent e) {
+				String tip = null;
+				Point p = e.getPoint();
+				int rowIndex = rowAtPoint(p);
+				int colIndex = columnAtPoint(p);
+				int realColumnIndex = convertColumnIndexToModel(colIndex);
+				if (rowIndex != -1) {
+					int realRowIndex = convertRowIndexToModel(rowIndex);
+					tip = String.valueOf(modelEmprestimo.getValueAt(realRowIndex, realColumnIndex));
+				} else
+					tip = null;
+				return tip;
+			}
+
+			// Implement table header tool tips.
+			protected JTableHeader createDefaultTableHeader() {
+				return new JTableHeader(columnModel) {
+					public String getToolTipText(MouseEvent e) {
+						String tip = null;
+						Point p = e.getPoint();
+						int index = columnModel.getColumnIndexAtX(p.x);
+						int realIndex = columnModel.getColumn(index).getModelIndex();
+						return columnToolTips[realIndex];
+					}
+				};
 			}
 		};
 		TableCellRenderer tcr = emprestimos.getTableHeader().getDefaultRenderer();
@@ -195,7 +229,6 @@ public class EmprestimoPanel extends JPanel {
 		panel2.add(panel3);
 
 		inicializarBotoes();
-
 
 		JMenuItem abrirItem = new JMenuItem("Abrir");
 		abrirItem.addActionListener(new ActionListener() {
@@ -335,8 +368,6 @@ public class EmprestimoPanel extends JPanel {
 		pInferior.add(panel4, BorderLayout.EAST);
 
 	}
-
-	
 
 	public void personalizarBotao(JButton jb) {
 		jb.setFont(new Font("Roboto", Font.PLAIN, 15));

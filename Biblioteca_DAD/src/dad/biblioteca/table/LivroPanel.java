@@ -38,6 +38,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
+import javax.swing.table.JTableHeader;
 import javax.swing.table.TableCellRenderer;
 
 import org.apache.commons.lang.time.DurationFormatUtils;
@@ -68,6 +69,10 @@ public class LivroPanel extends JPanel {
 	 * 
 	 */
 	private static final long serialVersionUID = -5439324224974968781L;
+	private String[] columnToolTips = { "ID do livro", "Título do livro", "Autor que escreveu o livro",
+			"Editora que publicou o livro", "Classificação/gênero do livro (ex: aventura, ficção, etc)",
+			"Número de exemplares do livro", "Número de exemplares do livro que estão disponíveis para empréstimo",
+			"O livro está disponível para empréstimo?", "Localização dos exemplares do livro na biblioteca" };
 
 	public LivroPanel() {
 		super();
@@ -107,6 +112,34 @@ public class LivroPanel extends JPanel {
 						c.setBackground(MaterialColors.RED_300);
 				}
 				return c;
+			}
+
+			// Implement table cell tool tips.
+			public String getToolTipText(MouseEvent e) {
+				String tip = null;
+				Point p = e.getPoint();
+				int rowIndex = rowAtPoint(p);
+				int colIndex = columnAtPoint(p);
+				int realColumnIndex = convertColumnIndexToModel(colIndex);
+				if (rowIndex != -1) {
+					int realRowIndex = convertRowIndexToModel(rowIndex);
+					tip = String.valueOf(modelLivro.getValueAt(realRowIndex, realColumnIndex));
+				} else
+					tip = null;
+				return tip;
+			}
+
+			// Implement table header tool tips.
+			protected JTableHeader createDefaultTableHeader() {
+				return new JTableHeader(columnModel) {
+					public String getToolTipText(MouseEvent e) {
+						String tip = null;
+						Point p = e.getPoint();
+						int index = columnModel.getColumnIndexAtX(p.x);
+						int realIndex = columnModel.getColumn(index).getModelIndex();
+						return columnToolTips[realIndex];
+					}
+				};
 			}
 		};
 		TableCellRenderer tcr = livros.getTableHeader().getDefaultRenderer();
