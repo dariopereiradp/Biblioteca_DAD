@@ -46,6 +46,12 @@ public class Emprestimo {
 
 	public void entregar() {
 		entregue = true;
+		item.dec_exemp_emprestados();
+	}
+	
+	public void cancelar_entrega(){
+		entregue = false;
+		item.inc_exemp_emprestados();
 	}
 
 	public int getId() {

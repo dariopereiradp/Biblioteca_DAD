@@ -43,6 +43,8 @@ import dad.biblioteca.table.TableModelLivro;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.JCheckBox;
+import javax.swing.SwingConstants;
 
 public class RealizarEmprestimo {
 
@@ -50,11 +52,13 @@ public class RealizarEmprestimo {
 			+ "Documents/BibliotecaDAD/Comprovantes/";
 	private String dirPath;
 	private JDialog dial;
-	private JButton bValidar, alterar, bConf;
+	private JButton bValidar, alterar, bConf, bGerarRecibo, bVerRecibo, bSave;
 	private JTextField id, tipo, titulo, idEmp, nome, dias;
 	private JFormattedTextField cpf;
 	private MaskFormatter mascaraCpf;
 	private JDateChooser date_emp, date_entrega;
+	private JCheckBox entregue;
+	private Emprestimo emp = null;
 	private Connection con;
 	private PreparedStatement pst;
 	private ResultSet rs;
@@ -65,17 +69,35 @@ public class RealizarEmprestimo {
 	 */
 	public RealizarEmprestimo(Item item) {
 		inicializar(item);
+		bGerarRecibo.setVisible(false);
+		bSave.setVisible(false);
+		bVerRecibo.setVisible(false);
+		entregue.setVisible(false);
 	}
 
 	public RealizarEmprestimo(Emprestimo emp) {
+		this.emp = emp;
 		inicializar(emp.getItem());
 		cpf.setText(emp.getUser().getCpf());
 		cpf.setEditable(false);
+		idEmp.setText(String.valueOf(emp.getId()));
 		date_emp.setDate(emp.getData_emprestimo());
 		date_entrega.setDate(emp.getData_entrega());
 		nome.setText(emp.getUser().getNome());
 		bValidar.setEnabled(false);
 		alterar.setEnabled(true);
+		bConf.setVisible(false);
+		bSave.setEnabled(false);
+		if (emp.isEntregue()) {
+			entregue.setSelected(true);
+			bSave.setEnabled(false);
+			alterar.setEnabled(false);
+			date_emp.setEnabled(false);
+			date_entrega.setEnabled(false);
+			entregue.setBackground(new Color(255, 0, 0));
+		} else {
+			entregue.setSelected(false);
+		}
 
 	}
 
@@ -166,6 +188,12 @@ public class RealizarEmprestimo {
 		bConf.setBounds(365, 332, 103, 23);
 		dial.getContentPane().add(bConf);
 
+		bSave = new JButton("Salvar");
+		bSave.setEnabled(false);
+		bSave.setFont(new Font("Roboto", Font.PLAIN, 12));
+		bSave.setBounds(365, 332, 103, 23);
+		dial.getContentPane().add(bSave);
+
 		titulo = new JTextField();
 		titulo.setEditable(false);
 		titulo.setFont(new Font("Roboto", Font.PLAIN, 12));
@@ -249,6 +277,7 @@ public class RealizarEmprestimo {
 				cpf.setEditable(true);
 				nome.setText("");
 				bConf.setEnabled(false);
+				bSave.setEnabled(false);
 				alterar.setEnabled(false);
 				bValidar.setEnabled(true);
 			}
@@ -258,13 +287,84 @@ public class RealizarEmprestimo {
 		alterar.setBounds(379, 161, 89, 23);
 		dial.getContentPane().add(alterar);
 
+		bGerarRecibo = new JButton("Gerar novo recibo");
+		bGerarRecibo.setFont(new Font("Roboto", Font.PLAIN, 12));
+		bGerarRecibo.setBounds(322, 301, 146, 23);
+		dial.getContentPane().add(bGerarRecibo);
+
+		bVerRecibo = new JButton("Ver recibo");
+		bVerRecibo.setFont(new Font("Roboto", Font.PLAIN, 12));
+		bVerRecibo.setBounds(322, 270, 146, 23);
+		dial.getContentPane().add(bVerRecibo);
+
+		entregue = new JCheckBox("MARCAR COMO DEVOLVIDO");
+		entregue.setHorizontalAlignment(SwingConstants.CENTER);
+		entregue.setBackground(new Color(50, 205, 50));
+		entregue.setFont(new Font("Roboto", Font.PLAIN, 12));
+		entregue.setBounds(186, 30, 188, 42);
+		dial.getContentPane().add(entregue);
+
+		entregue.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (entregue.isSelected()) {
+					int ok = JOptionPane.showConfirmDialog(dial, "Tem certeza que quer confirmar a devolução do item?",
+							"Confirmar devolução", JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE,
+							new ImageIcon(getClass().getResource("/DAD_SS.jpg")));
+					if (ok == JOptionPane.YES_OPTION) {
+						emp.entregar();
+						entregue.setBackground(new Color(255, 0, 0));
+						bSave.setEnabled(false);
+						alterar.setEnabled(false);
+						date_emp.setEnabled(false);
+						date_entrega.setEnabled(false);
+					} else {
+						entregue.setSelected(false);
+					}
+				} else {
+					int ok = JOptionPane.showConfirmDialog(dial, "Tem certeza que quer cancelar a devolução do item?",
+							"Cancelar devolução", JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE,
+							new ImageIcon(getClass().getResource("/DAD_SS.jpg")));
+					if (ok == JOptionPane.YES_OPTION) {
+						emp.cancelar_entrega();
+						entregue.setBackground(new Color(50, 205, 50));
+						bSave.setEnabled(false);
+						alterar.setEnabled(true);
+						date_emp.setEnabled(true);
+						date_entrega.setEnabled(true);
+					}
+					else{
+						entregue.setSelected(true);
+					}
+				}
+
+			}
+		});
+
 		date_entrega.getDateEditor().addPropertyChangeListener(new PropertyChangeListener() {
 
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
+				String ant = dias.getText();
 				dias.setText(String.valueOf(
 						ChronoUnit.DAYS.between(date_emp.getDate().toInstant(), date_entrega.getDate().toInstant())
 								+ 1));
+				if (!ant.equals(dias.getText()))
+					bSave.setEnabled(true);
+			}
+		});
+
+		date_emp.getDateEditor().addPropertyChangeListener(new PropertyChangeListener() {
+
+			@Override
+			public void propertyChange(PropertyChangeEvent evt) {
+				String ant = dias.getText();
+				dias.setText(String.valueOf(
+						ChronoUnit.DAYS.between(date_emp.getDate().toInstant(), date_entrega.getDate().toInstant())
+								+ 1));
+				if (!ant.equals(dias.getText()))
+					bSave.setEnabled(true);
 			}
 		});
 
@@ -272,7 +372,6 @@ public class RealizarEmprestimo {
 			public void actionPerformed(ActionEvent e) {
 				Emprestimo emprestimo = new Emprestimo(User.getUser(cpf.getText().replace(".", "").replace("-", "")),
 						item, date_emp.getDate(), date_entrega.getDate(), Login.NOME);
-				// TODO salvar na base de dados
 
 				con = ConexaoEmprestimos.getConnection();
 				try {
@@ -289,7 +388,8 @@ public class RealizarEmprestimo {
 					pst.setString(9, "0.0");
 					pst.execute();
 					TableModelEmprestimo.getInstance().addEmprestimo(emprestimo);
-					EmprestimoPanel.getInstance().getJtfTotal().setText(String.valueOf(TableModelEmprestimo.getInstance().getEmprestimos().size()));
+					EmprestimoPanel.getInstance().getJtfTotal()
+							.setText(String.valueOf(TableModelEmprestimo.getInstance().getEmprestimos().size()));
 					TableModelEmprestimo.getInstance().fireTableDataChanged();
 				} catch (SQLException e1) {
 					// TODO Auto-generated catch block
@@ -302,6 +402,38 @@ public class RealizarEmprestimo {
 				save(emprestimo);
 			}
 		});
+
+		bSave.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				con = ConexaoEmprestimos.getConnection();
+				try {
+					pst = con.prepareStatement(
+							"update emprestimos set Data_Emprestimo=?,Data_Devolucao=?,Cliente=?,Ativo=?,Multa=? where ID="
+									+ idEmp.getText());
+					emp.setData_emprestimo(date_emp.getDate());
+					emp.setData_entrega(date_entrega.getDate());
+					emp.setUser(User.getUser(cpf.getText().replace(".", "").replace("-", "")));
+					pst.setDate(1, new java.sql.Date(date_emp.getDate().getTime()));
+					pst.setDate(2, new java.sql.Date(date_entrega.getDate().getTime()));
+					pst.setString(3, cpf.getText().replace(".", "").replace("-", ""));
+					if (emp.isEntregue())
+						pst.setString(4, "Não");
+					else
+						pst.setString(4, "Sim");
+					pst.setString(9, String.valueOf(emp.getMulta()));
+					pst.execute();
+					TableModelEmprestimo.getInstance().fireTableDataChanged();
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+
+				emp.getItem().inc_exemp_emprestados();
+
+				TableModelLivro.getInstance().fireTableDataChanged();
+				save(emp);
+			}
+		});
 	}
 
 	public boolean validar() {
@@ -312,6 +444,7 @@ public class RealizarEmprestimo {
 			if (User.existe(cpfString)) {
 				nome.setText(User.getUser(cpfString).getNome());
 				bConf.setEnabled(true);
+				bSave.setEnabled(true);
 				cpf.setEditable(false);
 				bValidar.setEnabled(false);
 				alterar.setEnabled(true);
@@ -349,6 +482,17 @@ public class RealizarEmprestimo {
 
 	}
 
+	public void abrirRecibo(Emprestimo emprestimo) {
+		try {
+			Desktop.getDesktop().open(new File(dirPath));
+			Desktop.getDesktop().open(new File(dirPath + emprestimo.toString() + ".pdf"));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+
 	public void open() {
 		dial.setVisible(true);
 	}
@@ -372,5 +516,4 @@ public class RealizarEmprestimo {
 	public JButton getbConf() {
 		return bConf;
 	}
-
 }

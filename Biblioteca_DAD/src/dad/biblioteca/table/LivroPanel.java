@@ -234,6 +234,16 @@ public class LivroPanel extends JPanel {
 		inicializarBotoes();
 
 		inicializarPanelAdd();
+		
+		JMenuItem verHistorico = new JMenuItem("Ver histórico de empréstimos");
+		verHistorico.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
 
 		JMenuItem deleteItem = new JMenuItem("Apagar");
 		deleteItem.addActionListener(new ActionListener() {
@@ -350,6 +360,7 @@ public class LivroPanel extends JPanel {
 			}
 		});
 		popupMenu.add(emprestimoItem);
+		popupMenu.add(verHistorico);
 
 		popupMenu.setPopupSize(300, 150);
 

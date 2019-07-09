@@ -69,7 +69,7 @@ public class EmprestimoPanel extends JPanel {
 	private String[] columnToolTips = { "ID do empréstimo", "ID do item", "Título do item",
 			"Data em que o empréstimo foi realizado", "Data máxima de devolução do empréstimo",
 			"CPF do cliente a quem foi feito o empréstimo", "Funcionário que realizou o empréstimo",
-			"O empréstimo está ativo? (Ou seja, o item ainda não foi devolvido?)",
+			"O empréstimo está ativo? (Sim -> O item nao foi devolvido / Não -> O item foi devolvido)",
 			"Valor da multa a ser paga, caso esteja em atraso" };
 
 	public EmprestimoPanel() {
@@ -394,7 +394,7 @@ public class EmprestimoPanel extends JPanel {
 		}
 	}
 
-	public JTable getLivros() {
+	public JTable getEmprestimos() {
 		return emprestimos;
 	}
 
