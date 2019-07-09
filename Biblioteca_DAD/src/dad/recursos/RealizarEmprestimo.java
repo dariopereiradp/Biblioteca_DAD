@@ -11,7 +11,6 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.time.LocalDateTime;
@@ -61,7 +60,7 @@ public class RealizarEmprestimo {
 	private Emprestimo emp = null;
 	private Connection con;
 	private PreparedStatement pst;
-	private ResultSet rs;
+//	private ResultSet rs;
 
 	/**
 	 * @wbp.parser.constructor
@@ -292,10 +291,26 @@ public class RealizarEmprestimo {
 		bGerarRecibo.setBounds(322, 301, 146, 23);
 		dial.getContentPane().add(bGerarRecibo);
 
+		bGerarRecibo.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				save(emp);
+			}
+		});
+
 		bVerRecibo = new JButton("Ver recibo");
 		bVerRecibo.setFont(new Font("Roboto", Font.PLAIN, 12));
 		bVerRecibo.setBounds(322, 270, 146, 23);
 		dial.getContentPane().add(bVerRecibo);
+
+		bVerRecibo.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				abrirRecibo(emp);
+			}
+		});
 
 		entregue = new JCheckBox("MARCAR COMO DEVOLVIDO");
 		entregue.setHorizontalAlignment(SwingConstants.CENTER);
@@ -312,33 +327,59 @@ public class RealizarEmprestimo {
 					int ok = JOptionPane.showConfirmDialog(dial, "Tem certeza que quer confirmar a devolução do item?",
 							"Confirmar devolução", JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE,
 							new ImageIcon(getClass().getResource("/DAD_SS.jpg")));
-					if (ok == JOptionPane.YES_OPTION) {
-						emp.entregar();
-						entregue.setBackground(new Color(255, 0, 0));
-						bSave.setEnabled(false);
-						alterar.setEnabled(false);
-						date_emp.setEnabled(false);
-						date_entrega.setEnabled(false);
-					} else {
-						entregue.setSelected(false);
+
+					try {
+						if (ok == JOptionPane.YES_OPTION) {
+							emp.entregar();
+							con = ConexaoEmprestimos.getConnection();
+							pst = con.prepareStatement("update emprestimos set Ativo=? where ID=" + emp.getId());
+							if (emp.isEntregue())
+								pst.setString(1, "Não");
+							else
+								pst.setString(1, "Sim");
+							pst.execute();
+							entregue.setBackground(new Color(255, 0, 0));
+							bSave.setEnabled(false);
+							alterar.setEnabled(false);
+							date_emp.setEnabled(false);
+							date_entrega.setEnabled(false);
+						} else {
+							entregue.setSelected(false);
+						}
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
 					}
+
 				} else {
-					int ok = JOptionPane.showConfirmDialog(dial, "Tem certeza que quer cancelar a devolução do item?",
-							"Cancelar devolução", JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE,
-							new ImageIcon(getClass().getResource("/DAD_SS.jpg")));
-					if (ok == JOptionPane.YES_OPTION) {
-						emp.cancelar_entrega();
-						entregue.setBackground(new Color(50, 205, 50));
-						bSave.setEnabled(false);
-						alterar.setEnabled(true);
-						date_emp.setEnabled(true);
-						date_entrega.setEnabled(true);
-					}
-					else{
-						entregue.setSelected(true);
+					try {
+						int ok = JOptionPane.showConfirmDialog(dial,
+								"Tem certeza que quer cancelar a devolução do item?", "Cancelar devolução",
+								JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE,
+								new ImageIcon(getClass().getResource("/DAD_SS.jpg")));
+						if (ok == JOptionPane.YES_OPTION) {
+							emp.cancelar_entrega();
+							con = ConexaoEmprestimos.getConnection();
+							pst = con.prepareStatement("update emprestimos set Ativo=? where ID=" + emp.getId());
+							if (emp.isEntregue())
+								pst.setString(1, "Não");
+							else
+								pst.setString(1, "Sim");
+							pst.execute();
+							entregue.setBackground(new Color(50, 205, 50));
+							bSave.setEnabled(false);
+							alterar.setEnabled(true);
+							date_emp.setEnabled(true);
+							date_entrega.setEnabled(true);
+
+						} else {
+							entregue.setSelected(true);
+						}
+					} catch (SQLException e1) {
+						e1.printStackTrace();
 					}
 				}
-
+				TableModelEmprestimo.getInstance().fireTableDataChanged();
 			}
 		});
 

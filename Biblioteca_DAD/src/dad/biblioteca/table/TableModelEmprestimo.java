@@ -1,6 +1,5 @@
 package dad.biblioteca.table;
 
-import java.io.File;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -8,17 +7,13 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-import javax.swing.ImageIcon;
 import javax.swing.table.AbstractTableModel;
 
 import dad.biblioteca.Emprestimo;
 import dad.biblioteca.Item;
-import dad.biblioteca.Livro;
 import dad.biblioteca.User;
 import dad.recursos.ConexaoEmprestimos;
-import dad.recursos.ConexaoLivros;
 import dad.recursos.Log;
-import dad.recursos.UndoManager;
 
 public class TableModelEmprestimo extends AbstractTableModel {
 
@@ -33,11 +28,11 @@ public class TableModelEmprestimo extends AbstractTableModel {
 	private Connection con;
 	private PreparedStatement pst;
 	private ResultSet rs;
-	private UndoManager undoManager;
+//	private UndoManager undoManager;
 	
 	private TableModelEmprestimo() {
 		INSTANCE = this;
-		undoManager = new UndoManager();
+//		undoManager = new UndoManager();
 	}
 	
 	
@@ -61,6 +56,8 @@ public class TableModelEmprestimo extends AbstractTableModel {
 					String ativo = rs.getString(8);
 					Emprestimo emp = new Emprestimo(user, item, data_emprestimo, data_devolucao, funcionario);
 					emp.setId(Integer.parseInt(rs.getString(1)));
+					if(ativo.equals("Não"))
+						emp.entregar();
 					if (emp.getId() > maior)
 						maior = emp.getId();
 					emprestimos.add(emp);

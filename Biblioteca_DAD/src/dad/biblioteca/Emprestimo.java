@@ -6,7 +6,6 @@ import java.util.Date;
 
 import com.qoppa.pdfWriter.PDFDocument;
 
-import dad.biblioteca.gui.Login;
 import dad.recursos.PDFGenerator;
 
 /**

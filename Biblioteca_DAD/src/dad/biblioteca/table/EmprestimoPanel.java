@@ -96,13 +96,13 @@ public class EmprestimoPanel extends JPanel {
 				else
 					c.setBackground(MaterialColors.GRAY_100);
 				if (isCellSelected(data, columns)) {
-					if (TableModelLivro.getInstance().getValueAt(data, 7).equals("Sim"))
+					if (TableModelEmprestimo.getInstance().getValueAt(data, 7).equals("Sim"))
 						c.setBackground(MaterialColors.GREEN_A100);
 					else
 						c.setBackground(MaterialColors.RED_300);
 				}
 				if (columns == 7) {
-					if (TableModelLivro.getInstance().getValueAt(data, columns).equals("Sim"))
+					if (TableModelEmprestimo.getInstance().getValueAt(data, columns).equals("Sim"))
 						c.setBackground(MaterialColors.GREEN_A100);
 					else
 						c.setBackground(MaterialColors.RED_300);
@@ -128,7 +128,13 @@ public class EmprestimoPanel extends JPanel {
 			// Implement table header tool tips.
 			protected JTableHeader createDefaultTableHeader() {
 				return new JTableHeader(columnModel) {
+					/**
+					 * 
+					 */
+					private static final long serialVersionUID = -8247305580277890952L;
+
 					public String getToolTipText(MouseEvent e) {
+						@SuppressWarnings("unused")
 						String tip = null;
 						Point p = e.getPoint();
 						int index = columnModel.getColumnIndexAtX(p.x);
@@ -230,15 +236,6 @@ public class EmprestimoPanel extends JPanel {
 
 		inicializarBotoes();
 
-		JMenuItem abrirItem = new JMenuItem("Abrir");
-		abrirItem.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				abrir(modelEmprestimo.getEmprestimo(emprestimos.convertRowIndexToModel(emprestimos.getSelectedRow())));
-			}
-		});
-
 		JMenuItem deleteItem = new JMenuItem("Apagar");
 		deleteItem.addActionListener(new ActionListener() {
 
@@ -272,26 +269,12 @@ public class EmprestimoPanel extends JPanel {
 						if (rowAtPoint > -1) {
 							int[] rows = convertRowsIndextoModel();
 							if (rows.length <= 1) {
-								abrirItem.setVisible(true);
+								info.setVisible(true);
 								emprestimos.setRowSelectionInterval(rowAtPointOriginal, rowAtPointOriginal);
-								if (TableModelLivro.getInstance().getLivro(rowAtPoint).getNumero_exemplares() > 1) {
-									deleteItem.setVisible(false);
-								} else {
-									deleteItem.setVisible(true);
-								}
 							} else {
-								abrirItem.setVisible(false);
-								boolean exemplares = false;
-								for (int i = 0; i < rows.length; i++) {
-									if (TableModelLivro.getInstance().getLivro(rows[i]).getNumero_exemplares() > 1)
-										exemplares = true;
-								}
-								if (exemplares) {
-									deleteItem.setVisible(false);
-								} else {
-									deleteItem.setVisible(true);
-								}
+								info.setVisible(false);
 							}
+							deleteItem.setVisible(true);
 						}
 					}
 				});
@@ -309,7 +292,6 @@ public class EmprestimoPanel extends JPanel {
 		});
 
 		popupMenu.add(info);
-		popupMenu.add(abrirItem);
 		popupMenu.add(deleteItem);
 
 		popupMenu.setPopupSize(300, 150);

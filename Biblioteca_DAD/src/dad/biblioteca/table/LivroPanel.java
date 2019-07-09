@@ -132,7 +132,13 @@ public class LivroPanel extends JPanel {
 			// Implement table header tool tips.
 			protected JTableHeader createDefaultTableHeader() {
 				return new JTableHeader(columnModel) {
+					/**
+					 * 
+					 */
+					private static final long serialVersionUID = -6962458419476848334L;
+
 					public String getToolTipText(MouseEvent e) {
+						@SuppressWarnings("unused")
 						String tip = null;
 						Point p = e.getPoint();
 						int index = columnModel.getColumnIndexAtX(p.x);
