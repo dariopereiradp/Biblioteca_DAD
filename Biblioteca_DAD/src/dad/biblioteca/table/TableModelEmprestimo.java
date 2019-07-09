@@ -1,13 +1,23 @@
 package dad.biblioteca.table;
 
+import java.io.File;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
+import javax.swing.ImageIcon;
 import javax.swing.table.AbstractTableModel;
 
 import dad.biblioteca.Emprestimo;
+import dad.biblioteca.Item;
+import dad.biblioteca.Livro;
+import dad.biblioteca.User;
+import dad.recursos.ConexaoEmprestimos;
+import dad.recursos.ConexaoLivros;
+import dad.recursos.Log;
 import dad.recursos.UndoManager;
 
 public class TableModelEmprestimo extends AbstractTableModel {
@@ -30,9 +40,43 @@ public class TableModelEmprestimo extends AbstractTableModel {
 		undoManager = new UndoManager();
 	}
 	
-	public void uploadDatabase(){
+	
+	
+	public void uploadDataBase() {
 		emprestimos = new ArrayList<>();
+		int maior = 0;
+		try {
+			con = ConexaoEmprestimos.getConnection();
+			pst = con.prepareStatement("select * from emprestimos order by ID");
+			rs = pst.executeQuery();
+			if (rs.next()) {
+				do {
+					int id_item = Integer.parseInt(rs.getString(2));
+					Item item = Item.getItemById(id_item);
+					Date data_emprestimo = rs.getTimestamp(4);
+					Date data_devolucao = rs.getTimestamp(5);
+					String cpf = rs.getString(6);
+					User user = User.getUser(cpf);
+					String funcionario = rs.getString(7);
+					String ativo = rs.getString(8);
+					Emprestimo emp = new Emprestimo(user, item, data_emprestimo, data_devolucao, funcionario);
+					emp.setId(Integer.parseInt(rs.getString(1)));
+					if (emp.getId() > maior)
+						maior = emp.getId();
+					emprestimos.add(emp);
+				} while (rs.next());
+			}
+			fireTableDataChanged();
+			Log.getInstance().printLog("Base de dados empréstimos carregada com sucesso!");
+			if (emprestimos.size() > 0)
+				Emprestimo.countId = maior;
+		} catch (Exception e) {
+			Log.getInstance()
+					.printLog("Erro ao carregar a base de dados dos Empréstimos: " + e.getMessage() + "\n" + getClass());
+			e.printStackTrace();
+		}
 	}
+
 	
 	public static TableModelEmprestimo getInstance(){
 		if(INSTANCE == null){
@@ -56,6 +100,14 @@ public class TableModelEmprestimo extends AbstractTableModel {
 		return colunas[columnIndex];
 	}
 	
+	public ArrayList<Emprestimo> getEmprestimos() {
+		return emprestimos;
+	}
+	
+	public void addEmprestimo (Emprestimo emp){
+		emprestimos.add(emp);
+	}
+	
 	public Emprestimo getEmprestimo(int rowIndex){
 		return emprestimos.get(rowIndex);
 	}
@@ -74,9 +126,9 @@ public class TableModelEmprestimo extends AbstractTableModel {
 		case 2:
 			return emprestimos.get(rowIndex).getItem().getNome();
 		case 3:
-			return emprestimos.get(rowIndex).getData_emprestimo();
+			return new SimpleDateFormat("dd/MMM/yyyy").format(emprestimos.get(rowIndex).getData_emprestimo());
 		case 4:
-			return emprestimos.get(rowIndex).getData_entrega();
+			return new SimpleDateFormat("dd/MMM/yyyy").format(emprestimos.get(rowIndex).getData_entrega());
 		case 5:
 			return emprestimos.get(rowIndex).getUser().getCpf();
 		case 6:

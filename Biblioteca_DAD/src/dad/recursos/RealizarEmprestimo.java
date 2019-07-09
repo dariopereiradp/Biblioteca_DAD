@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.ParseException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -35,6 +36,9 @@ import dad.biblioteca.Emprestimo;
 import dad.biblioteca.Item;
 import dad.biblioteca.User;
 import dad.biblioteca.gui.DataGui;
+import dad.biblioteca.gui.Login;
+import dad.biblioteca.table.EmprestimoPanel;
+import dad.biblioteca.table.TableModelEmprestimo;
 import dad.biblioteca.table.TableModelLivro;
 
 import java.awt.event.ActionListener;
@@ -56,14 +60,14 @@ public class RealizarEmprestimo {
 	private ResultSet rs;
 
 	/**
-	 * 	@wbp.parser.constructor 
+	 * @wbp.parser.constructor
 	 *
 	 */
 	public RealizarEmprestimo(Item item) {
 		inicializar(item);
 	}
-	
-	public RealizarEmprestimo(Emprestimo emp){
+
+	public RealizarEmprestimo(Emprestimo emp) {
 		inicializar(emp.getItem());
 		cpf.setText(emp.getUser().getCpf());
 		cpf.setEditable(false);
@@ -72,10 +76,10 @@ public class RealizarEmprestimo {
 		nome.setText(emp.getUser().getNome());
 		bValidar.setEnabled(false);
 		alterar.setEnabled(true);
-		
+
 	}
-	
-	public void inicializar(Item item){
+
+	public void inicializar(Item item) {
 		String month_year = LocalDateTime.now().format(DateTimeFormatter.ofPattern("MMMyyyy")).toUpperCase();
 		dirPath = RealizarEmprestimo.EMPRESTIMOS_PATH + month_year + "/";
 		File docDir = new File(dirPath);
@@ -237,7 +241,7 @@ public class RealizarEmprestimo {
 		date_entrega.setDate(new Date());
 		date_entrega.setBounds(186, 239, 139, 20);
 		dial.getContentPane().add(date_entrega);
-		
+
 		alterar = new JButton("Alterar");
 		alterar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -267,8 +271,31 @@ public class RealizarEmprestimo {
 		bConf.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Emprestimo emprestimo = new Emprestimo(User.getUser(cpf.getText().replace(".", "").replace("-", "")),
-						item, date_emp.getDate(), date_entrega.getDate());
+						item, date_emp.getDate(), date_entrega.getDate(), Login.NOME);
 				// TODO salvar na base de dados
+
+				con = ConexaoEmprestimos.getConnection();
+				try {
+					pst = con.prepareStatement(
+							"insert into emprestimos(ID,ID_Item,Título,Data_Emprestimo,Data_Devolucao,Cliente,Funcionario,Ativo,Multa) values (?,?,?,?,?,?,?,?,?)");
+					pst.setString(1, String.valueOf(emprestimo.getId()));
+					pst.setString(2, String.valueOf(emprestimo.getItem().getId()));
+					pst.setString(3, emprestimo.getItem().getNome());
+					pst.setDate(4, new java.sql.Date(emprestimo.getData_emprestimo().getTime()));
+					pst.setDate(5, new java.sql.Date(emprestimo.getData_entrega().getTime()));
+					pst.setString(6, emprestimo.getUser().getCpf());
+					pst.setString(7, String.valueOf(emprestimo.getFuncionario()));
+					pst.setString(8, "Sim");
+					pst.setString(9, "0.0");
+					pst.execute();
+					TableModelEmprestimo.getInstance().addEmprestimo(emprestimo);
+					EmprestimoPanel.getInstance().getJtfTotal().setText(String.valueOf(TableModelEmprestimo.getInstance().getEmprestimos().size()));
+					TableModelEmprestimo.getInstance().fireTableDataChanged();
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+
 				emprestimo.getItem().inc_exemp_emprestados(); // salvar na base
 																// de dados
 				TableModelLivro.getInstance().fireTableDataChanged();
@@ -289,7 +316,7 @@ public class RealizarEmprestimo {
 				bValidar.setEnabled(false);
 				alterar.setEnabled(true);
 				return true;
-			} else{
+			} else {
 				NovoCliente.novoCliente(cpfString, this);
 				return true;
 			}
@@ -345,8 +372,5 @@ public class RealizarEmprestimo {
 	public JButton getbConf() {
 		return bConf;
 	}
-	
-	
-	
-	
+
 }

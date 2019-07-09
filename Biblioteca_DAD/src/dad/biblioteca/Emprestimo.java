@@ -27,15 +27,17 @@ public class Emprestimo {
 	private boolean entregue;
 	private String funcionario;
 
-	public Emprestimo(User user, Item item, Date data_emprestimo, Date data_entrega) {
+	public Emprestimo(User user, Item item, Date data_emprestimo, Date data_entrega, String funcionario) {
 		id = ++countId;
 		this.user = user;
 		this.item = item;
 		this.data_emprestimo = data_emprestimo;
 		this.data_entrega = data_entrega;
-		this.num_dias = Math.toIntExact(ChronoUnit.DAYS.between(data_emprestimo.toInstant(), data_entrega.toInstant())) + 1;
+		this.num_dias = Math.toIntExact(ChronoUnit.DAYS.between(data_emprestimo.toInstant(), data_entrega.toInstant()))
+				+ 1;
 		entregue = false;
-		this.setFuncionario(Login.NOME);
+		this.funcionario = funcionario;
+
 	}
 
 	public static void setMULTA(double multa) {
@@ -112,7 +114,8 @@ public class Emprestimo {
 
 	@Override
 	public String toString() {
-		return id + "-" + item.getNome() + "-" + user.getNome() + "-" + new SimpleDateFormat("dd_MMM_yyyy").format(data_emprestimo);
+		return id + "-" + item.getNome() + "-" + user.getNome() + "-"
+				+ new SimpleDateFormat("dd_MMM_yyyy").format(data_emprestimo);
 	}
 
 	public String getFuncionario() {
@@ -122,13 +125,13 @@ public class Emprestimo {
 	public void setFuncionario(String funcionario) {
 		this.funcionario = funcionario;
 	}
-	
-	public double getMulta(){
+
+	public double getMulta() {
 		Date hoje = new Date();
 		long days = ChronoUnit.DAYS.between(data_entrega.toInstant(), hoje.toInstant());
-		return MULTA * days;
+		if (days >= 0)
+			return MULTA * days;
+		else return 0.0;
 	}
-	
-	
 
 }

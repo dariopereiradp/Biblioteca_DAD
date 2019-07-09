@@ -49,7 +49,7 @@ public class Main {
 				public void run() {
 					createTables();
 					TableModelLivro.getInstance().uploadDataBase();
-					TableModelEmprestimo.getInstance().uploadDatabase();
+					TableModelEmprestimo.getInstance().uploadDataBase();
 				}
 			});
 			t1.start();
@@ -178,7 +178,7 @@ public class Main {
 				try (ResultSet rs = dmd.getTables(null, null, "Empréstimos", new String[] { "TABLE" })) {
 					try (Statement s = con.createStatement()) {
 						s.executeUpdate("CREATE TABLE Emprestimos (ID int NOT NULL,ID_Item int NOT NULL,Título varchar(255) NOT NULL,"
-								+ "Data_Emprestimo date,Data_Devolucao date, Cliente int,Funcionario varchar(255),Ativo varchar(5),"
+								+ "Data_Emprestimo date,Data_Devolucao date, Cliente varchar(15),Funcionario varchar(255),Ativo varchar(5),"
 								+ "Multa double,CONSTRAINT PK_Emprestimos PRIMARY KEY (ID));");
 						Log.getInstance().printLog("Base de dados emprestimos.mbd criada com sucesso");
 					}

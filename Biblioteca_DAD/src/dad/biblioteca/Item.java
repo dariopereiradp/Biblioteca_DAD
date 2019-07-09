@@ -123,8 +123,13 @@ public class Item {
 
 	public void setNumero_exemplares(int numero_exemplares) {
 		if (numero_exemplares > 0) {
-			this.numero_exemplares = numero_exemplares;
-			setN_exemp_disponiveis(numero_exemplares - getN_exemp_emprestados());
+			if (getN_exemp_emprestados() > 0) {
+				setN_exemp_disponiveis(numero_exemplares - getN_exemp_emprestados());
+				this.numero_exemplares = numero_exemplares;
+			} else{
+				this.numero_exemplares = numero_exemplares;
+				setN_exemp_disponiveis(numero_exemplares);
+			}
 		}
 	}
 
@@ -161,7 +166,7 @@ public class Item {
 
 	public void inc_exemp_emprestados() {
 		n_exemp_disponiveis--;
-		if(this instanceof Livro){
+		if (this instanceof Livro) {
 			TableModelLivro.getInstance().atualizaExemplares((Livro) this);
 		}
 	}
@@ -235,6 +240,15 @@ public class Item {
 				e.printStackTrace();
 				Log.getInstance().printLog("Item - addImg: Erro ao copiar a imagem!");
 			}
+	}
+	
+	public static Item getItemById(int id){
+		if(TableModelLivro.getInstance().getLivroById(id) != null)
+			return TableModelLivro.getInstance().getLivroById(id);
+		// else: verificar na multimedia e outros
+		
+		// se não existe em lado nenhum
+		return null;
 	}
 
 }

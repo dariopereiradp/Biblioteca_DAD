@@ -88,6 +88,14 @@ public class TableModelLivro extends AbstractTableModel {
 		}
 		return l;
 	}
+	
+	public Livro getLivroById(int id) {
+		for (int i = 0; i < livros.size(); i++) {
+			if (livros.get(i).getId() == id)
+				return livros.get(i);
+		}
+		return null;
+	}
 
 	public void addListeners() {
 		undoManager.addPropertyChangeListener(e -> updateItems());

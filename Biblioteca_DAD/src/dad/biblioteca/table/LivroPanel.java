@@ -235,15 +235,6 @@ public class LivroPanel extends JPanel {
 
 		inicializarPanelAdd();
 
-		JMenuItem abrirItem = new JMenuItem("Abrir");
-		abrirItem.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				abrir(modelLivro.getLivro(livros.convertRowIndexToModel(livros.getSelectedRow())));
-			}
-		});
-
 		JMenuItem deleteItem = new JMenuItem("Apagar");
 		deleteItem.addActionListener(new ActionListener() {
 
@@ -295,7 +286,7 @@ public class LivroPanel extends JPanel {
 						if (rowAtPoint > -1) {
 							int[] rows = convertRowsIndextoModel();
 							if (rows.length <= 1) {
-								abrirItem.setVisible(true);
+								info.setVisible(true);
 								livros.setRowSelectionInterval(rowAtPointOriginal, rowAtPointOriginal);
 								if (TableModelLivro.getInstance().getLivro(rowAtPoint).getNumero_exemplares() > 1) {
 									deleteItem.setVisible(false);
@@ -307,7 +298,7 @@ public class LivroPanel extends JPanel {
 									deleteItem.setVisible(true);
 								}
 							} else {
-								abrirItem.setVisible(false);
+								info.setVisible(false);
 								boolean exemplares = false;
 								for (int i = 0; i < rows.length; i++) {
 									if (TableModelLivro.getInstance().getLivro(rows[i]).getNumero_exemplares() > 1)
@@ -340,7 +331,6 @@ public class LivroPanel extends JPanel {
 		});
 
 		popupMenu.add(info);
-		popupMenu.add(abrirItem);
 		popupMenu.add(deleteItem);
 		popupMenu.add(deleteOneItem);
 		popupMenu.add(deleteAllItem);
