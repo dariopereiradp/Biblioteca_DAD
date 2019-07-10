@@ -241,7 +241,7 @@ public class EmprestimoPanel extends JPanel {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				removerLivros();
+				removerEmprestimos();
 			}
 		});
 
@@ -294,7 +294,7 @@ public class EmprestimoPanel extends JPanel {
 		popupMenu.add(info);
 		popupMenu.add(deleteItem);
 
-		popupMenu.setPopupSize(300, 150);
+		popupMenu.setPopupSize(150, 75);
 
 		emprestimos.setComponentPopupMenu(popupMenu);
 
@@ -364,10 +364,11 @@ public class EmprestimoPanel extends JPanel {
 		return rows;
 	}
 
-	public void removerLivros() {
+	public void removerEmprestimos() {
 		int[] rows = convertRowsIndextoModel();
 		if (rows.length > 0) {
-			int ok = JOptionPane.showConfirmDialog(this, "Tem certeza que quer apagar o(s) livro(s) selecionado(s)?",
+			int ok = JOptionPane.showConfirmDialog(this,
+					"Tem certeza que quer apagar o(s) empréstimo(s) selecionado(s)?\nO recibo relacionado a cada empréstimo também será apagado!\nATENÇÃO: ESSA AÇÃO NÃO PODE SER ANULADA!\nObs: pode marcar o empréstimo como 'entregue' sem precisar apagar!",
 					"APAGAR", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE,
 					new ImageIcon(getClass().getResource("/DAD_SS.jpg")));
 			if (ok == JOptionPane.OK_OPTION) {
@@ -414,7 +415,7 @@ public class EmprestimoPanel extends JPanel {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			removerLivros();
+			removerEmprestimos();
 		}
 	}
 

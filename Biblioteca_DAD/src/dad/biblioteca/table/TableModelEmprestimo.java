@@ -1,8 +1,10 @@
 package dad.biblioteca.table;
 
+import java.io.File;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -14,6 +16,7 @@ import dad.biblioteca.Item;
 import dad.biblioteca.User;
 import dad.recursos.ConexaoEmprestimos;
 import dad.recursos.Log;
+import dad.recursos.RealizarEmprestimo;
 
 public class TableModelEmprestimo extends AbstractTableModel {
 
@@ -23,20 +26,18 @@ public class TableModelEmprestimo extends AbstractTableModel {
 	private static final long serialVersionUID = 3247984074345998765L;
 	private static TableModelEmprestimo INSTANCE;
 	private ArrayList<Emprestimo> emprestimos;
-	private String[] colunas = { "ID", "ID do Item", "Título", "Data do Empréstimo", "Data de Devolução", "Cliente", "Funcionário",
-			"Ativo", "Multa" };
+	private String[] colunas = { "ID", "ID do Item", "Título", "Data do Empréstimo", "Data de Devolução", "Cliente",
+			"Funcionário", "Ativo", "Multa" };
 	private Connection con;
 	private PreparedStatement pst;
 	private ResultSet rs;
-//	private UndoManager undoManager;
-	
+	// private UndoManager undoManager;
+
 	private TableModelEmprestimo() {
 		INSTANCE = this;
-//		undoManager = new UndoManager();
+		// undoManager = new UndoManager();
 	}
-	
-	
-	
+
 	public void uploadDataBase() {
 		emprestimos = new ArrayList<>();
 		int maior = 0;
@@ -56,7 +57,7 @@ public class TableModelEmprestimo extends AbstractTableModel {
 					String ativo = rs.getString(8);
 					Emprestimo emp = new Emprestimo(user, item, data_emprestimo, data_devolucao, funcionario);
 					emp.setId(Integer.parseInt(rs.getString(1)));
-					if(ativo.equals("Não"))
+					if (ativo.equals("Não"))
 						emp.entregar();
 					if (emp.getId() > maior)
 						maior = emp.getId();
@@ -68,15 +69,14 @@ public class TableModelEmprestimo extends AbstractTableModel {
 			if (emprestimos.size() > 0)
 				Emprestimo.countId = maior;
 		} catch (Exception e) {
-			Log.getInstance()
-					.printLog("Erro ao carregar a base de dados dos Empréstimos: " + e.getMessage() + "\n" + getClass());
+			Log.getInstance().printLog(
+					"Erro ao carregar a base de dados dos Empréstimos: " + e.getMessage() + "\n" + getClass());
 			e.printStackTrace();
 		}
 	}
 
-	
-	public static TableModelEmprestimo getInstance(){
-		if(INSTANCE == null){
+	public static TableModelEmprestimo getInstance() {
+		if (INSTANCE == null) {
 			INSTANCE = new TableModelEmprestimo();
 		}
 		return INSTANCE;
@@ -91,26 +91,55 @@ public class TableModelEmprestimo extends AbstractTableModel {
 	public int getColumnCount() {
 		return colunas.length;
 	}
-	
+
 	@Override
 	public String getColumnName(int columnIndex) {
 		return colunas[columnIndex];
 	}
-	
+
 	public ArrayList<Emprestimo> getEmprestimos() {
 		return emprestimos;
 	}
-	
-	public void addEmprestimo (Emprestimo emp){
+
+	public void addEmprestimo(Emprestimo emp) {
 		emprestimos.add(emp);
 	}
-	
-	public Emprestimo getEmprestimo(int rowIndex){
+
+	public Emprestimo getEmprestimo(int rowIndex) {
 		return emprestimos.get(rowIndex);
 	}
-	
+
 	public void removeEmprestimos(int[] rows) {
-//		undoManager.execute(new RemoverExemplar(rows));
+		// undoManager.execute(new RemoverExemplar(rows));
+		ArrayList<Emprestimo> toDelete = new ArrayList<>();
+		for (int i = 0; i < rows.length; i++) {
+			Emprestimo emp = emprestimos.get(rows[i]);
+			apagar(emp, toDelete);
+		}
+		emprestimos.removeAll(toDelete);
+	}
+
+	private void apagar(Emprestimo emp, ArrayList<Emprestimo> toDelete) {
+		try {
+			if (!emp.isEntregue()) {
+				emp.entregar();
+			}
+			con = ConexaoEmprestimos.getConnection();
+			pst = con.prepareStatement("delete from emprestimos where ID=" + emp.getId());
+			pst.execute();
+			String month_year = new SimpleDateFormat("MMMyyyy").format(emp.getData_emprestimo()).toUpperCase();
+			String dirPath = RealizarEmprestimo.EMPRESTIMOS_PATH + month_year + "/";
+			File recibo = new File(dirPath + emp.toString() + ".pdf");
+			if(recibo.exists())
+				recibo.delete();
+			toDelete.add(emp);
+			fireTableDataChanged();
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		} catch (SecurityException e2){
+			Log.getInstance().printLog("Erro ao apagar o recibo! - " + e2.getMessage());
+		}
+
 	}
 
 	@Override
@@ -141,7 +170,7 @@ public class TableModelEmprestimo extends AbstractTableModel {
 			return emprestimos.get(rowIndex);
 		}
 	}
-	
+
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public Class getColumnClass(int column) {
@@ -156,7 +185,5 @@ public class TableModelEmprestimo extends AbstractTableModel {
 			return String.class;
 		}
 	}
-	
-	
 
 }

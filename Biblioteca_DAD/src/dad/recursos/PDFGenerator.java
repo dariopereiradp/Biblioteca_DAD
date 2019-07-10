@@ -84,12 +84,12 @@ public class PDFGenerator {
 				throw new RuntimeException("Image loading interrupted", ex);
 			}
 
-			g2d.drawImage(image, (int) (width / 10) * 7, 220 + 25, 177 / 3, 236 / 3, null);
+			g2d.drawImage(image, (int) (width / 11) * 8, 220 + 25, 177 / 3, 236 / 3, null);
 		} else {
 			g2d.setFont(PDFGraphics.COURIER.deriveFont(8f).deriveFont(Font.PLAIN));
-			g2d.drawString("Sem Imagem", (int) ((width / 10) * 7), 245 + 236 / 6);
+			g2d.drawString(" Sem Imagem ", (int) ((width / 11) * 8), 245 + 236 / 6);
 		}
-		g2d.drawRect((int) (width / 10) * 7, 220 + 25, 177 / 3, 236 / 3);
+		g2d.drawRect((int) (width / 11) * 8, 220 + 25, 177 / 3, 236 / 3);
 
 		g2d.setFont(PDFGraphics.COURIER.deriveFont(10f).deriveFont(Font.BOLD));
 		text = "DADOS DO ITEM";

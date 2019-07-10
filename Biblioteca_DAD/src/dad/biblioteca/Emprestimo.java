@@ -119,7 +119,8 @@ public class Emprestimo {
 
 	@Override
 	public String toString() {
-		return id + "-" + item.getNome() + "-" + user.getNome() + "-"
+		int endIndex = Math.min(15, item.getNome().trim().length());
+		return id + "-" + item.getNome().trim().substring(0, endIndex) + "-" + item.getId() + "-" + user.getNome().split(" ")[0] + "-"
 				+ new SimpleDateFormat("dd_MMM_yyyy").format(data_emprestimo);
 	}
 
