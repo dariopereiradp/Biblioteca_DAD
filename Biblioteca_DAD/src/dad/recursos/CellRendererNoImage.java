@@ -8,7 +8,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 import dad.biblioteca.gui.DataGui;
 import mdlaf.utils.MaterialColors;
 
-public class CellRendererBollean extends DefaultTableCellRenderer {
+public class CellRendererNoImage extends DefaultTableCellRenderer {
 
 	/**
 	 * 

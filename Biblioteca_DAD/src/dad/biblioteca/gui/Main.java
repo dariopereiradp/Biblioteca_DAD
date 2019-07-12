@@ -179,7 +179,7 @@ public class Main {
 					try (Statement s = con.createStatement()) {
 						s.executeUpdate("CREATE TABLE Emprestimos (ID int NOT NULL,ID_Item int NOT NULL,Título varchar(255) NOT NULL,"
 								+ "Data_Emprestimo date,Data_Devolucao date, Cliente varchar(15),Funcionario varchar(255),Ativo varchar(5),"
-								+ "Multa double,CONSTRAINT PK_Emprestimos PRIMARY KEY (ID));");
+								+ "Multa double,Pago varchar(5),CONSTRAINT PK_Emprestimos PRIMARY KEY (ID));");
 						Log.getInstance().printLog("Base de dados emprestimos.mbd criada com sucesso");
 					}
 				}

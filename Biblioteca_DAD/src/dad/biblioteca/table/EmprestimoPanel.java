@@ -43,12 +43,13 @@ import javax.swing.table.TableCellRenderer;
 import org.apache.commons.lang.time.DurationFormatUtils;
 
 import dad.biblioteca.Emprestimo;
+import dad.biblioteca.Item;
 import dad.biblioteca.Livro;
 import dad.biblioteca.gui.DataGui;
 import dad.biblioteca.gui.Login;
 import dad.recursos.CellRenderer;
-import dad.recursos.CellRendererBollean;
-import dad.recursos.CellRendererInt;
+import dad.recursos.CellRenderer2;
+import dad.recursos.CellRendererNoImage;
 import dad.recursos.Log;
 import dad.recursos.RealizarEmprestimo;
 import mdlaf.animation.MaterialUIMovement;
@@ -90,19 +91,26 @@ public class EmprestimoPanel extends JPanel {
 
 			@Override
 			public Component prepareRenderer(TableCellRenderer r, int data, int columns) {
+				int row = convertRowIndexToModel(data);
 				Component c = super.prepareRenderer(r, data, columns);
 				if (data % 2 == 0)
 					c.setBackground(Color.WHITE);
 				else
 					c.setBackground(MaterialColors.GRAY_100);
 				if (isCellSelected(data, columns)) {
-					if (TableModelEmprestimo.getInstance().getValueAt(data, 7).equals("Sim"))
+					if (TableModelEmprestimo.getInstance().getValueAt(row, 7).equals("Sim"))
 						c.setBackground(MaterialColors.GREEN_A100);
 					else
 						c.setBackground(MaterialColors.RED_300);
 				}
 				if (columns == 7) {
-					if (TableModelEmprestimo.getInstance().getValueAt(data, columns).equals("Sim"))
+					if (TableModelEmprestimo.getInstance().getValueAt(row, columns).equals("Sim"))
+						c.setBackground(MaterialColors.GREEN_A100);
+					else
+						c.setBackground(MaterialColors.RED_300);
+				}
+				if (columns == 8) {
+					if (TableModelEmprestimo.getInstance().getValueAt(row, columns).equals(0.0))
 						c.setBackground(MaterialColors.GREEN_A100);
 					else
 						c.setBackground(MaterialColors.RED_300);
@@ -206,10 +214,10 @@ public class EmprestimoPanel extends JPanel {
 		emprestimos.getColumnModel().getColumn(8).setMinWidth(80);
 		emprestimos.setDefaultRenderer(Object.class, new CellRenderer());
 
-		emprestimos.getColumnModel().getColumn(7).setCellRenderer(new CellRendererBollean());
-		emprestimos.getColumnModel().getColumn(0).setCellRenderer(new CellRendererInt());
-		emprestimos.getColumnModel().getColumn(5).setCellRenderer(new CellRendererInt());
-		emprestimos.getColumnModel().getColumn(6).setCellRenderer(new CellRendererInt());
+		emprestimos.getColumnModel().getColumn(0).setCellRenderer(new CellRendererNoImage());
+		emprestimos.getColumnModel().getColumn(1).setCellRenderer(new CellRendererNoImage());
+		emprestimos.getColumnModel().getColumn(7).setCellRenderer(new CellRendererNoImage());
+		emprestimos.getColumnModel().getColumn(8).setCellRenderer(new CellRenderer2());
 
 		JScrollPane jsEmprestimos = new JScrollPane(emprestimos);
 		add(jsEmprestimos, BorderLayout.CENTER);
@@ -255,6 +263,16 @@ public class EmprestimoPanel extends JPanel {
 			}
 		});
 
+		JMenuItem atualizar = new JMenuItem("Atualizar Tabela");
+		atualizar.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				TableModelEmprestimo.getInstance().fireTableDataChanged();
+				TableModelEmprestimo.getInstance().atualizarMultas();
+			}
+		});
+
 		JPopupMenu popupMenu = new JPopupMenu();
 		popupMenu.addPopupMenuListener(new PopupMenuListener() {
 
@@ -265,16 +283,22 @@ public class EmprestimoPanel extends JPanel {
 					public void run() {
 						int rowAtPointOriginal = emprestimos
 								.rowAtPoint(SwingUtilities.convertPoint(popupMenu, new Point(0, 0), emprestimos));
-						int rowAtPoint = emprestimos.convertRowIndexToModel(rowAtPointOriginal);
-						if (rowAtPoint > -1) {
-							int[] rows = convertRowsIndextoModel();
-							if (rows.length <= 1) {
-								info.setVisible(true);
-								emprestimos.setRowSelectionInterval(rowAtPointOriginal, rowAtPointOriginal);
-							} else {
-								info.setVisible(false);
+						if (rowAtPointOriginal > -1) {
+							int rowAtPoint = emprestimos.convertRowIndexToModel(rowAtPointOriginal);
+							if (rowAtPoint > -1) {
+								int[] rows = convertRowsIndextoModel();
+								if (rows.length <= 1) {
+									info.setVisible(true);
+									emprestimos.setRowSelectionInterval(rowAtPointOriginal, rowAtPointOriginal);
+								} else {
+									info.setVisible(false);
+								}
+								deleteItem.setVisible(true);
 							}
-							deleteItem.setVisible(true);
+						} else {
+							info.setVisible(false);
+							deleteItem.setVisible(false);
+							atualizar.setVisible(true);
 						}
 					}
 				});
@@ -293,8 +317,9 @@ public class EmprestimoPanel extends JPanel {
 
 		popupMenu.add(info);
 		popupMenu.add(deleteItem);
+		popupMenu.add(atualizar);
 
-		popupMenu.setPopupSize(150, 75);
+		popupMenu.setPopupSize(225, 75);
 
 		emprestimos.setComponentPopupMenu(popupMenu);
 
@@ -309,9 +334,23 @@ public class EmprestimoPanel extends JPanel {
 				int rowAtPoint = table.rowAtPoint(point);
 				if (rowAtPoint != -1) {
 					int row = table.convertRowIndexToModel(rowAtPoint);
-					if (mouseEvent.getClickCount() == 2 && !table.isCellEditable(row, column)
-							&& table.getSelectedRow() != -1) {
-						abrir(modelEmprestimo.getEmprestimo(row));
+					if (mouseEvent.getClickCount() == 2 && table.getSelectedRow() != -1) {
+						if (column == 0 || column == 2 || column == 3 || column == 4 || column == 6 || column == 7
+								|| column == 8)
+							abrir(modelEmprestimo.getEmprestimo(row));
+						else if (column == 1) {
+							try {
+								LivroPanel.getInstance().abrir(TableModelLivro.getInstance()
+										.getLivroById((Integer) table.getValueAt(rowAtPoint, column)));
+							} catch (NullPointerException e) {
+								JOptionPane.showMessageDialog(null,
+										"Atenção! O livro já não existe na base de dados. Deve ter sido apagado!",
+										"ERRO", JOptionPane.ERROR_MESSAGE,
+										new ImageIcon(getClass().getResource("/DAD_SS.jpg")));
+							}
+						} else if (column == 5) {
+							// TODO abrir cliente
+						}
 					}
 				}
 			}
@@ -381,6 +420,10 @@ public class EmprestimoPanel extends JPanel {
 		return emprestimos;
 	}
 
+	public void setTable(JTable emprestimos) {
+		this.emprestimos = emprestimos;
+	}
+
 	public void abrir(Emprestimo emp) {
 		new RealizarEmprestimo(emp).open();
 	}
@@ -423,5 +466,72 @@ public class EmprestimoPanel extends JPanel {
 		if (INSTANCE == null)
 			INSTANCE = new EmprestimoPanel();
 		return INSTANCE;
+	}
+
+	public JTable getSmallTable(Item item) {
+		if (item instanceof Livro) {
+			Livro l = (Livro) item;
+			JTable small = new JTable(TableModelEmprestimo.getInstance()){
+				/**
+				 * 
+				 */
+				private static final long serialVersionUID = -7294828362296077489L;
+
+				@Override
+				public Component prepareRenderer(TableCellRenderer r, int data, int columns) {
+					int rowIndex = convertRowIndexToModel(data);
+					Component c = super.prepareRenderer(r, data, columns);
+					if (data % 2 == 0)
+						c.setBackground(Color.WHITE);
+					else
+						c.setBackground(MaterialColors.GRAY_100);
+					if (isCellSelected(data, columns)) {
+						if (!TableModelEmprestimo.getInstance().getEmprestimo(rowIndex).isEntregue())
+							c.setBackground(MaterialColors.GREEN_A100);
+						else
+							c.setBackground(MaterialColors.RED_300);
+					}
+					if (columns == 5) {
+						if (!TableModelEmprestimo.getInstance().getEmprestimo(rowIndex).isEntregue())
+							c.setBackground(MaterialColors.GREEN_A100);
+						else
+							c.setBackground(MaterialColors.RED_300);
+					}
+					if (columns == 6) {
+						if (TableModelEmprestimo.getInstance().getEmprestimo(rowIndex).getMulta()==0)
+							c.setBackground(MaterialColors.GREEN_A100);
+						else
+							c.setBackground(MaterialColors.RED_300);
+					}
+					return c;
+				}
+				
+				protected JTableHeader createDefaultTableHeader() {
+					return new JTableHeader(columnModel) {
+						/**
+						 * 
+						 */
+						private static final long serialVersionUID = -8247305580277890952L;
+
+						public String getToolTipText(MouseEvent e) {
+							@SuppressWarnings("unused")
+							String tip = null;
+							Point p = e.getPoint();
+							int index = columnModel.getColumnIndexAtX(p.x);
+							int realIndex = columnModel.getColumn(index).getModelIndex();
+							return columnToolTips[realIndex];
+						}
+					};
+				}
+			};
+			small.setRowHeight(30);
+			small.removeColumn(small.getColumnModel().getColumn(1));
+			small.removeColumn(small.getColumnModel().getColumn(1));
+			DataGui.getInstance().filtrarEmprestimos(l, small);
+			small.getColumnModel().getColumn(6).setCellRenderer(new CellRenderer2());
+			
+			return small;
+		} else
+			return emprestimos;
 	}
 }

@@ -28,11 +28,13 @@ import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableRowSorter;
 import org.apache.commons.lang.time.DurationFormatUtils;
 
+import dad.biblioteca.Livro;
 import dad.biblioteca.table.EmprestimoPanel;
 import dad.biblioteca.table.LivroPanel;
+import dad.biblioteca.table.TableModelEmprestimo;
 import dad.biblioteca.table.TableModelLivro;
 import dad.recursos.CellRenderer;
-import dad.recursos.CellRendererInt;
+import dad.recursos.CellRendererNoImage;
 import dad.recursos.DefaultCellRenderer;
 import dad.recursos.Log;
 import javax.swing.JMenu;
@@ -52,16 +54,15 @@ public class DataGui extends JFrame {
 	private static final int DELAY = 2200;
 	private static DataGui INSTANCE;
 	private JTabbedPane tabbedPane;
-	private JTable media, outros, users;
-	private JMenu mnArquivo;
-	private JMenu mnAjuda;
+	private JTable media, outros;
+	private JTable users;
+	private JMenu mnArquivo, mnAjuda, mnEditar;
 	private JMenuItem menuSobre, menuEstatisticas, menuSair, menuAnular, menuRefazer, menuImportar, menuBackup,
-			menuOrdenar;
-	private JMenu mnEditar;
+			menuOrdenar, menuAtualizar, menuConfig;
 	private JTextField pesquisa;
 	private JPanel filtrosPanel;
-	private JCheckBox checkID, checkTitulo, checkAutor, checkEditora, checkClassificacao, checkLocal;
-	private JMenuItem menuConfig;
+	private JCheckBox checkID, checkTitulo, checkAutor, checkEditora, checkClassificacao, checkLocal, checkIDItem,
+			checkCliente, checkFuncionario, checkDataEmp, checkDataDevol;
 
 	private DataGui() {
 		INSTANCE = this;
@@ -95,6 +96,11 @@ public class DataGui extends JFrame {
 		checkID.setSelected(true);
 		filtrosPanel.add(checkID);
 
+		checkIDItem = new JCheckBox("ID do Item");
+		checkIDItem.setSelected(true);
+		filtrosPanel.add(checkIDItem);
+		checkIDItem.setVisible(false);
+
 		checkTitulo = new JCheckBox("T\u00EDtulo");
 		checkTitulo.setSelected(true);
 		filtrosPanel.add(checkTitulo);
@@ -115,6 +121,26 @@ public class DataGui extends JFrame {
 		checkLocal.setSelected(true);
 		filtrosPanel.add(checkLocal);
 
+		checkDataEmp = new JCheckBox("Data do Empréstimo");
+		checkDataEmp.setSelected(true);
+		filtrosPanel.add(checkDataEmp);
+		checkDataEmp.setVisible(false);
+
+		checkDataDevol = new JCheckBox("Data de Devolução");
+		checkDataDevol.setSelected(true);
+		filtrosPanel.add(checkDataDevol);
+		checkDataDevol.setVisible(false);
+
+		checkCliente = new JCheckBox("Cliente");
+		checkCliente.setSelected(true);
+		filtrosPanel.add(checkCliente);
+		checkCliente.setVisible(false);
+
+		checkFuncionario = new JCheckBox("Funcionário");
+		checkFuncionario.setSelected(true);
+		filtrosPanel.add(checkFuncionario);
+		checkFuncionario.setVisible(false);
+
 		tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		getContentPane().add(tabbedPane, BorderLayout.CENTER);
 
@@ -130,6 +156,11 @@ public class DataGui extends JFrame {
 
 		users = new JTable();
 		tabbedPane.addTab("Usuários", null, users, null);
+
+		tabbedPane.setEnabledAt(1, false);
+		tabbedPane.setEnabledAt(2, false);
+		tabbedPane.setToolTipTextAt(1, "Recurso em desenvolvimento... Brevemente disponível na versão 2.0");
+		tabbedPane.setToolTipTextAt(2, "Recurso em desenvolvimento... Brevemente disponível na versão 2.0");
 
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
@@ -148,6 +179,9 @@ public class DataGui extends JFrame {
 
 		menuConfig = new JMenuItem("Configura\u00E7\u00F5es");
 		mnArquivo.add(menuConfig);
+
+		menuAtualizar = new JMenuItem("Atualizar Tabelas");
+		mnArquivo.add(menuAtualizar);
 
 		menuSair = new JMenuItem("Sair");
 		menuSair.addActionListener(new SairAction());
@@ -202,6 +236,16 @@ public class DataGui extends JFrame {
 			}
 		});
 
+		menuAtualizar.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				TableModelLivro.getInstance().fireTableDataChanged();
+				TableModelEmprestimo.getInstance().fireTableDataChanged();
+				TableModelEmprestimo.getInstance().atualizarMultas();
+			}
+		});
+
 		pesquisa.addKeyListener(new KeyAdapter() {
 
 			@Override
@@ -218,6 +262,7 @@ public class DataGui extends JFrame {
 			@Override
 			public void stateChanged(ChangeEvent e) {
 				visibleBoxes();
+				filter("");
 			}
 		});
 
@@ -249,7 +294,8 @@ public class DataGui extends JFrame {
 	public void open() {
 		setVisible(true);
 		JOptionPane pane = new JOptionPane("Bem vindo " + Login.NOME + "!", JOptionPane.INFORMATION_MESSAGE,
-				JOptionPane.DEFAULT_OPTION, new ImageIcon(getClass().getResource("/DAD_SS.jpg")), new Object[] {}, null);
+				JOptionPane.DEFAULT_OPTION, new ImageIcon(getClass().getResource("/DAD_SS.jpg")), new Object[] {},
+				null);
 		final JDialog dialog = pane.createDialog("Boas vindas");
 		dialog.setModal(true);
 		dialog.setIconImage(Toolkit.getDefaultToolkit().getImage((getClass().getResource("/DAD.jpg"))));
@@ -265,15 +311,42 @@ public class DataGui extends JFrame {
 
 	public void visibleBoxes() {
 		if (tabbedPane.getSelectedIndex() == 0) {
+			menuOrdenar.setEnabled(true);
 			checkTitulo.setText("Título");
 			checkAutor.setText("Autor");
+			checkAutor.setVisible(true);
 			checkEditora.setVisible(true);
 			checkClassificacao.setVisible(true);
+			checkLocal.setVisible(true);
+			checkIDItem.setVisible(false);
+			checkDataEmp.setVisible(false);
+			checkDataDevol.setVisible(false);
+			checkCliente.setVisible(false);
+			checkFuncionario.setVisible(false);
 		} else if (tabbedPane.getSelectedIndex() == 1) {
+			menuOrdenar.setEnabled(true);
 			checkTitulo.setText("Título");
 			checkAutor.setText("Artista");
+			checkAutor.setVisible(true);
 			checkEditora.setVisible(false);
 			checkClassificacao.setVisible(true);
+			checkLocal.setVisible(true);
+			checkIDItem.setVisible(false);
+			checkDataEmp.setVisible(false);
+			checkDataDevol.setVisible(false);
+			checkCliente.setVisible(false);
+			checkFuncionario.setVisible(false);
+		} else if (tabbedPane.getSelectedIndex() == 3) {
+			menuOrdenar.setEnabled(false);
+			checkAutor.setVisible(false);
+			checkEditora.setVisible(false);
+			checkClassificacao.setVisible(false);
+			checkLocal.setVisible(false);
+			checkIDItem.setVisible(true);
+			checkDataEmp.setVisible(true);
+			checkDataDevol.setVisible(true);
+			checkCliente.setVisible(true);
+			checkFuncionario.setVisible(true);
 		}
 		// TODO
 		filtrosPanel.repaint();
@@ -302,39 +375,76 @@ public class DataGui extends JFrame {
 
 	private int num_checkboxEnabled() {
 		int count = 0;
-		if (checkID.isSelected())
-			count++;
-		if (checkTitulo.isSelected())
-			count++;
-		if (checkAutor.isSelected())
-			count++;
-		if (checkEditora.isSelected())
-			count++;
-		if (checkClassificacao.isSelected())
-			count++;
-		if (checkLocal.isSelected())
-			count++;
+		if (tabbedPane.getSelectedIndex() == 0) {
+			if (checkID.isSelected())
+				count++;
+			if (checkTitulo.isSelected())
+				count++;
+			if (checkAutor.isSelected())
+				count++;
+			if (checkEditora.isSelected())
+				count++;
+			if (checkClassificacao.isSelected())
+				count++;
+			if (checkLocal.isSelected())
+				count++;
+		} else if (tabbedPane.getSelectedIndex() == 3) {
+			if (checkID.isSelected())
+				count++;
+			if (checkIDItem.isSelected())
+				count++;
+			if (checkTitulo.isSelected())
+				count++;
+			if (checkDataEmp.isSelected())
+				count++;
+			if (checkDataDevol.isSelected())
+				count++;
+			if (checkCliente.isSelected())
+				count++;
+			if (checkFuncionario.isSelected())
+				count++;
+		}
 		return count;
 	}
 
 	public int[] checkBoxEnabled() {
 		int count = 0;
 		int[] columns = new int[num_checkboxEnabled() + 3];
-		if (checkID.isSelected())
-			columns[count++] = 0;
-		if (checkTitulo.isSelected())
-			columns[count++] = 1;
-		if (checkAutor.isSelected())
-			columns[count++] = 2;
-		if (checkEditora.isSelected())
-			columns[count++] = 3;
-		if (checkClassificacao.isSelected())
-			columns[count++] = 4;
-		columns[count++] = 5;
-		columns[count++] = 6;
-		columns[count++] = 7;
-		if (checkLocal.isSelected())
+		if (tabbedPane.getSelectedIndex() == 0) {
+			if (checkID.isSelected())
+				columns[count++] = 0;
+			if (checkTitulo.isSelected())
+				columns[count++] = 1;
+			if (checkAutor.isSelected())
+				columns[count++] = 2;
+			if (checkEditora.isSelected())
+				columns[count++] = 3;
+			if (checkClassificacao.isSelected())
+				columns[count++] = 4;
+			columns[count++] = 5;
+			columns[count++] = 6;
+			columns[count++] = 7;
+			if (checkLocal.isSelected())
+				columns[count++] = 8;
+		} else if (tabbedPane.getSelectedIndex() == 3) {
+			columns = new int[num_checkboxEnabled() + 2];
+			if (checkID.isSelected())
+				columns[count++] = 0;
+			if (checkIDItem.isSelected())
+				columns[count++] = 1;
+			if (checkTitulo.isSelected())
+				columns[count++] = 2;
+			if (checkDataEmp.isSelected())
+				columns[count++] = 3;
+			if (checkDataDevol.isSelected())
+				columns[count++] = 4;
+			if (checkCliente.isSelected())
+				columns[count++] = 5;
+			if (checkFuncionario.isSelected())
+				columns[count++] = 6;
+			columns[count++] = 7;
 			columns[count++] = 8;
+		}
 		return columns;
 	}
 
@@ -362,35 +472,106 @@ public class DataGui extends JFrame {
 				sorter.setRowFilter(filter);
 				setRenderers();
 			}
+		} else if (tabbedPane.getSelectedIndex() == 3) {
+			filtrarEmprestimos(filtro);
 		}
 	}
 
+	public void filtrarEmprestimos(String filtro) {
+		TableRowSorter<TableModelEmprestimo> sorter = new TableRowSorter<TableModelEmprestimo>(
+				TableModelEmprestimo.getInstance());
+		EmprestimoPanel.getInstance().getEmprestimos().setRowSorter(sorter);
+		RowFilter<TableModelEmprestimo, Object> filter;
+		if (filtro.trim().equals("")) {
+			sorter.setRowFilter(null);
+		} else {
+			if (num_checkboxEnabled() == 7 || num_checkboxEnabled() == 0) {
+				filter = RowFilter.regexFilter((Pattern.compile("(?i)" + filtro, Pattern.CASE_INSENSITIVE).toString()));
+				EmprestimoPanel.getInstance().getEmprestimos().setDefaultRenderer(Object.class, new CellRenderer());
+			} else
+				filter = RowFilter.regexFilter((Pattern.compile("(?i)" + filtro, Pattern.CASE_INSENSITIVE).toString()),
+						checkBoxEnabled());
+			sorter.setRowFilter(filter);
+			setRenderers();
+		}
+	}
+
+	public void filtrarEmprestimos(Livro l, JTable table) {
+		String filtro = String.valueOf(l.getId());
+		TableRowSorter<TableModelEmprestimo> sorter = new TableRowSorter<TableModelEmprestimo>(
+				TableModelEmprestimo.getInstance());
+		table.setRowSorter(sorter);
+		RowFilter<TableModelEmprestimo, Object> filter;
+		filter = RowFilter.regexFilter(Pattern.compile("\\b" + filtro + "\\b").toString(), 1);
+		sorter.setRowFilter(filter);
+		setRenderers();
+	}
+
 	public void setRenderers() {
-		TableColumnModel tcl = LivroPanel.getInstance().getLivros().getColumnModel();
-		if (checkID.isSelected())
-			tcl.getColumn(0).setCellRenderer(new CellRendererInt());
-		else
-			tcl.getColumn(0).setCellRenderer(new DefaultCellRenderer());
-		if (checkTitulo.isSelected())
-			tcl.getColumn(1).setCellRenderer(new CellRenderer());
-		else
-			tcl.getColumn(1).setCellRenderer(new DefaultCellRenderer());
-		if (checkAutor.isSelected())
-			tcl.getColumn(2).setCellRenderer(new CellRenderer());
-		else
-			tcl.getColumn(2).setCellRenderer(new DefaultCellRenderer());
-		if (checkEditora.isSelected())
-			tcl.getColumn(3).setCellRenderer(new CellRenderer());
-		else
-			tcl.getColumn(3).setCellRenderer(new DefaultCellRenderer());
-		if (checkClassificacao.isSelected())
-			tcl.getColumn(4).setCellRenderer(new CellRenderer());
-		else
-			tcl.getColumn(4).setCellRenderer(new DefaultCellRenderer());
-		if (checkLocal.isSelected())
-			tcl.getColumn(8).setCellRenderer(new CellRenderer());
-		else
-			tcl.getColumn(8).setCellRenderer(new DefaultCellRenderer());
+		if (tabbedPane.getSelectedIndex() == 0) {
+			TableColumnModel tcl = LivroPanel.getInstance().getLivros().getColumnModel();
+			if (checkID.isSelected())
+				tcl.getColumn(0).setCellRenderer(new CellRendererNoImage());
+			else
+				tcl.getColumn(0).setCellRenderer(new DefaultCellRenderer());
+			if (checkTitulo.isSelected())
+				tcl.getColumn(1).setCellRenderer(new CellRenderer());
+			else
+				tcl.getColumn(1).setCellRenderer(new DefaultCellRenderer());
+			if (checkAutor.isSelected())
+				tcl.getColumn(2).setCellRenderer(new CellRenderer());
+			else
+				tcl.getColumn(2).setCellRenderer(new DefaultCellRenderer());
+			if (checkEditora.isSelected())
+				tcl.getColumn(3).setCellRenderer(new CellRenderer());
+			else
+				tcl.getColumn(3).setCellRenderer(new DefaultCellRenderer());
+			if (checkClassificacao.isSelected())
+				tcl.getColumn(4).setCellRenderer(new CellRenderer());
+			else
+				tcl.getColumn(4).setCellRenderer(new DefaultCellRenderer());
+			if (checkLocal.isSelected())
+				tcl.getColumn(8).setCellRenderer(new CellRenderer());
+			else
+				tcl.getColumn(8).setCellRenderer(new DefaultCellRenderer());
+
+		} else if (tabbedPane.getSelectedIndex() == 3) {
+			TableColumnModel tcl = EmprestimoPanel.getInstance().getEmprestimos().getColumnModel();
+			if (checkID.isSelected())
+				tcl.getColumn(0).setCellRenderer(new CellRendererNoImage());
+			else
+				tcl.getColumn(0).setCellRenderer(new DefaultCellRenderer());
+
+			if (checkIDItem.isSelected())
+				tcl.getColumn(1).setCellRenderer(new CellRendererNoImage());
+			else
+				tcl.getColumn(1).setCellRenderer(new DefaultCellRenderer());
+
+			if (checkTitulo.isSelected())
+				tcl.getColumn(2).setCellRenderer(new CellRendererNoImage());
+			else
+				tcl.getColumn(2).setCellRenderer(new DefaultCellRenderer());
+
+			if (checkDataEmp.isSelected())
+				tcl.getColumn(3).setCellRenderer(new CellRendererNoImage());
+			else
+				tcl.getColumn(3).setCellRenderer(new DefaultCellRenderer());
+
+			if (checkDataDevol.isSelected())
+				tcl.getColumn(4).setCellRenderer(new CellRendererNoImage());
+			else
+				tcl.getColumn(4).setCellRenderer(new DefaultCellRenderer());
+
+			if (checkCliente.isSelected())
+				tcl.getColumn(5).setCellRenderer(new CellRendererNoImage());
+			else
+				tcl.getColumn(5).setCellRenderer(new DefaultCellRenderer());
+
+			if (checkFuncionario.isSelected())
+				tcl.getColumn(6).setCellRenderer(new CellRendererNoImage());
+			else
+				tcl.getColumn(6).setCellRenderer(new DefaultCellRenderer());
+		}
 
 	}
 

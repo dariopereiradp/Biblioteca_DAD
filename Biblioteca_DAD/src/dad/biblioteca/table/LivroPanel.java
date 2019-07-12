@@ -48,8 +48,7 @@ import dad.biblioteca.gui.DataGui;
 import dad.biblioteca.gui.LivroDetail;
 import dad.biblioteca.gui.Login;
 import dad.recursos.CellRenderer;
-import dad.recursos.CellRendererBollean;
-import dad.recursos.CellRendererInt;
+import dad.recursos.CellRendererNoImage;
 import dad.recursos.Log;
 import dad.recursos.RealizarEmprestimo;
 import mdlaf.animation.MaterialUIMovement;
@@ -94,19 +93,20 @@ public class LivroPanel extends JPanel {
 
 			@Override
 			public Component prepareRenderer(TableCellRenderer r, int data, int columns) {
+				int row = convertRowIndexToModel(data);
 				Component c = super.prepareRenderer(r, data, columns);
 				if (data % 2 == 0)
 					c.setBackground(Color.WHITE);
 				else
 					c.setBackground(MaterialColors.GRAY_100);
 				if (isCellSelected(data, columns)) {
-					if (TableModelLivro.getInstance().getValueAt(data, 7).equals("Sim"))
+					if (TableModelLivro.getInstance().getValueAt(row, 7).equals("Sim"))
 						c.setBackground(MaterialColors.GREEN_A100);
 					else
 						c.setBackground(MaterialColors.RED_300);
 				}
 				if (columns == 7) {
-					if (TableModelLivro.getInstance().getValueAt(data, columns).equals("Sim"))
+					if (TableModelLivro.getInstance().getValueAt(row, columns).equals("Sim"))
 						c.setBackground(MaterialColors.GREEN_A100);
 					else
 						c.setBackground(MaterialColors.RED_300);
@@ -209,10 +209,10 @@ public class LivroPanel extends JPanel {
 		livros.getColumnModel().getColumn(7).setMinWidth(120);
 		livros.setDefaultRenderer(Object.class, new CellRenderer());
 
-		livros.getColumnModel().getColumn(7).setCellRenderer(new CellRendererBollean());
-		livros.getColumnModel().getColumn(0).setCellRenderer(new CellRendererInt());
-		livros.getColumnModel().getColumn(5).setCellRenderer(new CellRendererInt());
-		livros.getColumnModel().getColumn(6).setCellRenderer(new CellRendererInt());
+		livros.getColumnModel().getColumn(0).setCellRenderer(new CellRendererNoImage());
+		livros.getColumnModel().getColumn(5).setCellRenderer(new CellRenderer());
+		livros.getColumnModel().getColumn(6).setCellRenderer(new CellRendererNoImage());
+		livros.getColumnModel().getColumn(7).setCellRenderer(new CellRendererNoImage());
 
 		JScrollPane jsLivros = new JScrollPane(livros);
 		add(jsLivros, BorderLayout.CENTER);
@@ -241,16 +241,6 @@ public class LivroPanel extends JPanel {
 
 		inicializarPanelAdd();
 		
-		JMenuItem verHistorico = new JMenuItem("Ver histórico de empréstimos");
-		verHistorico.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-		});
-
 		JMenuItem deleteItem = new JMenuItem("Apagar");
 		deleteItem.addActionListener(new ActionListener() {
 
@@ -287,6 +277,30 @@ public class LivroPanel extends JPanel {
 
 			}
 		});
+		
+		JMenuItem emprestimoItem = new JMenuItem("Realizar Emprésitimo");
+		emprestimoItem.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Livro l = modelLivro.getLivro(livros.convertRowIndexToModel(livros.getSelectedRow()));
+				if (l.getN_exemp_disponiveis() > 0)
+					realizarEmprestimo(l);
+				else
+					JOptionPane.showMessageDialog(DataGui.getInstance(),
+							"Não há exemplares disponíveis para empréstimo...", "Realiza Empréstimo",
+							JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource("/DAD_SS.jpg")));
+			}
+		});
+		
+		JMenuItem atualizar = new JMenuItem("Atualizar Tabela");
+		atualizar.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				TableModelLivro.getInstance().fireTableDataChanged();				
+			}
+		});
 
 		JPopupMenu popupMenu = new JPopupMenu();
 		popupMenu.addPopupMenuListener(new PopupMenuListener() {
@@ -298,40 +312,51 @@ public class LivroPanel extends JPanel {
 					public void run() {
 						int rowAtPointOriginal = livros
 								.rowAtPoint(SwingUtilities.convertPoint(popupMenu, new Point(0, 0), livros));
-						int rowAtPoint = livros.convertRowIndexToModel(rowAtPointOriginal);
-						if (rowAtPoint > -1) {
-							int[] rows = convertRowsIndextoModel();
-							if (rows.length <= 1) {
-								info.setVisible(true);
-								livros.setRowSelectionInterval(rowAtPointOriginal, rowAtPointOriginal);
-								if (TableModelLivro.getInstance().getLivro(rowAtPoint).getNumero_exemplares() > 1) {
-									deleteItem.setVisible(false);
-									deleteOneItem.setVisible(true);
-									deleteAllItem.setVisible(true);
+						if (rowAtPointOriginal > -1) {
+							int rowAtPoint = livros.convertRowIndexToModel(rowAtPointOriginal);
+							if (rowAtPoint > -1) {
+								int[] rows = convertRowsIndextoModel();
+								if (rows.length <= 1) {
+									info.setVisible(true);
+									livros.setRowSelectionInterval(rowAtPointOriginal, rowAtPointOriginal);
+									if (TableModelLivro.getInstance().getLivro(rowAtPoint).getNumero_exemplares() > 1) {
+										deleteItem.setVisible(false);
+										deleteOneItem.setVisible(true);
+										deleteAllItem.setVisible(true);
+									} else {
+										deleteOneItem.setVisible(false);
+										deleteAllItem.setVisible(false);
+										deleteItem.setVisible(true);
+									}
 								} else {
-									deleteOneItem.setVisible(false);
-									deleteAllItem.setVisible(false);
-									deleteItem.setVisible(true);
-								}
-							} else {
-								info.setVisible(false);
-								boolean exemplares = false;
-								for (int i = 0; i < rows.length; i++) {
-									if (TableModelLivro.getInstance().getLivro(rows[i]).getNumero_exemplares() > 1)
-										exemplares = true;
-								}
-								if (exemplares) {
-									deleteItem.setVisible(false);
-									deleteOneItem.setVisible(true);
-									deleteAllItem.setVisible(true);
-								} else {
-									deleteOneItem.setVisible(false);
-									deleteAllItem.setVisible(false);
-									deleteItem.setVisible(true);
+									info.setVisible(false);
+									boolean exemplares = false;
+									for (int i = 0; i < rows.length; i++) {
+										if (TableModelLivro.getInstance().getLivro(rows[i]).getNumero_exemplares() > 1)
+											exemplares = true;
+									}
+									if (exemplares) {
+										deleteItem.setVisible(false);
+										deleteOneItem.setVisible(true);
+										deleteAllItem.setVisible(true);
+									} else {
+										deleteOneItem.setVisible(false);
+										deleteAllItem.setVisible(false);
+										deleteItem.setVisible(true);
+									}
 								}
 							}
 						}
+						else {
+							info.setVisible(false);
+							deleteAllItem.setVisible(false);
+							deleteItem.setVisible(false);
+							deleteOneItem.setVisible(false);
+							emprestimoItem.setVisible(false);
+							atualizar.setVisible(true);
+						}
 					}
+
 				});
 			}
 
@@ -350,25 +375,10 @@ public class LivroPanel extends JPanel {
 		popupMenu.add(deleteItem);
 		popupMenu.add(deleteOneItem);
 		popupMenu.add(deleteAllItem);
-
-		JMenuItem emprestimoItem = new JMenuItem("Realizar Emprésitimo");
-		emprestimoItem.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				Livro l = modelLivro.getLivro(livros.convertRowIndexToModel(livros.getSelectedRow()));
-				if (l.getN_exemp_disponiveis() > 0)
-					realizarEmprestimo(l);
-				else
-					JOptionPane.showMessageDialog(DataGui.getInstance(),
-							"Não há exemplares disponíveis para empréstimo...", "Realiza Empréstimo",
-							JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource("/DAD_SS.jpg")));
-			}
-		});
 		popupMenu.add(emprestimoItem);
-		popupMenu.add(verHistorico);
+		popupMenu.add(atualizar);
 
-		popupMenu.setPopupSize(300, 150);
+		popupMenu.setPopupSize(350, 150);
 
 		livros.setComponentPopupMenu(popupMenu);
 

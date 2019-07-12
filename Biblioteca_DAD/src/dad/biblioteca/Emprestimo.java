@@ -2,7 +2,10 @@ package dad.biblioteca;
 
 import java.text.SimpleDateFormat;
 import java.time.temporal.ChronoUnit;
+import java.util.Calendar;
 import java.util.Date;
+
+import org.apache.commons.lang.time.DateUtils;
 
 import com.qoppa.pdfWriter.PDFDocument;
 
@@ -23,7 +26,7 @@ public class Emprestimo {
 	private Date data_emprestimo;
 	private Date data_entrega;
 	private int num_dias;
-	private boolean entregue;
+	private boolean entregue, pago;
 	private String funcionario;
 
 	public Emprestimo(User user, Item item, Date data_emprestimo, Date data_entrega, String funcionario) {
@@ -31,11 +34,12 @@ public class Emprestimo {
 		this.user = user;
 		this.item = item;
 		this.data_emprestimo = data_emprestimo;
-		this.data_entrega = data_entrega;
+		this.data_entrega = DateUtils.truncate(data_entrega, Calendar.DAY_OF_MONTH);
 		this.num_dias = Math.toIntExact(ChronoUnit.DAYS.between(data_emprestimo.toInstant(), data_entrega.toInstant()))
 				+ 1;
 		entregue = false;
 		this.funcionario = funcionario;
+		this.pago = false;
 
 	}
 
@@ -48,9 +52,12 @@ public class Emprestimo {
 		item.dec_exemp_emprestados();
 	}
 	
-	public void cancelar_entrega(){
-		entregue = false;
-		item.inc_exemp_emprestados();
+	public void pagar (){
+		pago = true;
+	}
+	
+	public boolean isPago() {
+		return pago;
 	}
 
 	public int getId() {

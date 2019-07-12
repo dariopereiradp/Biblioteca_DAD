@@ -8,15 +8,19 @@ import javax.swing.ImageIcon;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 
+import dad.biblioteca.Emprestimo;
 import dad.biblioteca.gui.DataGui;
+import dad.biblioteca.table.EmprestimoPanel;
+import dad.biblioteca.table.TableModelEmprestimo;
 import mdlaf.utils.MaterialColors;
 
-public class CellRendererInt extends DefaultTableCellRenderer {
+public class CellRenderer2 extends DefaultTableCellRenderer {
 	/**
 	 * 
 	 */
-	private final ImageIcon editIcon = new ImageIcon(getClass().getResource("/edit.png"));
-	private static final long serialVersionUID = 2740715982114928328L;
+	private static final long serialVersionUID = 9064760396702211972L;
+	private final ImageIcon right = new ImageIcon(getClass().getResource("/right.png"));
+	private final ImageIcon wrong = new ImageIcon(getClass().getResource("/wrong.png"));
 
 	@Override
 	public void paint(Graphics g) {
@@ -26,27 +30,34 @@ public class CellRendererInt extends DefaultTableCellRenderer {
 		if (filter.length() == 0) {
 			return;
 		}
-		String text = getText();
+		String text = getText().toLowerCase();
 		int index = text.indexOf(filter);
 		if (index == -1) {
 			return;
 		}
+
 		String preMatch = getText().substring(0, index);
 		String match = getText().substring(preMatch.length(), preMatch.length() + filter.length());
 		int pmw = g.getFontMetrics().stringWidth(preMatch);
 		int w = g.getFontMetrics().stringWidth(match);
 		g.setColor(MaterialColors.YELLOW_A200);
-		g.fillRect(pmw + 1, 5, w - 1, getHeight() - 10);
+		g.fillRect(pmw + 22, 5, w - 1, getHeight() - 10);
 		g.setColor(getForeground());
 		Rectangle r = g.getFontMetrics().getStringBounds(match, g).getBounds();
-		g.drawString(match, pmw + 1, -r.y + 6);
+		g.drawString(match, pmw + 21, -r.y + 6);
 	}
-	
+
 	@Override
 	public Component getTableCellRendererComponent(JTable table, Object value, boolean selected, boolean hasFocus,
 			int row, int column) {
 		super.getTableCellRendererComponent(table, value, selected, hasFocus, row, column);
-		this.setIcon(table.isCellEditable(row, column) ? editIcon : null);
+
+		Emprestimo emp = TableModelEmprestimo.getInstance().getEmprestimo(table.convertRowIndexToModel(row));
+
+		if (emp.getMulta() == 0.0 || emp.isPago())
+			this.setIcon(right);
+		else if(emp.getMulta()>0 || !emp.isPago())
+			this.setIcon(wrong);
 		return this;
 	}
 }

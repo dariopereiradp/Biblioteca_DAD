@@ -12,7 +12,7 @@ public class DefaultCellRenderer extends DefaultTableCellRenderer {
 	 * 
 	 */
 	private static final long serialVersionUID = 870200575796284069L;
-	private final ImageIcon editIcon = new ImageIcon(getClass().getResource("edit.png"));
+	private final ImageIcon editIcon = new ImageIcon(getClass().getResource("/edit.png"));
 
 	@Override
 	public Component getTableCellRendererComponent(JTable table, Object value, boolean selected, boolean hasFocus,

@@ -56,11 +56,11 @@ public class RealizarEmprestimo {
 	private JFormattedTextField cpf;
 	private MaskFormatter mascaraCpf;
 	private JDateChooser date_emp, date_entrega;
-	private JCheckBox entregue;
+	private JCheckBox entregue, pagar;
 	private Emprestimo emp = null;
 	private Connection con;
 	private PreparedStatement pst;
-//	private ResultSet rs;
+	// private ResultSet rs;
 
 	/**
 	 * @wbp.parser.constructor
@@ -72,6 +72,7 @@ public class RealizarEmprestimo {
 		bSave.setVisible(false);
 		bVerRecibo.setVisible(false);
 		entregue.setVisible(false);
+		pagar.setVisible(false);
 	}
 
 	public RealizarEmprestimo(Emprestimo emp) {
@@ -87,6 +88,18 @@ public class RealizarEmprestimo {
 		alterar.setEnabled(true);
 		bConf.setVisible(false);
 		bSave.setEnabled(false);
+		if (emp.getMulta() > 0) {
+			if (emp.isPago()) {
+				pagar.setSelected(true);
+				pagar.setBackground(new Color(255, 0, 0));
+				pagar.setEnabled(false);
+			} else {
+				pagar.setSelected(false);
+				pagar.setBackground(new Color(50, 205, 50));
+			}
+		} else {
+			pagar.setVisible(false);
+		}
 		if (emp.isEntregue()) {
 			entregue.setSelected(true);
 			bSave.setEnabled(false);
@@ -94,6 +107,7 @@ public class RealizarEmprestimo {
 			date_emp.setEnabled(false);
 			date_entrega.setEnabled(false);
 			entregue.setBackground(new Color(255, 0, 0));
+			entregue.setEnabled(false);
 		} else {
 			entregue.setSelected(false);
 		}
@@ -323,11 +337,10 @@ public class RealizarEmprestimo {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (entregue.isSelected()) {
+				if (entregue.isSelected() && (emp.isPago() || emp.getMulta() == 0.0)) {
 					int ok = JOptionPane.showConfirmDialog(dial, "Tem certeza que quer confirmar a devolução do item?",
 							"Confirmar devolução", JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE,
 							new ImageIcon(getClass().getResource("/DAD_SS.jpg")));
-
 					try {
 						if (ok == JOptionPane.YES_OPTION) {
 							emp.entregar();
@@ -343,6 +356,7 @@ public class RealizarEmprestimo {
 							alterar.setEnabled(false);
 							date_emp.setEnabled(false);
 							date_entrega.setEnabled(false);
+							entregue.setEnabled(false);
 						} else {
 							entregue.setSelected(false);
 						}
@@ -352,30 +366,45 @@ public class RealizarEmprestimo {
 					}
 
 				} else {
-					try {
-						int ok = JOptionPane.showConfirmDialog(dial,
-								"Tem certeza que quer cancelar a devolução do item?", "Cancelar devolução",
-								JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE,
-								new ImageIcon(getClass().getResource("/DAD_SS.jpg")));
-						if (ok == JOptionPane.YES_OPTION) {
-							emp.cancelar_entrega();
-							con = ConexaoEmprestimos.getConnection();
-							pst = con.prepareStatement("update emprestimos set Ativo=? where ID=" + emp.getId());
-							if (emp.isEntregue())
-								pst.setString(1, "Não");
-							else
-								pst.setString(1, "Sim");
-							pst.execute();
-							entregue.setBackground(new Color(50, 205, 50));
-							bSave.setEnabled(false);
-							alterar.setEnabled(true);
-							date_emp.setEnabled(true);
-							date_entrega.setEnabled(true);
+					JOptionPane.showMessageDialog(dial, "Atenção! Existe uma multa por atraso pendente! É preciso pagar a multa antes de efetuar a entrega!",
+							"Confirmar devolução", JOptionPane.INFORMATION_MESSAGE,
+							new ImageIcon(getClass().getResource("/DAD_SS.jpg")));
+					entregue.setSelected(false);
+				}
+				TableModelEmprestimo.getInstance().fireTableDataChanged();
+			}
+		});
 
+		pagar = new JCheckBox("PAGAR MULTA");
+		pagar.setHorizontalAlignment(SwingConstants.CENTER);
+		pagar.setBackground(new Color(255, 0, 0));
+		pagar.setFont(new Font("Roboto", Font.PLAIN, 12));
+		pagar.setBounds(353, 225, 115, 30);
+		dial.getContentPane().add(pagar);
+
+		pagar.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (pagar.isSelected()) {
+					int ok = JOptionPane.showConfirmDialog(dial, "Tem certeza que quer confirmar o pagamento da multa?",
+							"Confirmar pagamento", JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE,
+							new ImageIcon(getClass().getResource("/DAD_SS.jpg")));
+
+					try {
+						if (ok == JOptionPane.YES_OPTION) {
+							emp.pagar();
+							con = ConexaoEmprestimos.getConnection();
+							pst = con.prepareStatement("update emprestimos set Pago=? where ID=" + emp.getId());
+							pst.setString(1, "Sim");
+							pst.execute();
+							pagar.setBackground(new Color(255, 0, 0));
+							pagar.setEnabled(false);
 						} else {
-							entregue.setSelected(true);
+							pagar.setSelected(false);
 						}
 					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
 				}
@@ -417,7 +446,7 @@ public class RealizarEmprestimo {
 				con = ConexaoEmprestimos.getConnection();
 				try {
 					pst = con.prepareStatement(
-							"insert into emprestimos(ID,ID_Item,Título,Data_Emprestimo,Data_Devolucao,Cliente,Funcionario,Ativo,Multa) values (?,?,?,?,?,?,?,?,?)");
+							"insert into emprestimos(ID,ID_Item,Título,Data_Emprestimo,Data_Devolucao,Cliente,Funcionario,Ativo,Multa,Pago) values (?,?,?,?,?,?,?,?,?,?)");
 					pst.setString(1, String.valueOf(emprestimo.getId()));
 					pst.setString(2, String.valueOf(emprestimo.getItem().getId()));
 					pst.setString(3, emprestimo.getItem().getNome());
@@ -427,6 +456,7 @@ public class RealizarEmprestimo {
 					pst.setString(7, String.valueOf(emprestimo.getFuncionario()));
 					pst.setString(8, "Sim");
 					pst.setString(9, "0.0");
+					pst.setString(10, "Não");
 					pst.execute();
 					TableModelEmprestimo.getInstance().addEmprestimo(emprestimo);
 					EmprestimoPanel.getInstance().getJtfTotal()
@@ -461,18 +491,16 @@ public class RealizarEmprestimo {
 						pst.setString(4, "Não");
 					else
 						pst.setString(4, "Sim");
-					pst.setString(9, String.valueOf(emp.getMulta()));
+					pst.setString(5, String.valueOf(emp.getMulta()));
 					pst.execute();
-					TableModelEmprestimo.getInstance().fireTableDataChanged();
 				} catch (SQLException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 
 				emp.getItem().inc_exemp_emprestados();
-
-				TableModelLivro.getInstance().fireTableDataChanged();
 				save(emp);
+				TableModelEmprestimo.getInstance().fireTableDataChanged();
 			}
 		});
 	}

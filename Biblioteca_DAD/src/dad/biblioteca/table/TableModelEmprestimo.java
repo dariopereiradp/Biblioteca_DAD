@@ -55,8 +55,11 @@ public class TableModelEmprestimo extends AbstractTableModel {
 					User user = User.getUser(cpf);
 					String funcionario = rs.getString(7);
 					String ativo = rs.getString(8);
+					String pago = rs.getString(10);
 					Emprestimo emp = new Emprestimo(user, item, data_emprestimo, data_devolucao, funcionario);
 					emp.setId(Integer.parseInt(rs.getString(1)));
+					if (pago.equals("Sim"))
+						emp.pagar();
 					if (ativo.equals("Não"))
 						emp.entregar();
 					if (emp.getId() > maior)
@@ -68,10 +71,45 @@ public class TableModelEmprestimo extends AbstractTableModel {
 			Log.getInstance().printLog("Base de dados empréstimos carregada com sucesso!");
 			if (emprestimos.size() > 0)
 				Emprestimo.countId = maior;
+			atualizarMultas();
 		} catch (Exception e) {
 			Log.getInstance().printLog(
 					"Erro ao carregar a base de dados dos Empréstimos: " + e.getMessage() + "\n" + getClass());
 			e.printStackTrace();
+		}
+	}
+
+	public void atualizarMultas() {
+		for (int i = 0; i < emprestimos.size(); i++) {
+			try {
+				if (!emprestimos.get(i).isEntregue()) {
+					pst = con.prepareStatement(
+							"update emprestimos set Multa=?,Pago=? where ID=" + emprestimos.get(i).getId());
+					pst.setString(1, String.valueOf(emprestimos.get(i).getMulta()));
+					if (emprestimos.get(i).isPago())
+						pst.setString(2, "Sim");
+					else
+						pst.setString(2, "Não");
+					pst.execute();
+				}
+			} catch (Exception e) {
+				Log.getInstance()
+						.printLog("Erro ao carregar ao atualizar multas!: " + e.getMessage() + "\n" + getClass());
+				e.printStackTrace();
+			}
+		}
+	}
+
+	public void atualizarMultas(Emprestimo emp) throws Exception {
+		if (!emp.isEntregue()) {
+			pst = con.prepareStatement("update emprestimos set Multa=?,Pago=? where ID=" + emp.getId());
+
+			pst.setString(1, String.valueOf(emp.getMulta()));
+			if (emp.isPago())
+				pst.setString(2, "Sim");
+			else
+				pst.setString(2, "Não");
+			pst.execute();
 		}
 	}
 
@@ -130,13 +168,13 @@ public class TableModelEmprestimo extends AbstractTableModel {
 			String month_year = new SimpleDateFormat("MMMyyyy").format(emp.getData_emprestimo()).toUpperCase();
 			String dirPath = RealizarEmprestimo.EMPRESTIMOS_PATH + month_year + "/";
 			File recibo = new File(dirPath + emp.toString() + ".pdf");
-			if(recibo.exists())
+			if (recibo.exists())
 				recibo.delete();
 			toDelete.add(emp);
 			fireTableDataChanged();
 		} catch (SQLException e1) {
 			e1.printStackTrace();
-		} catch (SecurityException e2){
+		} catch (SecurityException e2) {
 			Log.getInstance().printLog("Erro ao apagar o recibo! - " + e2.getMessage());
 		}
 
@@ -165,7 +203,22 @@ public class TableModelEmprestimo extends AbstractTableModel {
 			else
 				return "Não";
 		case 8:
-			return emprestimos.get(rowIndex).getMulta();
+			double multa = 0.0;
+			try {
+				con = ConexaoEmprestimos.getConnection();
+				pst = con.prepareStatement(
+						"select Multa from emprestimos where ID=" + emprestimos.get(rowIndex).getId());
+				rs = pst.executeQuery();
+				if (rs.next())
+					multa = rs.getDouble(1);
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			if (emprestimos.get(rowIndex).isEntregue())
+				return multa;
+			else
+				return emprestimos.get(rowIndex).getMulta();
 		default:
 			return emprestimos.get(rowIndex);
 		}

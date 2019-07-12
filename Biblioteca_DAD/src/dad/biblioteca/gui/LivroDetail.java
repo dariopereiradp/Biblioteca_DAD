@@ -24,6 +24,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
+import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
@@ -36,6 +37,7 @@ import dad.biblioteca.Livro;
 import dad.biblioteca.table.AtualizaExemplares;
 import dad.biblioteca.table.AtualizaLivro;
 import dad.biblioteca.table.CompositeCommand;
+import dad.biblioteca.table.EmprestimoPanel;
 import dad.biblioteca.table.TableModelLivro;
 import dad.recursos.ImageViewer;
 import dad.recursos.RealizarEmprestimo;
@@ -48,6 +50,7 @@ public class LivroDetail {
 	private Livro l;
 	private JTextField titulo, autor, editora, classificacao, local, exemp, exempDisp, disp, exempEmp;
 	private JDialog dial;
+	// private JTable emprestimos;
 
 	public LivroDetail(Livro l) {
 		this.l = l;
@@ -60,7 +63,7 @@ public class LivroDetail {
 
 		JPanel principal = new JPanel(new BorderLayout());
 		JPanel botoesPrincipais = new JPanel();
-		JTable emprestimos = new JTable();
+		// emprestimos = EmprestimoPanel.getInstance().getSmallTable(l);
 		JPanel cimaPanel = new JPanel(new BorderLayout());
 		JPanel infoPanelWithButtons = new JPanel(new BorderLayout());
 		JPanel infoPanel = new JPanel(new GridLayout(10, 2));
@@ -80,10 +83,10 @@ public class LivroDetail {
 		emprestar.setBackground(MaterialColors.LIGHT_GREEN_500);
 		personalizarBotao(emprestar);
 		botoesPrincipais.add(emprestar, "cell 5 0,alignx left,aligny center");
-		if(!l.isDisponivel()){
+		if (!l.isDisponivel()) {
 			emprestar.setEnabled(false);
 			emprestar.setToolTipText("Não há exemplares disponíveis para empréstimo!");
-		}		
+		}
 
 		JButton ok = new JButton("Ok");
 		ok.setBackground(MaterialColors.LIGHT_BLUE_200);
@@ -256,7 +259,9 @@ public class LivroDetail {
 		cimaPanel.add(rightPanel, BorderLayout.EAST);
 
 		principal.add(cimaPanel, BorderLayout.CENTER);
-		principal.add(emprestimos, BorderLayout.SOUTH);
+		JScrollPane jsp = new JScrollPane(EmprestimoPanel.getInstance().getSmallTable(l));
+		jsp.setPreferredSize(new Dimension(744, 100));
+		principal.add(jsp, BorderLayout.SOUTH);
 
 		dial.getContentPane().add(principal, BorderLayout.CENTER);
 		dial.getContentPane().add(botoesPrincipais, BorderLayout.SOUTH);
@@ -308,9 +313,9 @@ public class LivroDetail {
 				salvar.setEnabled(false);
 				if (close && titulo.isEditable())
 					save(oldExemplares, close);
-				else if (close && !titulo.isEditable())
+				else if (close && !titulo.isEditable()) {
 					dial.dispose();
-				else
+				} else
 					save(oldExemplares, close);
 			}
 		}
@@ -325,8 +330,9 @@ public class LivroDetail {
 			public void windowClosing(WindowEvent e) {
 				if (titulo.isEditable())
 					save(oldExemplares, true);
-				else
+				else {
 					dial.dispose();
+				}
 			}
 
 		});
@@ -337,20 +343,17 @@ public class LivroDetail {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (l.getN_exemp_disponiveis() > 0){
+				if (l.getN_exemp_disponiveis() > 0) {
 					new RealizarEmprestimo(l).open();
 					dial.dispose();
 				}
-				
+
 				else
 					JOptionPane.showMessageDialog(DataGui.getInstance(),
 							"Não há exemplares disponíveis para empréstimo...", "Realiza Empréstimo",
 							JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource("/DAD_SS.jpg")));
-
 			}
 		});
-
-		// TODO Auto-generated method stub
 
 	}
 
@@ -388,8 +391,9 @@ public class LivroDetail {
 						new AtualizaExemplares(l.isDisponivel(), l, Integer.parseInt(exemp.getText()))));
 		TableModelLivro.getInstance().fireTableDataChanged();
 
-		if (close)
+		if (close) {
 			dial.dispose();
+		}
 
 	}
 
