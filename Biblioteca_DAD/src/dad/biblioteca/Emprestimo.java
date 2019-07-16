@@ -40,8 +40,8 @@ public class Emprestimo {
 		entregue = false;
 		this.funcionario = funcionario;
 		this.pago = false;
-
 	}
+	
 
 	public static void setMULTA(double multa) {
 		MULTA = multa;

@@ -88,7 +88,7 @@ public class TableModelLivro extends AbstractTableModel {
 		}
 		return l;
 	}
-	
+
 	public Livro getLivroById(int id) {
 		for (int i = 0; i < livros.size(); i++) {
 			if (livros.get(i).getId() == id)
@@ -297,7 +297,7 @@ public class TableModelLivro extends AbstractTableModel {
 				pst.setString(1, "Sim");
 			else
 				pst.setString(1, "Não");
-			pst.execute();		
+			pst.execute();
 			TableModelLivro.getInstance().fireTableDataChanged();
 		} catch (
 
@@ -463,9 +463,27 @@ public class TableModelLivro extends AbstractTableModel {
 		public void execute() {
 			try {
 				for (int i = 0; i < rows.length; i++) {
-					pst = con.prepareStatement("delete from livros where ID=" + livros.get(rows[i]).getId());
-					pst.execute();
-					remover.add(livros.get(rows[i]));
+					Livro l = livros.get(rows[i]);
+					if (TableModelEmprestimo.getInstance().getEmprestimosByItem(l).length > 0) {
+						int ok = JOptionPane.showConfirmDialog(null,
+								"ATENÇÃO! O livro " + l.getNome()
+										+ " tem empréstimos registados na base de dados!\nSe clicar em 'OK' todos os empréstimos ligados a esse livro serão apagados!\n"
+										+ "Embora seja possível anular a ação de apagar o livro, os histórico de empréstimos para esse livro será perdido definitivamente!\n"
+										+ "Tem a certeza que quer apagar?",
+								"APAGAR", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE,
+								new ImageIcon(getClass().getResource("/DAD_SS.jpg")));
+						if (ok == JOptionPane.OK_OPTION) {
+							pst = con.prepareStatement("delete from livros where ID=" + livros.get(rows[i]).getId());
+							pst.execute();
+							remover.add(livros.get(rows[i]));
+							TableModelEmprestimo.getInstance()
+									.removeEmprestimos(TableModelEmprestimo.getInstance().getEmprestimosByItem(l));
+						}
+					} else {
+						pst = con.prepareStatement("delete from livros where ID=" + livros.get(rows[i]).getId());
+						pst.execute();
+						remover.add(livros.get(rows[i]));
+					}
 				}
 				livros.removeAll(remover);
 				fireTableDataChanged();

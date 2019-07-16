@@ -39,6 +39,7 @@ import dad.biblioteca.gui.Login;
 import dad.biblioteca.table.EmprestimoPanel;
 import dad.biblioteca.table.TableModelEmprestimo;
 import dad.biblioteca.table.TableModelLivro;
+import dad.biblioteca.table.TableModelUser;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -366,7 +367,8 @@ public class RealizarEmprestimo {
 					}
 
 				} else {
-					JOptionPane.showMessageDialog(dial, "Atenção! Existe uma multa por atraso pendente! É preciso pagar a multa antes de efetuar a entrega!",
+					JOptionPane.showMessageDialog(dial,
+							"Atenção! Existe uma multa por atraso pendente! É preciso pagar a multa antes de efetuar a entrega!",
 							"Confirmar devolução", JOptionPane.INFORMATION_MESSAGE,
 							new ImageIcon(getClass().getResource("/DAD_SS.jpg")));
 					entregue.setSelected(false);
@@ -440,23 +442,22 @@ public class RealizarEmprestimo {
 
 		bConf.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Emprestimo emprestimo = new Emprestimo(User.getUser(cpf.getText().replace(".", "").replace("-", "")),
+				Emprestimo emprestimo = new Emprestimo(TableModelUser.getInstance().getUserByCpf(cpf.getText().replace(".", "").replace("-", "")),
 						item, date_emp.getDate(), date_entrega.getDate(), Login.NOME);
 
 				con = ConexaoEmprestimos.getConnection();
 				try {
 					pst = con.prepareStatement(
-							"insert into emprestimos(ID,ID_Item,Título,Data_Emprestimo,Data_Devolucao,Cliente,Funcionario,Ativo,Multa,Pago) values (?,?,?,?,?,?,?,?,?,?)");
+							"insert into emprestimos(ID,ID_Item,Data_Emprestimo,Data_Devolucao,Cliente,Funcionario,Ativo,Multa,Pago) values (?,?,?,?,?,?,?,?,?)");
 					pst.setString(1, String.valueOf(emprestimo.getId()));
 					pst.setString(2, String.valueOf(emprestimo.getItem().getId()));
-					pst.setString(3, emprestimo.getItem().getNome());
-					pst.setDate(4, new java.sql.Date(emprestimo.getData_emprestimo().getTime()));
-					pst.setDate(5, new java.sql.Date(emprestimo.getData_entrega().getTime()));
-					pst.setString(6, emprestimo.getUser().getCpf());
-					pst.setString(7, String.valueOf(emprestimo.getFuncionario()));
-					pst.setString(8, "Sim");
-					pst.setString(9, "0.0");
-					pst.setString(10, "Não");
+					pst.setDate(3, new java.sql.Date(emprestimo.getData_emprestimo().getTime()));
+					pst.setDate(4, new java.sql.Date(emprestimo.getData_entrega().getTime()));
+					pst.setString(5, emprestimo.getUser().getCpf());
+					pst.setString(6, String.valueOf(emprestimo.getFuncionario()));
+					pst.setString(7, "Sim");
+					pst.setString(8, "0.0");
+					pst.setString(9, "Não");
 					pst.execute();
 					TableModelEmprestimo.getInstance().addEmprestimo(emprestimo);
 					EmprestimoPanel.getInstance().getJtfTotal()
@@ -466,7 +467,8 @@ public class RealizarEmprestimo {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-
+				emprestimo.getUser().incrementar_emprestimos();
+				TableModelUser.getInstance().fireTableDataChanged();
 				emprestimo.getItem().inc_exemp_emprestados(); // salvar na base
 																// de dados
 				TableModelLivro.getInstance().fireTableDataChanged();
@@ -478,12 +480,17 @@ public class RealizarEmprestimo {
 			public void actionPerformed(ActionEvent e) {
 				con = ConexaoEmprestimos.getConnection();
 				try {
+					String cpfN = cpf.getText().replace(".", "").replace("-", "");
 					pst = con.prepareStatement(
 							"update emprestimos set Data_Emprestimo=?,Data_Devolucao=?,Cliente=?,Ativo=?,Multa=? where ID="
 									+ idEmp.getText());
 					emp.setData_emprestimo(date_emp.getDate());
 					emp.setData_entrega(date_entrega.getDate());
-					emp.setUser(User.getUser(cpf.getText().replace(".", "").replace("-", "")));
+					if (!emp.getUser().getCpf().equals(cpfN)) {
+						emp.getUser().decrementar_emprestimos();
+						emp.setUser(TableModelUser.getInstance().getUserByCpf(cpfN));
+						emp.getUser().incrementar_emprestimos();
+					}
 					pst.setDate(1, new java.sql.Date(date_emp.getDate().getTime()));
 					pst.setDate(2, new java.sql.Date(date_entrega.getDate().getTime()));
 					pst.setString(3, cpf.getText().replace(".", "").replace("-", ""));
@@ -497,7 +504,7 @@ public class RealizarEmprestimo {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-
+				TableModelUser.getInstance().fireTableDataChanged();
 				emp.getItem().inc_exemp_emprestados();
 				save(emp);
 				TableModelEmprestimo.getInstance().fireTableDataChanged();

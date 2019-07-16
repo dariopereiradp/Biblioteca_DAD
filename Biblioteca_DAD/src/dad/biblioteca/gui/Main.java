@@ -16,6 +16,7 @@ import javax.swing.UIManager;
 import dad.biblioteca.Item;
 import dad.biblioteca.table.TableModelEmprestimo;
 import dad.biblioteca.table.TableModelLivro;
+import dad.biblioteca.table.TableModelUser;
 import dad.recursos.ConexaoEmprestimos;
 import dad.recursos.ConexaoLivros;
 import dad.recursos.ConexaoLogin;
@@ -49,6 +50,7 @@ public class Main {
 				public void run() {
 					createTables();
 					TableModelLivro.getInstance().uploadDataBase();
+					TableModelUser.getInstance().uploadDataBase();
 					TableModelEmprestimo.getInstance().uploadDataBase();
 				}
 			});
@@ -177,7 +179,7 @@ public class Main {
 				DatabaseMetaData dmd = con.getMetaData();
 				try (ResultSet rs = dmd.getTables(null, null, "Empréstimos", new String[] { "TABLE" })) {
 					try (Statement s = con.createStatement()) {
-						s.executeUpdate("CREATE TABLE Emprestimos (ID int NOT NULL,ID_Item int NOT NULL,Título varchar(255) NOT NULL,"
+						s.executeUpdate("CREATE TABLE Emprestimos (ID int NOT NULL,ID_Item int NOT NULL,"
 								+ "Data_Emprestimo date,Data_Devolucao date, Cliente varchar(15),Funcionario varchar(255),Ativo varchar(5),"
 								+ "Multa double,Pago varchar(5),CONSTRAINT PK_Emprestimos PRIMARY KEY (ID));");
 						Log.getInstance().printLog("Base de dados emprestimos.mbd criada com sucesso");

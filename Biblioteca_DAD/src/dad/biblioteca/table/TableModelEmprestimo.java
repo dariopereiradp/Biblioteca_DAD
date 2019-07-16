@@ -49,14 +49,15 @@ public class TableModelEmprestimo extends AbstractTableModel {
 				do {
 					int id_item = Integer.parseInt(rs.getString(2));
 					Item item = Item.getItemById(id_item);
-					Date data_emprestimo = rs.getTimestamp(4);
-					Date data_devolucao = rs.getTimestamp(5);
-					String cpf = rs.getString(6);
-					User user = User.getUser(cpf);
-					String funcionario = rs.getString(7);
-					String ativo = rs.getString(8);
-					String pago = rs.getString(10);
-					Emprestimo emp = new Emprestimo(user, item, data_emprestimo, data_devolucao, funcionario);
+					Date data_emprestimo = rs.getTimestamp(3);
+					Date data_devolucao = rs.getTimestamp(4);
+					String cpf = rs.getString(5);
+					User user = TableModelUser.getInstance().getUserByCpf(cpf);
+					String funcionario = rs.getString(6);
+					String ativo = rs.getString(7);
+					String pago = rs.getString(8);
+					Emprestimo emp;
+					emp = new Emprestimo(user, item, data_emprestimo, data_devolucao, funcionario);
 					emp.setId(Integer.parseInt(rs.getString(1)));
 					if (pago.equals("Sim"))
 						emp.pagar();
@@ -147,6 +148,16 @@ public class TableModelEmprestimo extends AbstractTableModel {
 		return emprestimos.get(rowIndex);
 	}
 
+	public int[] getEmprestimosByItem(Item item) {
+		ArrayList<Integer> apagar = new ArrayList<>();
+		for (int i = 0; i < emprestimos.size(); i++) {
+			Emprestimo emp = emprestimos.get(i);
+			if (emp.getItem().getId() == item.getId())
+				apagar.add(i);
+		}
+		return apagar.stream().mapToInt(Integer::intValue).toArray();
+	}
+
 	public void removeEmprestimos(int[] rows) {
 		// undoManager.execute(new RemoverExemplar(rows));
 		ArrayList<Emprestimo> toDelete = new ArrayList<>();
@@ -171,6 +182,7 @@ public class TableModelEmprestimo extends AbstractTableModel {
 			if (recibo.exists())
 				recibo.delete();
 			toDelete.add(emp);
+			emp.getUser().decrementar_emprestimos();
 			fireTableDataChanged();
 		} catch (SQLException e1) {
 			e1.printStackTrace();
@@ -190,9 +202,9 @@ public class TableModelEmprestimo extends AbstractTableModel {
 		case 2:
 			return emprestimos.get(rowIndex).getItem().getNome();
 		case 3:
-			return new SimpleDateFormat("dd/MMM/yyyy").format(emprestimos.get(rowIndex).getData_emprestimo());
+			return new SimpleDateFormat("dd/MM/yyyy").format(emprestimos.get(rowIndex).getData_emprestimo());
 		case 4:
-			return new SimpleDateFormat("dd/MMM/yyyy").format(emprestimos.get(rowIndex).getData_entrega());
+			return new SimpleDateFormat("dd/MM/yyyy").format(emprestimos.get(rowIndex).getData_entrega());
 		case 5:
 			return emprestimos.get(rowIndex).getUser().getCpf();
 		case 6:

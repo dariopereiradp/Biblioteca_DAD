@@ -21,6 +21,7 @@ import com.toedter.calendar.JDateChooser;
 
 import dad.biblioteca.User;
 import dad.biblioteca.gui.DataGui;
+import dad.biblioteca.table.TableModelUser;
 import mdlaf.animation.MaterialUIMovement;
 import mdlaf.utils.MaterialColors;
 
@@ -97,7 +98,8 @@ public class NovoCliente {
 						JOptionPane.showMessageDialog(novo, "Escreva um nome!", "Nome vazio", JOptionPane.ERROR_MESSAGE,
 								new ImageIcon(getClass().getResource("/DAD_SS.jpg")));
 					else {
-						User user = User.newUser(nomeN.getText(), date_nasc.getDate(), cpfString);
+						User user = User.newUser(nomeN.getText(), date_nasc.getDate(), cpfString, 1);
+						TableModelUser.getInstance().addUser(user);
 						Log.getInstance().printLog("Novo cliente criado com sucesso:\n" + user.toText());
 						emp.getNome().setText(nomeN.getText());
 						emp.getbConf().setEnabled(true);

@@ -43,8 +43,8 @@ import javax.swing.table.TableCellRenderer;
 import org.apache.commons.lang.time.DurationFormatUtils;
 
 import dad.biblioteca.Emprestimo;
-import dad.biblioteca.Item;
 import dad.biblioteca.Livro;
+import dad.biblioteca.User;
 import dad.biblioteca.gui.DataGui;
 import dad.biblioteca.gui.Login;
 import dad.recursos.CellRenderer;
@@ -349,7 +349,15 @@ public class EmprestimoPanel extends JPanel {
 										new ImageIcon(getClass().getResource("/DAD_SS.jpg")));
 							}
 						} else if (column == 5) {
-							// TODO abrir cliente
+							try {
+								UserPanel.getInstance().abrir(TableModelUser.getInstance()
+										.getUserByCpf((String) table.getValueAt(rowAtPoint, column)));
+							} catch (NullPointerException e) {
+								JOptionPane.showMessageDialog(null,
+										"Atenção! O cliente já não existe na base de dados. Deve ter sido apagado!",
+										"ERRO", JOptionPane.ERROR_MESSAGE,
+										new ImageIcon(getClass().getResource("/DAD_SS.jpg")));
+							}
 						}
 					}
 				}
@@ -468,70 +476,74 @@ public class EmprestimoPanel extends JPanel {
 		return INSTANCE;
 	}
 
-	public JTable getSmallTable(Item item) {
-		if (item instanceof Livro) {
-			Livro l = (Livro) item;
-			JTable small = new JTable(TableModelEmprestimo.getInstance()){
-				/**
-				 * 
-				 */
-				private static final long serialVersionUID = -7294828362296077489L;
+	public JTable getSmallTable(Object object) {
+		JTable small = new JTable(TableModelEmprestimo.getInstance()) {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = -7294828362296077489L;
 
-				@Override
-				public Component prepareRenderer(TableCellRenderer r, int data, int columns) {
-					int rowIndex = convertRowIndexToModel(data);
-					Component c = super.prepareRenderer(r, data, columns);
-					if (data % 2 == 0)
-						c.setBackground(Color.WHITE);
+			@Override
+			public Component prepareRenderer(TableCellRenderer r, int data, int columns) {
+				int rowIndex = convertRowIndexToModel(data);
+				Component c = super.prepareRenderer(r, data, columns);
+				if (data % 2 == 0)
+					c.setBackground(Color.WHITE);
+				else
+					c.setBackground(MaterialColors.GRAY_100);
+				if (isCellSelected(data, columns)) {
+					if (!TableModelEmprestimo.getInstance().getEmprestimo(rowIndex).isEntregue())
+						c.setBackground(MaterialColors.GREEN_A100);
 					else
-						c.setBackground(MaterialColors.GRAY_100);
-					if (isCellSelected(data, columns)) {
-						if (!TableModelEmprestimo.getInstance().getEmprestimo(rowIndex).isEntregue())
-							c.setBackground(MaterialColors.GREEN_A100);
-						else
-							c.setBackground(MaterialColors.RED_300);
-					}
-					if (columns == 5) {
-						if (!TableModelEmprestimo.getInstance().getEmprestimo(rowIndex).isEntregue())
-							c.setBackground(MaterialColors.GREEN_A100);
-						else
-							c.setBackground(MaterialColors.RED_300);
-					}
-					if (columns == 6) {
-						if (TableModelEmprestimo.getInstance().getEmprestimo(rowIndex).getMulta()==0)
-							c.setBackground(MaterialColors.GREEN_A100);
-						else
-							c.setBackground(MaterialColors.RED_300);
-					}
-					return c;
+						c.setBackground(MaterialColors.RED_300);
 				}
-				
-				protected JTableHeader createDefaultTableHeader() {
-					return new JTableHeader(columnModel) {
-						/**
-						 * 
-						 */
-						private static final long serialVersionUID = -8247305580277890952L;
+				if ((object instanceof Livro && columns == 5) || ((object instanceof User && columns == 6))) {
+					if (!TableModelEmprestimo.getInstance().getEmprestimo(rowIndex).isEntregue())
+						c.setBackground(MaterialColors.GREEN_A100);
+					else
+						c.setBackground(MaterialColors.RED_300);
+				}
+				if ((object instanceof Livro && columns == 6) || ((object instanceof User && columns == 7))) {
+					if (TableModelEmprestimo.getInstance().getEmprestimo(rowIndex).getMulta() == 0)
+						c.setBackground(MaterialColors.GREEN_A100);
+					else
+						c.setBackground(MaterialColors.RED_300);
+				}
+				return c;
+			}
 
-						public String getToolTipText(MouseEvent e) {
-							@SuppressWarnings("unused")
-							String tip = null;
-							Point p = e.getPoint();
-							int index = columnModel.getColumnIndexAtX(p.x);
-							int realIndex = columnModel.getColumn(index).getModelIndex();
-							return columnToolTips[realIndex];
-						}
-					};
-				}
-			};
-			small.setRowHeight(30);
+			protected JTableHeader createDefaultTableHeader() {
+				return new JTableHeader(columnModel) {
+					/**
+					 * 
+					 */
+					private static final long serialVersionUID = -8247305580277890952L;
+
+					public String getToolTipText(MouseEvent e) {
+						@SuppressWarnings("unused")
+						String tip = null;
+						Point p = e.getPoint();
+						int index = columnModel.getColumnIndexAtX(p.x);
+						int realIndex = columnModel.getColumn(index).getModelIndex();
+						return columnToolTips[realIndex];
+					}
+				};
+			}
+		};
+		small.setRowHeight(30);
+		if (object instanceof Livro) {
+			Livro l = (Livro) object;
 			small.removeColumn(small.getColumnModel().getColumn(1));
 			small.removeColumn(small.getColumnModel().getColumn(1));
-			DataGui.getInstance().filtrarEmprestimos(l, small);
 			small.getColumnModel().getColumn(6).setCellRenderer(new CellRenderer2());
-			
-			return small;
-		} else
-			return emprestimos;
+			DataGui.getInstance().filtrarEmprestimos(l, small);
+		} else if(object instanceof User){
+			User user = (User) object;
+			small.removeColumn(small.getColumnModel().getColumn(5));
+			small.getColumnModel().getColumn(7).setCellRenderer(new CellRenderer2());
+			DataGui.getInstance().filtrarEmprestimos(user, small);
+		}
+
+		return small;
 	}
 }
