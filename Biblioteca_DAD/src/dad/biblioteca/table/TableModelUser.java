@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import javax.swing.table.AbstractTableModel;
 
 import dad.biblioteca.User;
+import dad.biblioteca.gui.DataGui;
 import dad.recursos.Command;
 import dad.recursos.ConexaoUser;
 import dad.recursos.CriptografiaAES;
@@ -65,6 +66,22 @@ public class TableModelUser extends AbstractTableModel {
 		return INSTANCE;
 	}
 
+	public UndoManager getUndoManager() {
+		return undoManager;
+	}
+
+	public void addListeners() {
+		undoManager.addPropertyChangeListener(e -> updateItems());
+		updateItems();
+	}
+
+	public void updateItems() {
+		DataGui.getInstance().getMenuAnular().setEnabled(undoManager.isUndoAvailable());
+		DataGui.getInstance().getMenuAnular().setText("Anular (Ctrl+Z) - (" + undoManager.getUndoName() + ")");
+		DataGui.getInstance().getMenuRefazer().setEnabled(undoManager.isRedoAvailable());
+		DataGui.getInstance().getMenuRefazer().setText("Refazer (Ctrl+Y) - (" + undoManager.getRedoName() + ")");
+	}
+
 	@Override
 	public int getRowCount() {
 		return users.size();
@@ -85,16 +102,18 @@ public class TableModelUser extends AbstractTableModel {
 	}
 
 	public void addUser(User user) {
-		users.add(user);
+		undoManager.execute(new AddUser(user));
+		UserPanel.getInstance().clearTextFields();
+		fireTableDataChanged();
 	}
 
 	public User getUser(int rowIndex) {
 		return users.get(rowIndex);
 	}
-	
-	public User getUserByCpf(String cpf){
-		for(User user: users){
-			if(user.getCpf().equals(cpf))
+
+	public User getUserByCpf(String cpf) {
+		for (User user : users) {
+			if (user.getCpf().equals(cpf))
 				return user;
 		}
 		return null;
@@ -133,6 +152,38 @@ public class TableModelUser extends AbstractTableModel {
 		}
 	}
 
+	@Override
+	public void setValueAt(Object valor, int rowIndex, int columnIndex) {
+		try {
+			if (!(columnIndex == 1 && (String.valueOf(valor)).trim().equals(""))) {
+				if ((String.valueOf(valor).trim().equals("")))
+					valor = "-";
+				User user = users.get(rowIndex);
+				switch (columnIndex) {
+				case 1:
+					undoManager.execute(new AtualizaUser(this, "Nome", user, valor));
+					break;
+				case 2:
+					undoManager.execute(new AtualizaUser(this, "Data_Nascimento", user, valor));
+					break;
+				default:
+					users.get(rowIndex);
+					break;
+				}
+				fireTableDataChanged();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			Log.getInstance().printLog("Erro no setValue()\n" + e.getMessage() + "\n" + getClass());
+		}
+	}
+
+	public void insertUser(User user, int pos) {
+		user.adicionarNaBaseDeDados();
+		users.add(pos, user);
+
+	}
+
 	private class RemoverUser implements Command {
 
 		private int[] rows;
@@ -147,8 +198,7 @@ public class TableModelUser extends AbstractTableModel {
 			try {
 				con = ConexaoUser.getConnection();
 				for (int i = 0; i < rows.length; i++) {
-					pst = con.prepareStatement("delete * from usuarios where CPF=" + users.get(rows[i]).getCpf());
-					pst.execute();
+					users.get(rows[i]).removerBaseDeDados();
 					remover.add(users.get(rows[i]));
 				}
 				users.removeAll(remover);
@@ -166,6 +216,7 @@ public class TableModelUser extends AbstractTableModel {
 			for (int i = 0; i < rows.length; i++) {
 				insertUser(remover.get(i), rows[i]);
 			}
+			fireTableDataChanged();
 		}
 
 		@Override
@@ -179,10 +230,43 @@ public class TableModelUser extends AbstractTableModel {
 		}
 	}
 
-	public void insertUser(User user, int pos) {
-		user.adicionarNaBaseDeDados();
-		users.add(pos, user);
+	private class AddUser implements Command {
 
+		private User user;
+
+		public AddUser(User user) {
+			this.user = user;
+		}
+
+		@Override
+		public void execute() {
+			try {
+				user.adicionarNaBaseDeDados();
+				users.add(user);
+				UserPanel.getInstance().getJtfTotal().setText(String.valueOf(users.size()));
+			} catch (Exception e) {
+				Log.getInstance().printLog("Erro ao criar cliente! " + e.getMessage());
+				e.printStackTrace();
+			}
+		}
+
+		@Override
+		public void undo() {
+			user.removerBaseDeDados();
+			users.remove(user);
+			UserPanel.getInstance().getJtfTotal().setText(String.valueOf(users.size()));
+			fireTableDataChanged();
+		}
+
+		@Override
+		public void redo() {
+			execute();
+		}
+
+		@Override
+		public String getName() {
+			return "Adicionar Cliente";
+		}
 	}
 
 }

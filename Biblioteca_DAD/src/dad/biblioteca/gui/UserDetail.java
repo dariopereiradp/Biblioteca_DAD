@@ -9,6 +9,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
@@ -26,6 +27,8 @@ import javax.swing.text.MaskFormatter;
 import com.toedter.calendar.JDateChooser;
 
 import dad.biblioteca.User;
+import dad.biblioteca.table.AtualizaUser;
+import dad.biblioteca.table.CompositeCommand;
 import dad.biblioteca.table.EmprestimoPanel;
 import dad.biblioteca.table.TableModelUser;
 import dad.recursos.Log;
@@ -33,12 +36,12 @@ import mdlaf.animation.MaterialUIMovement;
 import mdlaf.utils.MaterialColors;
 
 public class UserDetail {
-	
+
 	private JFormattedTextField cpfN;
 	private MaskFormatter mascaraCpf;
 	private boolean editCancel = false;
 	private JDialog novo;
-	
+
 	public User user;
 
 	public UserDetail(User user) {
@@ -47,7 +50,7 @@ public class UserDetail {
 		novo.setTitle("Cliente - " + user.getNome());
 		novo.setLocationRelativeTo(null);
 		novo.setMinimumSize(new Dimension(600, 300));
-		
+
 		JPanel cima = new JPanel(new GridLayout(3, 2));
 		JPanel baixo = new JPanel(new BorderLayout());
 		JPanel botoes = new JPanel();
@@ -116,42 +119,44 @@ public class UserDetail {
 					JOptionPane.showMessageDialog(novo, "Escreva um nome!", "Nome vazio", JOptionPane.ERROR_MESSAGE,
 							new ImageIcon(getClass().getResource("/DAD_SS.jpg")));
 				else {
-					user.setNome(nomeN.getText());
-					user.setData_nascimento(date_nasc.getDate());
-					user.atualizarDados();
+//					user.setNome(nomeN.getText());
+//					user.setData_nascimento(date_nasc.getDate());
+					TableModelUser.getInstance().getUndoManager()
+							.execute(new CompositeCommand("Atualizar dados do cliente",
+									new AtualizaUser(TableModelUser.getInstance(), "Nome", user, nomeN.getText()),
+									new AtualizaUser(TableModelUser.getInstance(), "Data_Nascimento", user, new SimpleDateFormat("dd/MM/yyyy").format(date_nasc.getDate()))));
 					TableModelUser.getInstance().fireTableDataChanged();
 					Log.getInstance().printLog("Dados do cliente adicionados com sucesso!\n" + user.toText());
 					novo.dispose();
 				}
 			}
 		});
-		
+
 		editar.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(!editCancel){
-				nomeN.setEditable(true);
-				date_nasc.setEnabled(true);
-				editCancel=true;
-				editar.setText("Cancelar");
-				salvar.setEnabled(true);
-				}
-				else if(editCancel){
+				if (!editCancel) {
+					nomeN.setEditable(true);
+					date_nasc.setEnabled(true);
+					editCancel = true;
+					editar.setText("Cancelar");
+					salvar.setEnabled(true);
+				} else if (editCancel) {
 					novo.dispose();
 				}
 			}
 		});
-		
+
 		baixo.add(botoes, BorderLayout.SOUTH);
-		
+
 		JScrollPane jsp = new JScrollPane(EmprestimoPanel.getInstance().getSmallTable(user));
 		jsp.setPreferredSize(new Dimension(596, 150));
-		
+
 		baixo.add(jsp, BorderLayout.CENTER);
-		
+
 		novo.getContentPane().add(cima, BorderLayout.NORTH);
-		
+
 		novo.getContentPane().add(baixo, BorderLayout.CENTER);
 
 		novo.addWindowListener(new WindowAdapter() {
@@ -160,8 +165,8 @@ public class UserDetail {
 			}
 		});
 	}
-	
-	public void open(){
+
+	public void open() {
 		novo.setVisible(true);
 	}
 }

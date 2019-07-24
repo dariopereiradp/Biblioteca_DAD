@@ -28,6 +28,8 @@ import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableRowSorter;
 import org.apache.commons.lang.time.DurationFormatUtils;
 
+import com.healthmarketscience.jackcess.Table;
+
 import dad.biblioteca.Livro;
 import dad.biblioteca.User;
 import dad.biblioteca.table.EmprestimoPanel;
@@ -171,7 +173,7 @@ public class DataGui extends JFrame {
 
 		tabbedPane.addTab("Empréstimos", EmprestimoPanel.getInstance());
 
-		tabbedPane.addTab("Usuários", null, UserPanel.getInstance(), null);
+		tabbedPane.addTab("Clientes", null, UserPanel.getInstance(), null);
 
 		tabbedPane.setEnabledAt(1, false);
 		tabbedPane.setEnabledAt(2, false);
@@ -194,6 +196,13 @@ public class DataGui extends JFrame {
 		mnArquivo.add(menuBackup);
 
 		menuConfig = new JMenuItem("Configura\u00E7\u00F5es");
+		menuConfig.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				new Config().open();				
+			}
+		});
 		mnArquivo.add(menuConfig);
 
 		menuAtualizar = new JMenuItem("Atualizar Tabelas");
@@ -259,6 +268,7 @@ public class DataGui extends JFrame {
 				TableModelLivro.getInstance().fireTableDataChanged();
 				TableModelEmprestimo.getInstance().fireTableDataChanged();
 				TableModelEmprestimo.getInstance().atualizarMultas();
+				TableModelUser.getInstance().fireTableDataChanged();
 			}
 		});
 
@@ -272,6 +282,7 @@ public class DataGui extends JFrame {
 		});
 
 		TableModelLivro.getInstance().addListeners();
+		TableModelUser.getInstance().addListeners();
 
 		tabbedPane.addChangeListener(new ChangeListener() {
 
@@ -279,9 +290,22 @@ public class DataGui extends JFrame {
 			public void stateChanged(ChangeEvent e) {
 				visibleBoxes();
 				filter("");
+				updateItems();
 			}
 		});
 
+	}
+
+	public void updateItems() {
+		if (tabbedPane.getSelectedIndex() == 0){
+			TableModelLivro.getInstance().updateItems();
+		} else if(tabbedPane.getSelectedIndex() == 4){
+			TableModelUser.getInstance().updateItems();
+		} else {
+			DataGui.getInstance().getMenuAnular().setEnabled(false);
+			DataGui.getInstance().getMenuRefazer().setEnabled(false);
+		}
+		
 	}
 
 	private class MyDispatcher implements KeyEventDispatcher {
@@ -402,14 +426,16 @@ public class DataGui extends JFrame {
 	public void anular() {
 		if (tabbedPane.getSelectedIndex() == 0)
 			TableModelLivro.getInstance().getUndoManager().undo();
-		// else if (tabbedPane.getSelectedIndex() == 1)
+		 else if (tabbedPane.getSelectedIndex() == 4)
+			 TableModelUser.getInstance().getUndoManager().undo();
 		// TODO
 	}
 
 	public void refazer() {
 		if (tabbedPane.getSelectedIndex() == 0)
 			TableModelLivro.getInstance().getUndoManager().redo();
-		// else if (tabbedPane.getSelectedIndex() == 1)
+		 else if (tabbedPane.getSelectedIndex() == 4)
+			 TableModelUser.getInstance().getUndoManager().redo();
 		// TODO
 	}
 
@@ -674,12 +700,12 @@ public class DataGui extends JFrame {
 				tcl.getColumn(0).setCellRenderer(new DefaultCellRenderer());
 
 			if (checkNome.isSelected())
-				tcl.getColumn(1).setCellRenderer(new CellRendererNoImage());
+				tcl.getColumn(1).setCellRenderer(new CellRenderer());
 			else
 				tcl.getColumn(1).setCellRenderer(new DefaultCellRenderer());
 
 			if (checkData_Nasc.isSelected())
-				tcl.getColumn(2).setCellRenderer(new CellRendererNoImage());
+				tcl.getColumn(2).setCellRenderer(new CellRenderer());
 			else
 				tcl.getColumn(2).setCellRenderer(new DefaultCellRenderer());
 		}

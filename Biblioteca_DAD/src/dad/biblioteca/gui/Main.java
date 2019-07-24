@@ -2,6 +2,9 @@ package dad.biblioteca.gui;
 
 import java.awt.EventQueue;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
@@ -9,10 +12,15 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.InputMismatchException;
+import java.util.NoSuchElementException;
+import java.util.Scanner;
+
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 
+import dad.biblioteca.Emprestimo;
 import dad.biblioteca.Item;
 import dad.biblioteca.table.TableModelEmprestimo;
 import dad.biblioteca.table.TableModelLivro;
@@ -90,7 +98,7 @@ public class Main {
 					new ImageIcon(getClass().getResource("/DAD_SS.jpg")));
 			Log.getInstance().printLog(message);
 			System.exit(1);
-			
+
 		}
 	}
 
@@ -113,10 +121,33 @@ public class Main {
 		if (!dir.exists())
 			dir.mkdirs();
 		
-
+		File conf = null;
+		Scanner scan = null;
+		try{
+		conf = new File(System.getenv("APPDATA") + "/BibliotecaDAD/Databases/conf.dad");
+		conf.createNewFile();
+		scan = new Scanner(conf);
+		Emprestimo.MULTA = scan.nextDouble();
+		scan.close();
+		} catch (IOException | InputMismatchException e1) {
+			Log.getInstance().printLog("Erro ao carregar configurações! - " + e1.getMessage());
+			e1.printStackTrace();
+		} catch (NoSuchElementException e){
+			Emprestimo.MULTA=0.5;
+			scan.close();
+			PrintWriter pw;
+			try {
+				pw = new PrintWriter(conf);
+				pw.println(Emprestimo.MULTA);
+				pw.close();
+			} catch (FileNotFoundException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			
+		}
 
 		try {
-
 			File livros = new File(ConexaoLivros.dbFile);
 			if (!livros.exists()) {
 				con = DriverManager
@@ -186,7 +217,7 @@ public class Main {
 					}
 				}
 			}
-			
+
 			File imgs = new File(Item.imgPath);
 			if (!imgs.exists())
 				imgs.mkdirs();
@@ -198,7 +229,7 @@ public class Main {
 					new ImageIcon(getClass().getResource("/DAD_SS.jpg")));
 			Log.getInstance().printLog(message);
 			e.printStackTrace();
-		}
+		} 
 
 	}
 

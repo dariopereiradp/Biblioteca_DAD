@@ -57,6 +57,7 @@ import dad.biblioteca.User;
 import dad.biblioteca.gui.DataGui;
 import dad.biblioteca.gui.Login;
 import dad.biblioteca.gui.UserDetail;
+import dad.recursos.CellRenderer;
 import dad.recursos.CellRendererNoImage;
 import dad.recursos.CpfValidator;
 import dad.recursos.Log;
@@ -81,10 +82,8 @@ public class UserPanel extends JPanel {
 	 * 
 	 */
 	private static final long serialVersionUID = -5439324224974968781L;
-	private String[] columnToolTips = { "ID do livro", "Título do livro", "Autor que escreveu o livro",
-			"Editora que publicou o livro", "Classificação/gênero do livro (ex: aventura, ficção, etc)",
-			"Número de exemplares do livro", "Número de exemplares do livro que estão disponíveis para empréstimo",
-			"O livro está disponível para empréstimo?", "Localização dos exemplares do livro na biblioteca" };
+	private String[] columnToolTips = { "CPF do cliente", "Nome do cliente", "Data de Nascimento do Cliente",
+			"Número de Empréstimos que o cliente fez"};
 
 	public UserPanel() {
 		super();
@@ -204,12 +203,15 @@ public class UserPanel extends JPanel {
 		users.setAutoCreateRowSorter(true);
 		users.getTableHeader().setReorderingAllowed(false);
 		users.setRowHeight(30);
-		
+
+		users.getColumnModel().getColumn(0).setCellRenderer(new CellRendererNoImage());
+		users.getColumnModel().getColumn(1).setCellRenderer(new CellRenderer());
+		users.getColumnModel().getColumn(2).setCellRenderer(new CellRenderer());
 		users.getColumnModel().getColumn(3).setCellRenderer(new CellRendererNoImage());
-		
+
 		MaskFormatter mascaraData;
 		JFormattedTextField data;
-		
+
 		try {
 			mascaraData = new MaskFormatter("##/##/####");
 			mascaraData.setCommitsOnValidEdit(true);
@@ -220,6 +222,7 @@ public class UserPanel extends JPanel {
 		}
 		data.setFont(new Font("Arial", Font.PLAIN, 15));
 		users.getColumnModel().getColumn(2).setCellEditor(new DefaultCellEditor(data));
+//		users.getColumnModel().getColumn(2).setCellEditor(new JDateChooserCellEditor());
 
 		JScrollPane jsLivros = new JScrollPane(users);
 		add(jsLivros, BorderLayout.CENTER);
@@ -253,7 +256,7 @@ public class UserPanel extends JPanel {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				removerLivros();
+				removerUsers();
 			}
 		});
 
@@ -512,18 +515,19 @@ public class UserPanel extends JPanel {
 	}
 
 	public void adicionarUser() {
-		/**
-		 * if (titulo.getText().trim().equals(""))
-		 * JOptionPane.showMessageDialog(this, "Deve inserir pelo menos o
-		 * título!", "ADICIONAR", JOptionPane.INFORMATION_MESSAGE, new
-		 * ImageIcon(getClass().getResource("/DAD_SS.jpg"))); else { if
-		 * (autor.getText().trim().equals("") &&
-		 * editora.getText().trim().equals("") &&
-		 * classificacao.getText().trim().equals("")) modelUser.addUser(new
-		 * User(titulo.getText())); else modelUser.addUser(new
-		 * User(titulo.getText(), autor.getText(), editora.getText(),
-		 * classificacao.getText(), local.getText())); }
-		 */
+		if (nome.getText().trim().equals(""))
+			JOptionPane.showMessageDialog(this, "Deve inserir um nome para o cliente!", "ADICIONAR",
+					JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource("/DAD_SS.jpg")));
+		else {
+			if (validar()) {
+				TableModelUser.getInstance().addUser(new User(nome.getText(), date_nasc.getDate(),
+						cpf.getText().replace(".", "").replace("-", ""), 0, false));
+				Log.getInstance().printLog("Cliente adicionado com sucesso!");
+			} else
+				JOptionPane.showMessageDialog(this, "CPF inválido!", "ADICIONAR",
+						JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource("/DAD_SS.jpg")));
+		}
+
 	}
 
 	public int[] convertRowsIndextoModel() {
@@ -540,22 +544,10 @@ public class UserPanel extends JPanel {
 		cpf.setText("");
 	}
 
-	public void removerLivros() {
+	public void removerUsers() {
 		int[] rows = convertRowsIndextoModel();
 		if (rows.length > 0) {
-			int ok = JOptionPane.showConfirmDialog(this, "Tem certeza que quer apagar o(s) livro(s) selecionado(s)?",
-					"APAGAR", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE,
-					new ImageIcon(getClass().getResource("/DAD_SS.jpg")));
-			if (ok == JOptionPane.OK_OPTION) {
-				modelUser.removeUser(rows);
-			}
-		}
-	}
-
-	public void removerExemplar() {
-		int[] rows = convertRowsIndextoModel();
-		if (rows.length > 0) {
-			int ok = JOptionPane.showConfirmDialog(this, "Tem certeza que quer apagar o exemplar selecionado?",
+			int ok = JOptionPane.showConfirmDialog(this, "Tem certeza que quer apagar o(s) cliente(s) selecionado(s)?",
 					"APAGAR", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE,
 					new ImageIcon(getClass().getResource("/DAD_SS.jpg")));
 			if (ok == JOptionPane.OK_OPTION) {
@@ -602,7 +594,7 @@ public class UserPanel extends JPanel {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			removerLivros();
+			removerUsers();
 		}
 	}
 
@@ -615,7 +607,5 @@ public class UserPanel extends JPanel {
 	public JButton getbAdd() {
 		return bAdd;
 	}
-	
-	
 
 }

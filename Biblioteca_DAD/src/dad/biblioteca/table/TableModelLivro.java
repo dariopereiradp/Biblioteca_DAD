@@ -315,7 +315,7 @@ public class TableModelLivro extends AbstractTableModel {
 		return undoManager;
 	}
 
-	private void updateItems() {
+	public void updateItems() {
 		DataGui.getInstance().getMenuAnular().setEnabled(undoManager.isUndoAvailable());
 		DataGui.getInstance().getMenuAnular().setText("Anular (Ctrl+Z) - (" + undoManager.getUndoName() + ")");
 		DataGui.getInstance().getMenuRefazer().setEnabled(undoManager.isRedoAvailable());

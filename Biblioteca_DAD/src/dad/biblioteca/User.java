@@ -10,7 +10,6 @@ import org.apache.commons.lang.WordUtils;
 
 import dad.recursos.ConexaoUser;
 import dad.recursos.CriptografiaAES;
-import dad.recursos.Log;
 
 public class User {
 
@@ -23,7 +22,7 @@ public class User {
 	private String cpf;
 	private int n_emprestimos;
 
-	private User(String nome, Date data_nascimento, String cpf, int n_emprestimos, boolean adicionar) {
+	public User(String nome, Date data_nascimento, String cpf, int n_emprestimos, boolean adicionar) {
 		con = ConexaoUser.getConnection();
 		nome = WordUtils.capitalize(nome);
 		this.setNome(nome);
@@ -32,8 +31,6 @@ public class User {
 		this.n_emprestimos = n_emprestimos;
 		if (adicionar) {
 			adicionarNaBaseDeDados();
-			Log.getInstance().printLog("Utilizador admin criado com sucesso!");
-			// TODO: salvar na base de dados
 		}
 	}
 
@@ -52,6 +49,19 @@ public class User {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	public void removerBaseDeDados(){
+			try {
+				CriptografiaAES.setKey(key);
+				CriptografiaAES.encrypt(cpf);
+				pst = con.prepareStatement("delete from usuarios where CPF=?");
+				pst.setString(1, CriptografiaAES.getEncryptedString());
+				pst.execute();
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 	}
 
 	public String getNome() {
