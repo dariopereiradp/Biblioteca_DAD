@@ -25,6 +25,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.awt.Color;
 import javax.swing.JFormattedTextField;
@@ -62,33 +63,33 @@ public class Config extends JDialog {
 
 		MaskFormatter mask;
 		try {
-			mask = new MaskFormatter("##,##");
+			mask = new MaskFormatter("R$ #.##");
 			mask.setCommitsOnValidEdit(true);
 			multa = new JFormattedTextField(mask);
 		} catch (ParseException e1) {
 			multa = new JFormattedTextField();
 			e1.printStackTrace();
 		}
+		System.out.println("Multa: " + Emprestimo.MULTA);
 
-		multa.setToolTipText("0,0");
-		multa.setText(String.valueOf(Emprestimo.MULTA));
-		multa.setFont(new Font("Perpetua", Font.PLAIN, 14));
-		multa.setBounds(180, 72, 39, 30);
+		multa.setFont(new Font("Arial", Font.PLAIN, 14));
+		multa.setBounds(180, 72, 60, 30);
+		multa.setValue("R$ " + String.valueOf(Emprestimo.MULTA));
 		contentPanel.add(multa);
-		
+
 		JButton btnAdicionarFuncionrio = new JButton("ADICIONAR FUNCION\u00C1RIO");
 		btnAdicionarFuncionrio.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				RegistoLogin.getInstance().open(false);
 			}
 		});
-		btnAdicionarFuncionrio.setBounds(125, 135, 200, 25);
+		btnAdicionarFuncionrio.setBounds(25, 185, 240, 25);
 		contentPanel.add(btnAdicionarFuncionrio);
-		
+
 		JLabel lBemVindo = new JLabel("Bem vindo! Est\u00E1 ligado como " + Login.NOME);
-		lBemVindo.setBounds(120, 33, 210, 14);
+		lBemVindo.setBounds(90, 33, 260, 20);
 		contentPanel.add(lBemVindo);
-		lBemVindo.setHorizontalAlignment(SwingConstants.LEFT);
+		lBemVindo.setHorizontalAlignment(SwingConstants.CENTER);
 		{
 			JPanel buttonPane = new JPanel();
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
@@ -99,30 +100,35 @@ public class Config extends JDialog {
 
 					@Override
 					public void actionPerformed(ActionEvent e) {
-						int ok = JOptionPane.showConfirmDialog(Config.this,
-								"Tem certeza que quer alterar o valor diário da multa por atraso?\nAtenção: Essa alteração será válida para todos os empréstimos ativos e futuros!",
-								"ALTERAR VALOR DA MULTA", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE,
-								new ImageIcon(getClass().getResource("/DAD_SS.jpg")));
-						if (ok == JOptionPane.OK_OPTION) {
-							double multaValor = Double.valueOf(multa.getText().trim().replace(",", ""));
-							Emprestimo.MULTA = multaValor;
-							TableModelEmprestimo.getInstance().atualizarMultas();
-							File conf = new File(System.getenv("APPDATA") + "/BibliotecaDAD/Databases/conf.dad");
-							conf.delete();
-							try {
-								conf.createNewFile();
-								PrintWriter pw = new PrintWriter(conf);
-								pw.println(multaValor);
-								pw.close();
-							} catch (FileNotFoundException e1) {
-								Log.getInstance().printLog(
-										"Erro ao alterar valor da multa: Ficheiro de configuração não encontrado! - "
-												+ e1.getMessage());
-								e1.printStackTrace();
-							} catch (IOException e1) {
-								Log.getInstance().printLog("Erro ao alterar valor da multa! - " + e1.getMessage());
-								e1.printStackTrace();
+						double multaValor = Double.valueOf(multa.getText().trim().replace("R$", ""));
+						if (multaValor != Emprestimo.MULTA) {
+							int ok = JOptionPane.showConfirmDialog(Config.this,
+									"Tem certeza que quer alterar o valor diário da multa por atraso?\nAtenção: Essa alteração será válida para todos os empréstimos ativos e futuros!",
+									"ALTERAR VALOR DA MULTA", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE,
+									new ImageIcon(getClass().getResource("/DAD_SS.jpg")));
+							if (ok == JOptionPane.OK_OPTION) {
+								Emprestimo.MULTA = multaValor;
+								TableModelEmprestimo.getInstance().atualizarMultas();
+								File conf = new File(System.getenv("APPDATA") + "/BibliotecaDAD/Databases/conf.dad");
+								conf.delete();
+								try {
+									conf.createNewFile();
+									PrintWriter pw = new PrintWriter(conf);
+									pw.println(multaValor);
+									pw.close();
+								} catch (FileNotFoundException e1) {
+									Log.getInstance().printLog(
+											"Erro ao alterar valor da multa: Ficheiro de configuração não encontrado! - "
+													+ e1.getMessage());
+									e1.printStackTrace();
+								} catch (IOException e1) {
+									Log.getInstance().printLog("Erro ao alterar valor da multa! - " + e1.getMessage());
+									e1.printStackTrace();
+								}
+								dispose();
 							}
+						} else {
+							dispose();
 						}
 					}
 				});
@@ -132,19 +138,19 @@ public class Config extends JDialog {
 			{
 				JButton cancelButton = new JButton("Cancelar");
 				cancelButton.addActionListener(new ActionListener() {
-					
+
 					@Override
 					public void actionPerformed(ActionEvent e) {
 						dispose();
-						
+
 					}
 				});
 				buttonPane.add(cancelButton);
 			}
 		}
 	}
-	
-	public void open(){
+
+	public void open() {
 		this.setVisible(true);
 	}
 }

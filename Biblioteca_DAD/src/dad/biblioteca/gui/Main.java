@@ -13,6 +13,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.InputMismatchException;
+import java.util.Locale;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
@@ -120,20 +121,21 @@ public class Main {
 		File dir = new File(System.getenv("APPDATA") + "/BibliotecaDAD/Databases/");
 		if (!dir.exists())
 			dir.mkdirs();
-		
+
 		File conf = null;
 		Scanner scan = null;
-		try{
-		conf = new File(System.getenv("APPDATA") + "/BibliotecaDAD/Databases/conf.dad");
-		conf.createNewFile();
-		scan = new Scanner(conf);
-		Emprestimo.MULTA = scan.nextDouble();
-		scan.close();
+		try {
+			conf = new File(System.getenv("APPDATA") + "/BibliotecaDAD/Databases/conf.dad");
+			conf.createNewFile();
+			scan = new Scanner(conf);
+			scan.useLocale(Locale.US);
+			Emprestimo.MULTA = scan.nextDouble();
+			scan.close();
 		} catch (IOException | InputMismatchException e1) {
 			Log.getInstance().printLog("Erro ao carregar configurações! - " + e1.getMessage());
 			e1.printStackTrace();
-		} catch (NoSuchElementException e){
-			Emprestimo.MULTA=0.5;
+		} catch (NoSuchElementException e) {
+			Emprestimo.MULTA = 0.5;
 			scan.close();
 			PrintWriter pw;
 			try {
@@ -144,7 +146,7 @@ public class Main {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
-			
+
 		}
 
 		try {
@@ -229,7 +231,7 @@ public class Main {
 					new ImageIcon(getClass().getResource("/DAD_SS.jpg")));
 			Log.getInstance().printLog(message);
 			e.printStackTrace();
-		} 
+		}
 
 	}
 
