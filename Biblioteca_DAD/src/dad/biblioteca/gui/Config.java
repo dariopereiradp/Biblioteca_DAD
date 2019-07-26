@@ -7,6 +7,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.text.MaskFormatter;
 
@@ -25,7 +26,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.awt.Color;
 import javax.swing.JFormattedTextField;
@@ -77,19 +77,56 @@ public class Config extends JDialog {
 		multa.setValue("R$ " + String.valueOf(Emprestimo.MULTA));
 		contentPanel.add(multa);
 
-		JButton btnAdicionarFuncionrio = new JButton("ADICIONAR FUNCION\u00C1RIO");
-		btnAdicionarFuncionrio.addActionListener(new ActionListener() {
+		JButton bAddFuncionrio = new JButton("ADICIONAR FUNCION\u00C1RIO");
+		bAddFuncionrio.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				RegistoLogin.getInstance().open(false);
 			}
 		});
-		btnAdicionarFuncionrio.setBounds(25, 185, 240, 25);
-		contentPanel.add(btnAdicionarFuncionrio);
+		bAddFuncionrio.setBounds(25, 130, 240, 25);
+		contentPanel.add(bAddFuncionrio);
 
 		JLabel lBemVindo = new JLabel("Bem vindo! Est\u00E1 ligado como " + Login.NOME);
 		lBemVindo.setBounds(90, 33, 260, 20);
 		contentPanel.add(lBemVindo);
 		lBemVindo.setHorizontalAlignment(SwingConstants.CENTER);
+
+		JButton bGerirFunc = new JButton("GERIR FUNCION\u00C1RIOS");
+		bGerirFunc.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JPasswordField pass = new JPasswordField();
+				int ok = JOptionPane.showConfirmDialog(null, pass, "Introduza a senha do administrador",
+						JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE,
+						new ImageIcon(getClass().getResource("/DAD_SS.jpg")));
+				if (ok == JOptionPane.OK_OPTION) {
+					if (String.valueOf(pass.getPassword()).equals(Main.pass))
+						new GerirFuncionarios().open();
+					else
+						JOptionPane.showMessageDialog(null, "Senha errada!", "SENHA ERRADA", JOptionPane.OK_OPTION,
+								new ImageIcon(getClass().getResource("/DAD_SS.jpg")));
+				}
+
+			}
+		});
+		bGerirFunc.setBounds(25, 166, 240, 25);
+		contentPanel.add(bGerirFunc);
+		if (!Login.NOME.equals("admin")) {
+			bGerirFunc.setEnabled(false);
+			bGerirFunc.setToolTipText("Apenas o utilizador 'admin' pode gerir os funcionários!");
+		}
+
+		JButton bAlterarPass = new JButton("ALTERAR SENHA");
+		bAlterarPass.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				new ChangePassword(Login.NOME, false).open();
+			}
+		});
+		bAlterarPass.setBounds(25, 202, 240, 25);
+		if (Login.NOME.equals("admin")) {
+			bAlterarPass.setEnabled(false);
+			bAlterarPass.setToolTipText("Não é possível alterar a senha do utilizador 'admin'!");
+		}
+		contentPanel.add(bAlterarPass);
 		{
 			JPanel buttonPane = new JPanel();
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));

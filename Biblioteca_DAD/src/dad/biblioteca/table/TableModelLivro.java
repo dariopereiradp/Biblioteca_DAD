@@ -155,6 +155,15 @@ public class TableModelLivro extends AbstractTableModel {
 	public int getRowCount() {
 		return livros.size();
 	}
+	
+	public int getNumLivrosDisponiveis(){
+		int n = 0;
+		for(Livro l: livros){
+			if(l.isDisponivel())
+				n++;
+		}
+		return n;
+	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override

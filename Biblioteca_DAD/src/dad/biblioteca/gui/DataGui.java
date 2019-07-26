@@ -28,8 +28,6 @@ import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableRowSorter;
 import org.apache.commons.lang.time.DurationFormatUtils;
 
-import com.healthmarketscience.jackcess.Table;
-
 import dad.biblioteca.Livro;
 import dad.biblioteca.User;
 import dad.biblioteca.table.EmprestimoPanel;
@@ -187,13 +185,27 @@ public class DataGui extends JFrame {
 		menuBar.add(mnArquivo);
 
 		menuEstatisticas = new JMenuItem("Estat\u00EDsticas");
+		menuEstatisticas.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				new Estatisticas().open();
+			}
+		});
 		mnArquivo.add(menuEstatisticas);
 
-		menuImportar = new JMenuItem("Importar base de dados (.mdb)");
-		mnArquivo.add(menuImportar);
-
 		menuBackup = new JMenuItem("Cópia de segurança");
+		menuBackup.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				new Restauro().open();
+			}
+		});
 		mnArquivo.add(menuBackup);
+		
+		menuImportar = new JMenuItem("Restaurar Cópia de Segurança");
+		mnArquivo.add(menuImportar);
 
 		menuConfig = new JMenuItem("Configura\u00E7\u00F5es");
 		menuConfig.addActionListener(new ActionListener() {

@@ -10,6 +10,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -18,8 +19,10 @@ import javax.swing.JFrame;
 
 import org.apache.commons.lang.time.DurationFormatUtils;
 
+import dad.biblioteca.Funcionario;
 import dad.biblioteca.gui.Login;
 import dad.biblioteca.gui.Main;
+import dad.biblioteca.table.TableModelFuncionario;
 import dad.recursos.ConexaoLogin;
 import dad.recursos.CriptografiaAES;
 import dad.recursos.Log;
@@ -124,11 +127,11 @@ public class RegistoLogin {
 		dialog.getContentPane().add(texto);
 
 		JLabel warning = new JLabel(
-				"ATEN\u00C7\u00C3O: N\u00E3o esque\u00E7a da senha! \u00C9 imposs\u00EDvel recuper\u00E1-la!");
+				"ATEN\u00C7\u00C3O: N\u00E3o esque\u00E7a da senha! Apenas o administrador pode recuper\u00E1-la!");
 		warning.setFont(new Font("Roboto", Font.PLAIN, 12));
 		warning.setForeground(Color.RED);
 		warning.setHorizontalAlignment(SwingConstants.CENTER);
-		warning.setBounds(85, 225, 399, 14);
+		warning.setBounds(10, 225, 474, 14);
 		dialog.getContentPane().add(warning);
 
 		JCheckBox showPass = new JCheckBox("Mostrar senha");
@@ -238,11 +241,14 @@ public class RegistoLogin {
 			password = CriptografiaAES.getEncryptedString();
 
 			con = ConexaoLogin.getConnection();
-			pst = con.prepareStatement("insert into logins(Nome,Pass,Num_acessos) values (?,?,?)");
+			pst = con.prepareStatement("insert into logins(Nome,Pass,Num_acessos,Ultimo_Acesso,Data_Criacao) values (?,?,?,?,?)");
 			pst.setString(1, username);
 			pst.setString(2, password);
 			pst.setInt(3, 0);
+			pst.setDate(4, new Date(System.currentTimeMillis()));
+			pst.setDate(5, new Date(System.currentTimeMillis()));
 			pst.execute();
+			TableModelFuncionario.getInstance().addFuncionario(new Funcionario(username, 0, new java.util.Date(), new java.util.Date()));
 			JOptionPane.showMessageDialog(dialog, "O usuário '" + username + "' foi criado com sucesso!",
 					"USUÁRIO CRIADO", JOptionPane.INFORMATION_MESSAGE,
 					new ImageIcon(getClass().getResource("/DAD_SS.jpg")));

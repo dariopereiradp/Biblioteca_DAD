@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -24,6 +25,7 @@ import javax.swing.UIManager;
 import dad.biblioteca.Emprestimo;
 import dad.biblioteca.Item;
 import dad.biblioteca.table.TableModelEmprestimo;
+import dad.biblioteca.table.TableModelFuncionario;
 import dad.biblioteca.table.TableModelLivro;
 import dad.biblioteca.table.TableModelUser;
 import dad.recursos.ConexaoEmprestimos;
@@ -61,6 +63,7 @@ public class Main {
 					TableModelLivro.getInstance().uploadDataBase();
 					TableModelUser.getInstance().uploadDataBase();
 					TableModelEmprestimo.getInstance().uploadDataBase();
+					TableModelFuncionario.getInstance().uploadDataBase();
 				}
 			});
 			t1.start();
@@ -173,16 +176,18 @@ public class Main {
 				try (ResultSet rs = dmd.getTables(null, null, "Logins", new String[] { "TABLE" })) {
 					try (Statement s = con.createStatement()) {
 						s.executeUpdate("CREATE TABLE Logins (Nome varchar(255) NOT NULL,"
-								+ "Pass varchar(50) NOT NULL, Num_acessos int, CONSTRAINT PK_Logins PRIMARY KEY (Nome));");
+								+ "Pass varchar(50) NOT NULL, Num_acessos int, Ultimo_Acesso date,Data_Criacao date, CONSTRAINT PK_Logins PRIMARY KEY (Nome));");
 						Log.getInstance().printLog("Base de dados logins.mbd criada com sucesso");
 					}
 					CriptografiaAES.setKey(pass);
 					CriptografiaAES.encrypt(pass);
 					PreparedStatement pst = con
-							.prepareStatement("insert into logins(Nome,Pass,Num_acessos) values (?,?,?)");
+							.prepareStatement("insert into logins(Nome,Pass,Num_acessos,Ultimo_Acesso,Data_Criacao) values (?,?,?,?,?)");
 					pst.setString(1, user);
 					pst.setString(2, CriptografiaAES.getEncryptedString());
 					pst.setInt(3, 0);
+					pst.setDate(4, new Date(System.currentTimeMillis()));
+					pst.setDate(5, new Date(System.currentTimeMillis()));
 					pst.execute();
 					Log.getInstance().printLog("Utilizador admin criado com sucesso!");
 				} catch (Exception e) {

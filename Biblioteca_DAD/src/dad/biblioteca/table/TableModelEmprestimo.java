@@ -125,6 +125,24 @@ public class TableModelEmprestimo extends AbstractTableModel {
 	public int getRowCount() {
 		return emprestimos.size();
 	}
+	
+	public int getNumEmprestimosAtivos(){
+		int n = 0;
+		for(Emprestimo emp: emprestimos){
+			if(!emp.isEntregue())
+				n++;
+		}
+		return n;
+	}
+	
+	public int getNumEmprestimosAtivosComMulta(){
+		int n = 0;
+		for(Emprestimo emp: emprestimos){
+			if(!emp.isEntregue() && emp.getMulta()>0 && !emp.isPago())
+				n++;
+		}
+		return n;
+	}
 
 	@Override
 	public int getColumnCount() {

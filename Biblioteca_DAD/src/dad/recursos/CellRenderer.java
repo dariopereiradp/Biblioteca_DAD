@@ -11,6 +11,12 @@ import javax.swing.table.DefaultTableCellRenderer;
 import dad.biblioteca.gui.DataGui;
 import mdlaf.utils.MaterialColors;
 
+/** Classe para renderer das células de uma JTable que são editáveis, ou seja, vai aparecer o ícone de edição no lado esquerdo.
+ * Também está adaptada para pesquisa e filtragem, desenhando um retângulo amarelo em volta do filtro.
+ * 
+ * @author Dário Pereira
+ *
+ */
 public class CellRenderer extends DefaultTableCellRenderer {
 	/**
 	 * 
