@@ -213,7 +213,8 @@ public class Login {
 						new ImageIcon(getClass().getResource("/DAD_SS.jpg")));
 			} else {
 				Log.getInstance().printLog("Usuário: " + username + " - Conectado com sucesso!");
-				pst = con.prepareStatement("update logins set Num_acessos = Num_acessos + 1,Ultimo_Acesso=? where nome = ?");
+				pst = con.prepareStatement(
+						"update logins set Num_acessos = Num_acessos + 1,Ultimo_Acesso=? where nome = ?");
 				pst.setDate(1, new Date(System.currentTimeMillis()));
 				pst.setString(2, username);
 				pst.execute();
@@ -225,6 +226,15 @@ public class Login {
 		} catch (Exception e) {
 			e.printStackTrace();
 			Log.getInstance().printLog("Login - " + e.getMessage());
+		} finally {
+			try {
+				rs.close();
+				pst.close();
+				con.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+				Log.getInstance().printLog("Login - " + e.getMessage());
+			}
 		}
 
 	}

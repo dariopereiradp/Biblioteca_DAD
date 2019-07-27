@@ -10,13 +10,21 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+
 import javax.swing.Timer;
+
+import java.util.Date;
 import java.util.regex.Pattern;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
 import java.awt.BorderLayout;
+import java.awt.Desktop;
+
 import javax.swing.JMenuBar;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
@@ -40,6 +48,7 @@ import dad.recursos.CellRenderer;
 import dad.recursos.CellRendererNoImage;
 import dad.recursos.DefaultCellRenderer;
 import dad.recursos.Log;
+import dad.recursos.ZipCompress;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
@@ -186,7 +195,7 @@ public class DataGui extends JFrame {
 
 		menuEstatisticas = new JMenuItem("Estat\u00EDsticas");
 		menuEstatisticas.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				new Estatisticas().open();
@@ -196,23 +205,31 @@ public class DataGui extends JFrame {
 
 		menuBackup = new JMenuItem("Cópia de segurança");
 		menuBackup.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				backup();
+			}
+		});
+		mnArquivo.add(menuBackup);
+
+		menuImportar = new JMenuItem("Restaurar Cópia de Segurança");
+		mnArquivo.add(menuImportar);
+		menuImportar.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				new Restauro().open();
+				
 			}
 		});
-		mnArquivo.add(menuBackup);
-		
-		menuImportar = new JMenuItem("Restaurar Cópia de Segurança");
-		mnArquivo.add(menuImportar);
 
 		menuConfig = new JMenuItem("Configura\u00E7\u00F5es");
 		menuConfig.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				new Config().open();				
+				new Config().open();
 			}
 		});
 		mnArquivo.add(menuConfig);
@@ -308,16 +325,38 @@ public class DataGui extends JFrame {
 
 	}
 
+	public void backup() {
+		String message = "Deseja criar uma cópia de segurança de todas as bases de dados do programa?"
+				+ "\nObs: A cópia irá incluir as configurações, livros, empréstimos, clientes, funcionários e imagens, que serão salvos em um único ficheiro.\n"
+				+ "Não modifique esse ficheiro!\n"
+				+ "Você deve copiá-lo para um lugar seguro (por exemplo, uma pen-drive) para mais tarde ser possível restaurar,\n"
+				+ "caso o computador seja formatado ou você pretenda usar o programa em outro computador.";
+		int ok = JOptionPane.showConfirmDialog(null, message, "Cópia de Segurança", JOptionPane.YES_NO_OPTION,
+				JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource("/DAD_SS.jpg")));
+		if (ok == JOptionPane.OK_OPTION) {
+			String name = "BibliotecaDAD-Backup-" + new SimpleDateFormat("ddMMMyyyy-HH'h'mm").format(new Date());
+			ZipCompress.compress(Main.DATABASE_DIR, name, Main.BACKUP_DIR);
+			JOptionPane.showMessageDialog(null, "Cópia de segurança salva com sucesso na pasta:\n" + Main.BACKUP_DIR,
+					"Cópia de Segurança - Sucesso", JOptionPane.OK_OPTION,
+					new ImageIcon(getClass().getResource("/DAD_SS.jpg")));
+			try {
+				Desktop.getDesktop().open(new File(Main.BACKUP_DIR));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
 	public void updateItems() {
-		if (tabbedPane.getSelectedIndex() == 0){
+		if (tabbedPane.getSelectedIndex() == 0) {
 			TableModelLivro.getInstance().updateItems();
-		} else if(tabbedPane.getSelectedIndex() == 4){
+		} else if (tabbedPane.getSelectedIndex() == 4) {
 			TableModelUser.getInstance().updateItems();
 		} else {
 			DataGui.getInstance().getMenuAnular().setEnabled(false);
 			DataGui.getInstance().getMenuRefazer().setEnabled(false);
 		}
-		
+
 	}
 
 	private class MyDispatcher implements KeyEventDispatcher {
@@ -438,16 +477,16 @@ public class DataGui extends JFrame {
 	public void anular() {
 		if (tabbedPane.getSelectedIndex() == 0)
 			TableModelLivro.getInstance().getUndoManager().undo();
-		 else if (tabbedPane.getSelectedIndex() == 4)
-			 TableModelUser.getInstance().getUndoManager().undo();
+		else if (tabbedPane.getSelectedIndex() == 4)
+			TableModelUser.getInstance().getUndoManager().undo();
 		// TODO
 	}
 
 	public void refazer() {
 		if (tabbedPane.getSelectedIndex() == 0)
 			TableModelLivro.getInstance().getUndoManager().redo();
-		 else if (tabbedPane.getSelectedIndex() == 4)
-			 TableModelUser.getInstance().getUndoManager().redo();
+		else if (tabbedPane.getSelectedIndex() == 4)
+			TableModelUser.getInstance().getUndoManager().redo();
 		// TODO
 	}
 

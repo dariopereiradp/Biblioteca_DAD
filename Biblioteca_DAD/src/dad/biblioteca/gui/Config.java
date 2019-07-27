@@ -99,7 +99,7 @@ public class Config extends JDialog {
 						JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE,
 						new ImageIcon(getClass().getResource("/DAD_SS.jpg")));
 				if (ok == JOptionPane.OK_OPTION) {
-					if (String.valueOf(pass.getPassword()).equals(Main.pass))
+					if (String.valueOf(pass.getPassword()).equals(Main.PASS))
 						new GerirFuncionarios().open();
 					else
 						JOptionPane.showMessageDialog(null, "Senha errada!", "SENHA ERRADA", JOptionPane.OK_OPTION,

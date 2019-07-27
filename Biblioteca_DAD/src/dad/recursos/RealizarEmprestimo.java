@@ -562,8 +562,10 @@ public class RealizarEmprestimo {
 		try {
 			Desktop.getDesktop().open(new File(dirPath));
 			Desktop.getDesktop().open(new File(dirPath + emprestimo.toString() + ".pdf"));
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(dial, "Ocorreu um erro ao abrir o recibo! Provavelmente deve ter sido apagado! Pode 'Gerar um novo recibo'", "Erro", JOptionPane.ERROR_MESSAGE,
+					new ImageIcon(getClass().getResource("/DAD_SS.jpg")));
+			Log.getInstance().printLog("Ocorreu um erro ao abrir o recibo! Provavelmente deve ter sido apagado! -" + e.getMessage());
 			e.printStackTrace();
 		}
 
