@@ -13,6 +13,8 @@ import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import javax.swing.Timer;
 
@@ -34,6 +36,8 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableRowSorter;
+
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.time.DurationFormatUtils;
 
 import dad.biblioteca.Livro;
@@ -74,6 +78,8 @@ public class DataGui extends JFrame {
 	private JPanel filtrosPanel;
 	private JCheckBox checkID, checkTitulo, checkAutor, checkEditora, checkClassificacao, checkLocal, checkIDItem,
 			checkCliente, checkFuncionario, checkDataEmp, checkDataDevol, checkNome, checkData_Nasc, checkCpf;
+	private JMenuItem mntmRelatarErro;
+	private JMenuItem mnLimpar;
 
 	private DataGui() {
 		INSTANCE = this;
@@ -216,11 +222,11 @@ public class DataGui extends JFrame {
 		menuImportar = new JMenuItem("Restaurar Cópia de Segurança");
 		mnArquivo.add(menuImportar);
 		menuImportar.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				new Restauro().open();
-				
+
 			}
 		});
 
@@ -236,6 +242,23 @@ public class DataGui extends JFrame {
 
 		menuAtualizar = new JMenuItem("Atualizar Tabelas");
 		mnArquivo.add(menuAtualizar);
+
+		mnLimpar = new JMenuItem("Limpar espa\u00E7o");
+		mnLimpar.setToolTipText("Apaga os arquivos de logs antigos, que são desnecessários");
+		mnLimpar.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				int ok = JOptionPane.showConfirmDialog(null,
+						"Os arquivos de logs antigos serão apagados. Isso não influencia o funcionamento do programa.\n"
+								+ "Tem a certeza que quer limpar?",
+						"Limpar espaço", JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE,
+						new ImageIcon(getClass().getResource("/DAD_SS.jpg")));
+				if (ok == JOptionPane.YES_OPTION)
+					limpar();
+			}
+		});
+		mnArquivo.add(mnLimpar);
 
 		menuSair = new JMenuItem("Sair");
 		menuSair.addActionListener(new SairAction());
@@ -258,7 +281,25 @@ public class DataGui extends JFrame {
 		mnAjuda = new JMenu("Ajuda");
 		menuBar.add(mnAjuda);
 
+		mntmRelatarErro = new JMenuItem("Relatar erro");
+		mntmRelatarErro.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				new BugReport().open();				
+			}
+		});
+		mnAjuda.add(mntmRelatarErro);
+
 		menuSobre = new JMenuItem("Sobre");
+		menuSobre.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				new About().open();
+				
+			}
+		});
 		mnAjuda.add(menuSobre);
 
 		getRootPane().setDefaultButton(LivroPanel.getInstance().getbAdd());
@@ -325,6 +366,34 @@ public class DataGui extends JFrame {
 
 	}
 
+	public void limpar() {
+		String logPath = Main.DATA_DIR + "Logs/";
+		String month_year = LocalDateTime.now().format(DateTimeFormatter.ofPattern("MMMyyyy")).toUpperCase();
+		File logs = new File(logPath);
+		File logMonth = new File(logPath + month_year + "/");
+		File logMonthTmp = new File(Main.DATA_DIR + month_year + "/");
+
+		try {
+			FileUtils.copyDirectory(logMonth, logMonthTmp);
+			FileUtils.deleteDirectory(logs);
+		} catch (IOException e) {
+			try {
+				FileUtils.copyDirectory(logMonthTmp, logMonth);
+				FileUtils.deleteDirectory(logMonthTmp);
+				JOptionPane.showMessageDialog(null, "Limpeza feita!",
+						"Limpar espaço - Sucesso", JOptionPane.OK_OPTION,
+						new ImageIcon(getClass().getResource("/DAD_SS.jpg")));
+			} catch (IOException e1) {
+				Log.getInstance().printLog("Erro ao limpar o espaço! - " + e.getMessage());
+				JOptionPane.showMessageDialog(null, "Erro ao fazer a limpeza! - " + e.getMessage(),
+						"Limpar espaço - Erro", JOptionPane.OK_OPTION,
+						new ImageIcon(getClass().getResource("/DAD_SS.jpg")));
+				e1.printStackTrace();
+			}
+		}
+
+	}
+
 	public void backup() {
 		String message = "Deseja criar uma cópia de segurança de todas as bases de dados do programa?"
 				+ "\nObs: A cópia irá incluir as configurações, livros, empréstimos, clientes, funcionários e imagens, que serão salvos em um único ficheiro.\n"
@@ -334,7 +403,7 @@ public class DataGui extends JFrame {
 		int ok = JOptionPane.showConfirmDialog(null, message, "Cópia de Segurança", JOptionPane.YES_NO_OPTION,
 				JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource("/DAD_SS.jpg")));
 		if (ok == JOptionPane.OK_OPTION) {
-			String name = "BibliotecaDAD-Backup-" + new SimpleDateFormat("ddMMMyyyy-HH'h'mm").format(new Date());
+			String name = "BibliotecaDAD-Backup-" + new SimpleDateFormat("ddMMMyyyy-HH'h'mm").format(new Date()) + ".dadb";
 			ZipCompress.compress(Main.DATABASE_DIR, name, Main.BACKUP_DIR);
 			JOptionPane.showMessageDialog(null, "Cópia de segurança salva com sucesso na pasta:\n" + Main.BACKUP_DIR,
 					"Cópia de Segurança - Sucesso", JOptionPane.OK_OPTION,

@@ -74,6 +74,21 @@ public class LivroDetail {
 		botoesSecund.setLayout(new MigLayout("", "[79px][100px][][240px][][][][][]", "[27px]"));
 
 		JButton apagar = new JButton("Apagar");
+		apagar.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				int ok = JOptionPane.showConfirmDialog(null, "Tem a certeza que quer apagar esse livro?",
+						"Apagar livro", JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE,
+						new ImageIcon(getClass().getResource("/DAD_SS.jpg")));
+				if (ok == JOptionPane.YES_OPTION) {
+					int[] rows = new int[1];
+					rows[0] = TableModelLivro.getInstance().getRow(l);
+					TableModelLivro.getInstance().removeLivros(rows);
+					dial.dispose();
+				}
+			}
+		});
 		botoesPrincipais.add(apagar, "cell 0 0,alignx left,aligny center");
 		apagar.setBackground(MaterialColors.RED_400);
 		personalizarBotao(apagar);

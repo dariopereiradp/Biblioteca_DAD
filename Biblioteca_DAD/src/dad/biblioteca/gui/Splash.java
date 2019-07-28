@@ -29,7 +29,7 @@ public class Splash extends JWindow {
 		progressBar.setStringPainted(true);
 		getContentPane().add(progressBar);
 		
-		JLabel lblNewLabel = new JLabel("BIBLIOTECA D\u00C1DIVA DE DEUS");
+		JLabel lblNewLabel = new JLabel(Main.TITLE);
 		lblNewLabel.setFont(new Font("Roboto Medium", Font.PLAIN, 15));
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel.setBounds(50, 172, 350, 35);
@@ -41,7 +41,7 @@ public class Splash extends JWindow {
 		lblNewLabel_1.setBounds(0, 0, 450, 181);
 		getContentPane().add(lblNewLabel_1);
 		
-		JLabel lblVerso = new JLabel("Vers\u00E3o 1.0");
+		JLabel lblVerso = new JLabel("Vers\u00E3o " + Main.VERSION);
 		lblVerso.setHorizontalAlignment(SwingConstants.CENTER);
 		lblVerso.setFont(new Font("Roboto Medium", Font.PLAIN, 13));
 		lblVerso.setBounds(180, 213, 90, 14);

@@ -16,7 +16,8 @@ public class Log {
 	private static Log INSTANCE;
 	private Logger logger;
 	private FileHandler fh;
-
+	private String name;
+	
 	private Log() {
 		INSTANCE = this;
 		String logFormatName = "log_"
@@ -27,12 +28,26 @@ public class Log {
 			File dir = new File(System.getenv("APPDATA") + "/BibliotecaDAD/Logs/" + month_year + "/");
 			if (!dir.exists())
 				dir.mkdirs();
-			fh = new FileHandler(dir.getAbsolutePath() + "/" + logFormatName + ".log");
+			name = dir.getAbsolutePath() + "/" + logFormatName + ".log";
+			open();
 			logger.addHandler(fh);
 			logger.setUseParentHandlers(true);
 			SimpleFormatter formatter = new SimpleFormatter();
 			fh.setFormatter(formatter);
 
+		} catch (SecurityException e) {
+			String message = "Ocorreu um erro ao criar o log...\n" + e.getMessage() + "\n" + this.getClass();
+			JOptionPane.showMessageDialog(null, message, "Erro", JOptionPane.ERROR_MESSAGE,
+					new ImageIcon(getClass().getResource("DAD_S.jpg")));
+			e.printStackTrace();
+		}
+
+	}
+
+	public void open() {
+		try {
+			fh = new FileHandler(name);
+			logger.addHandler(fh);
 		} catch (SecurityException e) {
 			String message = "Ocorreu um erro ao criar o log...\n" + e.getMessage() + "\n" + this.getClass();
 			JOptionPane.showMessageDialog(null, message, "Erro", JOptionPane.ERROR_MESSAGE,
@@ -44,7 +59,6 @@ public class Log {
 					new ImageIcon(getClass().getResource("DAD_S.jpg")));
 			e.printStackTrace();
 		}
-
 	}
 
 	public static Log getInstance() {
@@ -55,6 +69,10 @@ public class Log {
 
 	public void printLog(String message) {
 		logger.info(message + "\n");
+	}
+	
+	public void close(){
+		fh.close();
 	}
 
 }

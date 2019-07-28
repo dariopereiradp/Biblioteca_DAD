@@ -155,11 +155,19 @@ public class TableModelLivro extends AbstractTableModel {
 	public int getRowCount() {
 		return livros.size();
 	}
-	
-	public int getNumLivrosDisponiveis(){
+
+	public int getRow(Livro l) {
+		for (int i = 0; i < livros.size(); i++) {
+			if (livros.get(i).getId() == l.getId())
+				return i;
+		}
+		return -1;
+	}
+
+	public int getNumLivrosDisponiveis() {
 		int n = 0;
-		for(Livro l: livros){
-			if(l.isDisponivel())
+		for (Livro l : livros) {
+			if (l.isDisponivel())
 				n++;
 		}
 		return n;

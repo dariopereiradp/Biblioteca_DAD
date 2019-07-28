@@ -42,10 +42,16 @@ import mdlaf.MaterialLookAndFeel;
 
 public class Main {
 
+	public static final String TITLE = "BIBLIOTECA DÁDIVA DE DEUS";
+	public static final String VERSION = "1.0";
+	public static final String DATA_PUBLICACAO = "20 de Agosto de 2019";
+	public static final String EMAIL_SUPORTE = "pereira13.dario@gmail.com";
 	public static final String USER = "admin";
 	public static final String PASS = "dad";
 	public static final String BACKUP_DIR = System.getProperty("user.home") + System.getProperty("file.separator")
 			+ "Documents/BibliotecaDAD/Backups/";
+	public static final String BUG_REPORTS_DIR = System.getProperty("user.home") + System.getProperty("file.separator")
+	+ "Documents/BibliotecaDAD/BugReports/";
 	public static final String DATA_DIR = System.getenv("APPDATA") + "/BibliotecaDAD/";
 	public static final String DATABASE_DIR = DATA_DIR + "Databases/";
 	public static long inicialTime;
@@ -136,6 +142,10 @@ public class Main {
 		File backdir = new File(Main.BACKUP_DIR);
 		if (!backdir.exists())
 			backdir.mkdirs();
+		
+		File bugDir = new File(Main.BUG_REPORTS_DIR);
+		if(!bugDir.exists())
+			bugDir.mkdirs();
 
 		restaurar();
 
