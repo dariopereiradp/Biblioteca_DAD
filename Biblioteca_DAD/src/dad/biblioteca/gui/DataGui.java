@@ -80,6 +80,7 @@ public class DataGui extends JFrame {
 			checkCliente, checkFuncionario, checkDataEmp, checkDataDevol, checkNome, checkData_Nasc, checkCpf;
 	private JMenuItem mntmRelatarErro;
 	private JMenuItem mnLimpar;
+	private JMenuItem menuManual;
 
 	private DataGui() {
 		INSTANCE = this;
@@ -283,21 +284,43 @@ public class DataGui extends JFrame {
 
 		mntmRelatarErro = new JMenuItem("Relatar erro");
 		mntmRelatarErro.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				new BugReport().open();				
+				new BugReport().open();
 			}
 		});
+
+		menuManual = new JMenuItem("Manual de Instru\u00E7\u00F5es");
+		menuManual.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String path = Main.DATA_DIR + "Manual_Biblioteca_DAD_v" + Main.VERSION + ".pdf";
+				try {
+					Desktop.getDesktop().open(new File(path));
+				} catch (Exception e1) {
+					JOptionPane.showMessageDialog(null,
+							"Ocorreu um erro ao abrir o manual! Pode ter sido apagado...\n"
+									+ "Consulte o manual que veio com o programa ou entre em contato com '"
+									+ Main.EMAIL_SUPORTE + "'",
+							"Manual de Instruções - Erro", JOptionPane.OK_OPTION,
+							new ImageIcon(getClass().getResource("/DAD_SS.jpg")));
+					e1.printStackTrace();
+				}
+
+			}
+		});
+		mnAjuda.add(menuManual);
 		mnAjuda.add(mntmRelatarErro);
 
 		menuSobre = new JMenuItem("Sobre");
 		menuSobre.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				new About().open();
-				
+
 			}
 		});
 		mnAjuda.add(menuSobre);
@@ -380,8 +403,7 @@ public class DataGui extends JFrame {
 			try {
 				FileUtils.copyDirectory(logMonthTmp, logMonth);
 				FileUtils.deleteDirectory(logMonthTmp);
-				JOptionPane.showMessageDialog(null, "Limpeza feita!",
-						"Limpar espaço - Sucesso", JOptionPane.OK_OPTION,
+				JOptionPane.showMessageDialog(null, "Limpeza feita!", "Limpar espaço - Sucesso", JOptionPane.OK_OPTION,
 						new ImageIcon(getClass().getResource("/DAD_SS.jpg")));
 			} catch (IOException e1) {
 				Log.getInstance().printLog("Erro ao limpar o espaço! - " + e.getMessage());
@@ -403,7 +425,8 @@ public class DataGui extends JFrame {
 		int ok = JOptionPane.showConfirmDialog(null, message, "Cópia de Segurança", JOptionPane.YES_NO_OPTION,
 				JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource("/DAD_SS.jpg")));
 		if (ok == JOptionPane.OK_OPTION) {
-			String name = "BibliotecaDAD-Backup-" + new SimpleDateFormat("ddMMMyyyy-HH'h'mm").format(new Date()) + ".dadb";
+			String name = "BibliotecaDAD-Backup-" + new SimpleDateFormat("ddMMMyyyy-HH'h'mm").format(new Date())
+					+ ".dadb";
 			ZipCompress.compress(Main.DATABASE_DIR, name, Main.BACKUP_DIR);
 			JOptionPane.showMessageDialog(null, "Cópia de segurança salva com sucesso na pasta:\n" + Main.BACKUP_DIR,
 					"Cópia de Segurança - Sucesso", JOptionPane.OK_OPTION,
