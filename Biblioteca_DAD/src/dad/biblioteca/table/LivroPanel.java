@@ -41,16 +41,13 @@ import javax.swing.event.PopupMenuListener;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableCellRenderer;
 
-import org.apache.commons.lang.time.DurationFormatUtils;
-
 import dad.biblioteca.Livro;
 import dad.biblioteca.gui.DataGui;
 import dad.biblioteca.gui.LivroDetail;
-import dad.biblioteca.gui.Login;
 import dad.recursos.CellRenderer;
 import dad.recursos.CellRendererNoImage;
-import dad.recursos.Log;
 import dad.recursos.RealizarEmprestimo;
+import dad.recursos.SairAction;
 import mdlaf.animation.MaterialUIMovement;
 import mdlaf.utils.MaterialColors;
 
@@ -240,7 +237,7 @@ public class LivroPanel extends JPanel {
 		inicializarBotoes();
 
 		inicializarPanelAdd();
-		
+
 		JMenuItem deleteItem = new JMenuItem("Apagar");
 		deleteItem.addActionListener(new ActionListener() {
 
@@ -277,7 +274,7 @@ public class LivroPanel extends JPanel {
 
 			}
 		});
-		
+
 		JMenuItem emprestimoItem = new JMenuItem("Realizar Emprésitimo");
 		emprestimoItem.addActionListener(new ActionListener() {
 
@@ -292,13 +289,13 @@ public class LivroPanel extends JPanel {
 							JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource("/DAD_SS.jpg")));
 			}
 		});
-		
+
 		JMenuItem atualizar = new JMenuItem("Atualizar Tabela");
 		atualizar.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				TableModelLivro.getInstance().fireTableDataChanged();				
+				TableModelLivro.getInstance().fireTableDataChanged();
 			}
 		});
 
@@ -346,8 +343,7 @@ public class LivroPanel extends JPanel {
 									}
 								}
 							}
-						}
-						else {
+						} else {
 							info.setVisible(false);
 							deleteAllItem.setVisible(false);
 							deleteItem.setVisible(false);
@@ -621,18 +617,6 @@ public class LivroPanel extends JPanel {
 
 	public JTextField getJtfTotal() {
 		return jtfTotal;
-	}
-
-	private class SairAction implements ActionListener {
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			DataGui.getInstance().setVisible(false);
-			long time = System.currentTimeMillis() - Login.inicialTime;
-			Log.getInstance().printLog("Usuário " + Login.NOME + " saiu!\nTempo de Uso: "
-					+ DurationFormatUtils.formatDuration(time, "HH'h'mm'm'ss's"));
-			Login.getInstance().open();
-		}
 	}
 
 	private class DeleteAction extends AbstractAction {

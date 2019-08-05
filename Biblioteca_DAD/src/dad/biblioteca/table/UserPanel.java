@@ -49,19 +49,16 @@ import javax.swing.table.JTableHeader;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.text.MaskFormatter;
 
-import org.apache.commons.lang.time.DurationFormatUtils;
-
 import com.toedter.calendar.JDateChooser;
 import dad.biblioteca.Livro;
 import dad.biblioteca.User;
-import dad.biblioteca.gui.DataGui;
-import dad.biblioteca.gui.Login;
 import dad.biblioteca.gui.UserDetail;
 import dad.recursos.CellRenderer;
 import dad.recursos.CellRendererNoImage;
 import dad.recursos.CpfValidator;
 import dad.recursos.Log;
 import dad.recursos.RealizarEmprestimo;
+import dad.recursos.SairAction;
 import mdlaf.animation.MaterialUIMovement;
 import mdlaf.utils.MaterialColors;
 
@@ -83,7 +80,7 @@ public class UserPanel extends JPanel {
 	 */
 	private static final long serialVersionUID = -5439324224974968781L;
 	private String[] columnToolTips = { "CPF do cliente", "Nome do cliente", "Data de Nascimento do Cliente",
-			"Número de Empréstimos que o cliente fez"};
+			"Número de Empréstimos que o cliente fez" };
 
 	public UserPanel() {
 		super();
@@ -222,7 +219,8 @@ public class UserPanel extends JPanel {
 		}
 		data.setFont(new Font("Arial", Font.PLAIN, 15));
 		users.getColumnModel().getColumn(2).setCellEditor(new DefaultCellEditor(data));
-//		users.getColumnModel().getColumn(2).setCellEditor(new JDateChooserCellEditor());
+		// users.getColumnModel().getColumn(2).setCellEditor(new
+		// JDateChooserCellEditor());
 
 		JScrollPane jsLivros = new JScrollPane(users);
 		add(jsLivros, BorderLayout.CENTER);
@@ -524,8 +522,8 @@ public class UserPanel extends JPanel {
 						cpf.getText().replace(".", "").replace("-", ""), 0, false));
 				Log.getInstance().printLog("Cliente adicionado com sucesso!");
 			} else
-				JOptionPane.showMessageDialog(this, "CPF inválido!", "ADICIONAR",
-						JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource("/DAD_SS.jpg")));
+				JOptionPane.showMessageDialog(this, "CPF inválido!", "ADICIONAR", JOptionPane.INFORMATION_MESSAGE,
+						new ImageIcon(getClass().getResource("/DAD_SS.jpg")));
 		}
 
 	}
@@ -571,18 +569,6 @@ public class UserPanel extends JPanel {
 
 	public JTextField getJtfTotal() {
 		return jtfTotal;
-	}
-
-	private class SairAction implements ActionListener {
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			DataGui.getInstance().setVisible(false);
-			long time = System.currentTimeMillis() - Login.inicialTime;
-			Log.getInstance().printLog("Usuário " + Login.NOME + " saiu!\nTempo de Uso: "
-					+ DurationFormatUtils.formatDuration(time, "HH'h'mm'm'ss's"));
-			Login.getInstance().open();
-		}
 	}
 
 	private class DeleteAction extends AbstractAction {

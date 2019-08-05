@@ -124,20 +124,33 @@ public class TableModelLivro extends AbstractTableModel {
 		return livros.get(rowIndex);
 	}
 
-	public boolean perguntaIncrementar() {
+	public boolean perguntaIncrementar(Livro l) {
 		int ok = JOptionPane.showConfirmDialog(DataGui.getInstance(),
 				"Esse livro já existe! Deseja aumentar uma unidade ao livro já existente?", "Livro já existe",
 				JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE,
 				new ImageIcon(getClass().getResource("/DAD_SS.jpg")));
-		if (ok == JOptionPane.OK_OPTION)
-			return true;
-		else
+		if (ok == JOptionPane.OK_OPTION) {
+			if (TableModelEmprestimo.getInstance().getEmprestimosByItem(l).length > 0) {
+				int ok1 = JOptionPane.showConfirmDialog(null,
+						"ATENÇÃO! O livro " + l.getNome()
+								+ " tem empréstimos registados na base de dados!\nSe clicar em 'OK' todos os empréstimos ligados a esse livro serão apagados!\n"
+								+ "Embora seja possível anular a ação de apagar o livro, os histórico de empréstimos para esse livro será perdido definitivamente!\n"
+								+ "Tem a certeza que quer apagar?",
+						"APAGAR", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE,
+						new ImageIcon(getClass().getResource("/DAD_SS.jpg")));
+				if (ok1 == JOptionPane.OK_OPTION)
+					return true;
+				else
+					return false;
+			} else
+				return true;
+		} else
 			return false;
 	}
 
 	public void incrementarLivro(Livro livro, boolean undo) {
 		if (!undo) {
-			if (perguntaIncrementar()) {
+			if (perguntaIncrementar(livro)) {
 				undoManager.execute(new IncLivro(livro));
 				LivroPanel.getInstance().clearTextFields();
 			} else
@@ -232,7 +245,7 @@ public class TableModelLivro extends AbstractTableModel {
 					l.setNome((String) valor);
 					if (!(l.getNome().equals(livro.getNome()))) {
 						if (livros.contains(l)) {
-							if (perguntaIncrementar()) {
+							if (perguntaIncrementar(livro)) {
 								int[] rows = { rowIndex };
 								undoManager.execute(new CompositeCommand("Atualizar Título e Juntar", new IncLivro(l),
 										new RemoverLivro(rows)));
@@ -245,7 +258,7 @@ public class TableModelLivro extends AbstractTableModel {
 					l.setAutor((String) valor);
 					if (!(l.getAutor().equals(livro.getAutor()))) {
 						if (livros.contains(l)) {
-							if (perguntaIncrementar()) {
+							if (perguntaIncrementar(livro)) {
 								int[] rows = { rowIndex };
 								undoManager.execute(new CompositeCommand("Atualizar Autor e Juntar", new IncLivro(l),
 										new RemoverLivro(rows)));
@@ -258,7 +271,7 @@ public class TableModelLivro extends AbstractTableModel {
 					l.setEditora((String) valor);
 					if (!(l.getEditora().equals(livro.getEditora()))) {
 						if (livros.contains(l)) {
-							if (perguntaIncrementar()) {
+							if (perguntaIncrementar(livro)) {
 								int[] rows = { rowIndex };
 								undoManager.execute(new CompositeCommand("Atualizar Editora e Juntar", new IncLivro(l),
 										new RemoverLivro(rows)));
@@ -271,7 +284,7 @@ public class TableModelLivro extends AbstractTableModel {
 					l.setClassificacao((String) valor);
 					if (!(l.getClassificacao().equals(livro.getClassificacao()))) {
 						if (livros.contains(l)) {
-							if (perguntaIncrementar()) {
+							if (perguntaIncrementar(livro)) {
 								int[] rows = { rowIndex };
 								undoManager.execute(new CompositeCommand("Atualizar Classificação e Juntar",
 										new IncLivro(l), new RemoverLivro(rows)));

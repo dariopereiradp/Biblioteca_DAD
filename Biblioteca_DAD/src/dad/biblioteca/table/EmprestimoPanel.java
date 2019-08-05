@@ -40,18 +40,15 @@ import javax.swing.event.PopupMenuListener;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableCellRenderer;
 
-import org.apache.commons.lang.time.DurationFormatUtils;
-
 import dad.biblioteca.Emprestimo;
 import dad.biblioteca.Livro;
 import dad.biblioteca.User;
 import dad.biblioteca.gui.DataGui;
-import dad.biblioteca.gui.Login;
 import dad.recursos.CellRenderer;
 import dad.recursos.CellRenderer2;
 import dad.recursos.CellRendererNoImage;
-import dad.recursos.Log;
 import dad.recursos.RealizarEmprestimo;
+import dad.recursos.SairAction;
 import mdlaf.animation.MaterialUIMovement;
 import mdlaf.utils.MaterialColors;
 
@@ -443,18 +440,6 @@ public class EmprestimoPanel extends JPanel {
 
 	public JTextField getJtfTotal() {
 		return jtfTotal;
-	}
-
-	private class SairAction implements ActionListener {
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			DataGui.getInstance().setVisible(false);
-			long time = System.currentTimeMillis() - Login.inicialTime;
-			Log.getInstance().printLog("Usuário " + Login.NOME + " saiu!\nTempo de Uso: "
-					+ DurationFormatUtils.formatDuration(time, "HH'h'mm'm'ss's"));
-			Login.getInstance().open();
-		}
 	}
 
 	private class DeleteAction extends AbstractAction {

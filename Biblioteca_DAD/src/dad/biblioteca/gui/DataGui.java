@@ -52,6 +52,7 @@ import dad.recursos.CellRenderer;
 import dad.recursos.CellRendererNoImage;
 import dad.recursos.DefaultCellRenderer;
 import dad.recursos.Log;
+import dad.recursos.SairAction;
 import dad.recursos.ZipCompress;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
@@ -296,7 +297,8 @@ public class DataGui extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				String path = Main.DATA_DIR + "Manual_Biblioteca_DAD_v" + Main.VERSION + ".pdf";
+				String path = System.getenv("ProgramFiles(X86)") + System.getProperty("file.separator") + "Biblioteca Dádiva de Deus/"
+						+ "Manual_Instrucoes_Biblioteca_DAD_v" + Main.VERSION + ".pdf";
 				try {
 					Desktop.getDesktop().open(new File(path));
 				} catch (Exception e1) {
@@ -853,18 +855,6 @@ public class DataGui extends JFrame {
 				tcl.getColumn(2).setCellRenderer(new DefaultCellRenderer());
 		}
 
-	}
-
-	private class SairAction implements ActionListener {
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			setVisible(false);
-			long time = System.currentTimeMillis() - Login.inicialTime;
-			Log.getInstance().printLog("Usuário " + Login.NOME + " saiu!\nTempo de Uso: "
-					+ DurationFormatUtils.formatDuration(time, "HH'h'mm'm'ss's"));
-			Login.getInstance().open();
-		}
 	}
 
 	public JTextField getPesquisa() {
