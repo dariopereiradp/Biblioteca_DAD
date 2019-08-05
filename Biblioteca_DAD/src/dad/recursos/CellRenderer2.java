@@ -10,7 +10,6 @@ import javax.swing.table.DefaultTableCellRenderer;
 
 import dad.biblioteca.Emprestimo;
 import dad.biblioteca.gui.DataGui;
-import dad.biblioteca.table.EmprestimoPanel;
 import dad.biblioteca.table.TableModelEmprestimo;
 import mdlaf.utils.MaterialColors;
 

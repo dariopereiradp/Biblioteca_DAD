@@ -59,7 +59,7 @@ public class RegistoLogin {
 	private RegistoLogin() {
 		INSTANCE = this;
 		dialog = new JDialog();
-		dialog.setTitle("Biblioteca Dádiva de Deus - Registo");
+		dialog.setTitle("Biblioteca Dádiva de Deus - Registro");
 		dialog.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		dialog.setIconImage(Toolkit.getDefaultToolkit().getImage((getClass().getResource("/DAD.jpg"))));
 		dialog.setBounds(100, 100, 500, 300);
