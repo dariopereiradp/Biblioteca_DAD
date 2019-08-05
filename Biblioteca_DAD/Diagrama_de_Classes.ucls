@@ -1,0 +1,1769 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<class-diagram version="1.2.3" icons="true" automaticImage="PNG" always-add-relationships="false" generalizations="true" 
+  realizations="true" associations="true" dependencies="true" nesting-relationships="true" router="FAN">  
+  <class id="1" language="java" name="dad.biblioteca.Emprestimo" project="Biblioteca_DAD" 
+    file="/Biblioteca_DAD/src/dad/biblioteca/Emprestimo.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="67" y="36"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="false" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <class id="2" language="java" name="dad.biblioteca.Funcionario" project="Biblioteca_DAD" 
+    file="/Biblioteca_DAD/src/dad/biblioteca/Funcionario.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="1914" y="325"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="false" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <class id="3" language="java" name="dad.biblioteca.Item" project="Biblioteca_DAD" 
+    file="/Biblioteca_DAD/src/dad/biblioteca/Item.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="251" y="68"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="false" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <class id="4" language="java" name="dad.biblioteca.Livro" project="Biblioteca_DAD" 
+    file="/Biblioteca_DAD/src/dad/biblioteca/Livro.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="270" y="185"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="false" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <class id="5" language="java" name="dad.biblioteca.Multimedia" project="Biblioteca_DAD" 
+    file="/Biblioteca_DAD/src/dad/biblioteca/Multimedia.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="144" y="200"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="false" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <class id="6" language="java" name="dad.biblioteca.Outros" project="Biblioteca_DAD" 
+    file="/Biblioteca_DAD/src/dad/biblioteca/Outros.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="27" y="-72"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="false" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <class id="7" language="java" name="dad.biblioteca.User" project="Biblioteca_DAD" 
+    file="/Biblioteca_DAD/src/dad/biblioteca/User.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="68" y="313"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="false" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <class id="8" language="java" name="dad.biblioteca.gui.About" project="Biblioteca_DAD" 
+    file="/Biblioteca_DAD/src/dad/biblioteca/gui/About.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="905" y="-55"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="false" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <class id="9" language="java" name="dad.biblioteca.gui.BugReport" project="Biblioteca_DAD" 
+    file="/Biblioteca_DAD/src/dad/biblioteca/gui/BugReport.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="894" y="155"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="false" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <class id="10" language="java" name="dad.biblioteca.gui.ChangePassword" project="Biblioteca_DAD" 
+    file="/Biblioteca_DAD/src/dad/biblioteca/gui/ChangePassword.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="588" y="-53"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="false" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <class id="11" language="java" name="dad.biblioteca.gui.Config" project="Biblioteca_DAD" 
+    file="/Biblioteca_DAD/src/dad/biblioteca/gui/Config.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="402" y="-50"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="false" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <class id="12" language="java" name="dad.biblioteca.gui.DataGui.MyDispatcher" project="Biblioteca_DAD" 
+    file="/Biblioteca_DAD/src/dad/biblioteca/gui/DataGui.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="538" y="191"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="false" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <class id="13" language="java" name="dad.biblioteca.gui.DataGui" project="Biblioteca_DAD" 
+    file="/Biblioteca_DAD/src/dad/biblioteca/gui/DataGui.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="58" width="92" x="491" y="73"/>    
+    <display autosize="false" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="false" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <class id="14" language="java" name="dad.biblioteca.gui.Estatisticas" project="Biblioteca_DAD" 
+    file="/Biblioteca_DAD/src/dad/biblioteca/gui/Estatisticas.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="747" y="-60"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="false" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <class id="15" language="java" name="dad.biblioteca.gui.GerirFuncionarios" project="Biblioteca_DAD" 
+    file="/Biblioteca_DAD/src/dad/biblioteca/gui/GerirFuncionarios.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="211" y="-47"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="false" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <class id="16" language="java" name="dad.biblioteca.gui.LivroDetail" project="Biblioteca_DAD" 
+    file="/Biblioteca_DAD/src/dad/biblioteca/gui/LivroDetail.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="305" y="302"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="false" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <class id="17" language="java" name="dad.biblioteca.gui.Login" project="Biblioteca_DAD" 
+    file="/Biblioteca_DAD/src/dad/biblioteca/gui/Login.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="894" y="268"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="false" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <class id="18" language="java" name="dad.biblioteca.gui.Main" project="Biblioteca_DAD" 
+    file="/Biblioteca_DAD/src/dad/biblioteca/gui/Main.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="1301" y="-67"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="false" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <class id="19" language="java" name="dad.biblioteca.gui.Main.Incrementar" project="Biblioteca_DAD" 
+    file="/Biblioteca_DAD/src/dad/biblioteca/gui/Main.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="1291" y="224"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="false" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <class id="20" language="java" name="dad.biblioteca.gui.Restauro" project="Biblioteca_DAD" 
+    file="/Biblioteca_DAD/src/dad/biblioteca/gui/Restauro.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="671" y="267"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="false" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <class id="21" language="java" name="dad.biblioteca.gui.Splash" project="Biblioteca_DAD" 
+    file="/Biblioteca_DAD/src/dad/biblioteca/gui/Splash.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="1385" y="327"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="false" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <class id="22" language="java" name="dad.biblioteca.gui.UserDetail" project="Biblioteca_DAD" 
+    file="/Biblioteca_DAD/src/dad/biblioteca/gui/UserDetail.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="67" y="422"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="false" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <class id="23" language="java" name="dad.biblioteca.table.AtualizaExemplares" project="Biblioteca_DAD" 
+    file="/Biblioteca_DAD/src/dad/biblioteca/table/AtualizaExemplares.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="58" width="137" x="178" y="382"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="false" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <class id="24" language="java" name="dad.biblioteca.table.AtualizaLivro" project="Biblioteca_DAD" 
+    file="/Biblioteca_DAD/src/dad/biblioteca/table/AtualizaLivro.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="436" y="306"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="false" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <class id="25" language="java" name="dad.biblioteca.table.AtualizaUser" project="Biblioteca_DAD" 
+    file="/Biblioteca_DAD/src/dad/biblioteca/table/AtualizaUser.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="181" y="511"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="false" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <class id="26" language="java" name="dad.biblioteca.table.CompositeCommand" project="Biblioteca_DAD" 
+    file="/Biblioteca_DAD/src/dad/biblioteca/table/CompositeCommand.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="450" y="480"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="false" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <class id="27" language="java" name="dad.biblioteca.table.EmprestimoPanel.DeleteAction" project="Biblioteca_DAD" 
+    file="/Biblioteca_DAD/src/dad/biblioteca/table/EmprestimoPanel.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="768" y="436"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="false" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <class id="28" language="java" name="dad.biblioteca.table.EmprestimoPanel" project="Biblioteca_DAD" 
+    file="/Biblioteca_DAD/src/dad/biblioteca/table/EmprestimoPanel.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="946" y="431"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="false" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <class id="29" language="java" name="dad.biblioteca.table.LivroPanel" project="Biblioteca_DAD" 
+    file="/Biblioteca_DAD/src/dad/biblioteca/table/LivroPanel.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="577" y="549"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="false" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <class id="30" language="java" name="dad.biblioteca.table.LivroPanel.DeleteAction" project="Biblioteca_DAD" 
+    file="/Biblioteca_DAD/src/dad/biblioteca/table/LivroPanel.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="751" y="553"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="false" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <class id="31" language="java" name="dad.biblioteca.table.UserPanel.DeleteAction" project="Biblioteca_DAD" 
+    file="/Biblioteca_DAD/src/dad/biblioteca/table/UserPanel.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="976" y="567"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="false" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <class id="32" language="java" name="dad.biblioteca.table.UserPanel" project="Biblioteca_DAD" 
+    file="/Biblioteca_DAD/src/dad/biblioteca/table/UserPanel.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="1219" y="357"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="false" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <class id="33" language="java" name="dad.biblioteca.table.TableModelEmprestimo" project="Biblioteca_DAD" 
+    file="/Biblioteca_DAD/src/dad/biblioteca/table/TableModelEmprestimo.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="1651" y="138"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="false" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <class id="34" language="java" name="dad.biblioteca.table.TableModelFuncionario" project="Biblioteca_DAD" 
+    file="/Biblioteca_DAD/src/dad/biblioteca/table/TableModelFuncionario.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="1905" y="199"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="false" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <class id="35" language="java" name="dad.biblioteca.table.TableModelLivro.IncLivro" project="Biblioteca_DAD" 
+    file="/Biblioteca_DAD/src/dad/biblioteca/table/TableModelLivro.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="1482" y="572"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="false" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <class id="36" language="java" name="dad.biblioteca.table.TableModelLivro.RemoverExemplar" project="Biblioteca_DAD" 
+    file="/Biblioteca_DAD/src/dad/biblioteca/table/TableModelLivro.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="1631" y="572"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="false" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <class id="37" language="java" name="dad.biblioteca.table.TableModelLivro" project="Biblioteca_DAD" 
+    file="/Biblioteca_DAD/src/dad/biblioteca/table/TableModelLivro.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="1327" y="491"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="false" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <class id="38" language="java" name="dad.biblioteca.table.TableModelLivro.AddLivro" project="Biblioteca_DAD" 
+    file="/Biblioteca_DAD/src/dad/biblioteca/table/TableModelLivro.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="1781" y="572"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="false" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <class id="39" language="java" name="dad.biblioteca.table.TableModelLivro.RemoverLivro" project="Biblioteca_DAD" 
+    file="/Biblioteca_DAD/src/dad/biblioteca/table/TableModelLivro.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="1917" y="572"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="false" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <class id="40" language="java" name="dad.biblioteca.table.TableModelUser.RemoverUser" project="Biblioteca_DAD" 
+    file="/Biblioteca_DAD/src/dad/biblioteca/table/TableModelUser.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="837" y="862"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="false" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <class id="41" language="java" name="dad.biblioteca.table.TableModelUser" project="Biblioteca_DAD" 
+    file="/Biblioteca_DAD/src/dad/biblioteca/table/TableModelUser.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="914" y="754"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="false" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <class id="42" language="java" name="dad.biblioteca.table.TableModelUser.AddUser" project="Biblioteca_DAD" 
+    file="/Biblioteca_DAD/src/dad/biblioteca/table/TableModelUser.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="973" y="862"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="false" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <class id="43" language="java" name="dad.recursos.BackgroundPanel" project="Biblioteca_DAD" 
+    file="/Biblioteca_DAD/src/dad/recursos/BackgroundPanel.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="1774" y="687"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="false" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <class id="44" language="java" name="dad.recursos.CellRenderer" project="Biblioteca_DAD" 
+    file="/Biblioteca_DAD/src/dad/recursos/CellRenderer.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="1115" y="656"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="false" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <class id="45" language="java" name="dad.recursos.CellRenderer2" project="Biblioteca_DAD" 
+    file="/Biblioteca_DAD/src/dad/recursos/CellRenderer2.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="1233" y="658"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="false" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <class id="46" language="java" name="dad.recursos.CellRendererNoImage" project="Biblioteca_DAD" 
+    file="/Biblioteca_DAD/src/dad/recursos/CellRendererNoImage.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="1394" y="662"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="false" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <interface id="47" language="java" name="dad.recursos.Command" project="Biblioteca_DAD" 
+    file="/Biblioteca_DAD/src/dad/recursos/Command.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="1165" y="816"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="false" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </interface>  
+  <class id="48" language="java" name="dad.recursos.ConexaoEmprestimos" project="Biblioteca_DAD" 
+    file="/Biblioteca_DAD/src/dad/recursos/ConexaoEmprestimos.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="1763" y="823"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="false" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <class id="49" language="java" name="dad.recursos.ConexaoLivros" project="Biblioteca_DAD" 
+    file="/Biblioteca_DAD/src/dad/recursos/ConexaoLivros.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="1618" y="820"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="false" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <class id="50" language="java" name="dad.recursos.ConexaoLogin" project="Biblioteca_DAD" 
+    file="/Biblioteca_DAD/src/dad/recursos/ConexaoLogin.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="1488" y="823"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="false" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <class id="51" language="java" name="dad.recursos.ConexaoUser" project="Biblioteca_DAD" 
+    file="/Biblioteca_DAD/src/dad/recursos/ConexaoUser.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="1371" y="822"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="false" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <class id="52" language="java" name="dad.recursos.CpfValidator" project="Biblioteca_DAD" 
+    file="/Biblioteca_DAD/src/dad/recursos/CpfValidator.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="1041" y="172"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="false" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <class id="53" language="java" name="dad.recursos.CriptografiaAES" project="Biblioteca_DAD" 
+    file="/Biblioteca_DAD/src/dad/recursos/CriptografiaAES.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="1155" y="940"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="false" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <class id="54" language="java" name="dad.recursos.DefaultCellRenderer" project="Biblioteca_DAD" 
+    file="/Biblioteca_DAD/src/dad/recursos/DefaultCellRenderer.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="1576" y="664"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="false" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <class id="55" language="java" name="dad.recursos.ImageCompression" project="Biblioteca_DAD" 
+    file="/Biblioteca_DAD/src/dad/recursos/ImageCompression.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="15" y="148"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="false" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <class id="56" language="java" name="dad.recursos.ImageViewer" project="Biblioteca_DAD" 
+    file="/Biblioteca_DAD/src/dad/recursos/ImageViewer.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="147" y="621"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="false" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <class id="57" language="java" name="dad.recursos.Log" project="Biblioteca_DAD" 
+    file="/Biblioteca_DAD/src/dad/recursos/Log.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="408" y="955"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="false" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <class id="58" language="java" name="dad.recursos.NovoCliente" project="Biblioteca_DAD" 
+    file="/Biblioteca_DAD/src/dad/recursos/NovoCliente.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="50" y="733"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="false" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <class id="59" language="java" name="dad.recursos.PDFGenerator" project="Biblioteca_DAD" 
+    file="/Biblioteca_DAD/src/dad/recursos/PDFGenerator.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="234" y="800"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="false" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <class id="60" language="java" name="dad.recursos.RealizarEmprestimo" project="Biblioteca_DAD" 
+    file="/Biblioteca_DAD/src/dad/recursos/RealizarEmprestimo.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="86" y="923"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="false" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <class id="61" language="java" name="dad.recursos.RegistoLogin" project="Biblioteca_DAD" 
+    file="/Biblioteca_DAD/src/dad/recursos/RegistoLogin.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="817" y="984"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="false" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <class id="62" language="java" name="dad.recursos.SairAction" project="Biblioteca_DAD" 
+    file="/Biblioteca_DAD/src/dad/recursos/SairAction.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="1738" y="315"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="false" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <class id="63" language="java" name="dad.recursos.UndoManager" project="Biblioteca_DAD" 
+    file="/Biblioteca_DAD/src/dad/recursos/UndoManager.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="1480" y="945"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="false" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <class id="64" language="java" name="dad.recursos.UndoManager.OldState" project="Biblioteca_DAD" 
+    file="/Biblioteca_DAD/src/dad/recursos/UndoManager.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="1614" y="949"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="false" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <class id="65" language="java" name="dad.recursos.ZipCompress" project="Biblioteca_DAD" 
+    file="/Biblioteca_DAD/src/dad/recursos/ZipCompress.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="1774" y="957"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="false" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <dependency id="66">    
+    <end type="SOURCE" refId="28"/>    
+    <end type="TARGET" refId="4"/>  
+  </dependency>  
+  <association id="67">    
+    <end type="SOURCE" refId="34" navigable="false">      
+      <attribute id="68" name="INSTANCE"/>      
+      <multiplicity id="69" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="34" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <dependency id="70">    
+    <end type="SOURCE" refId="13"/>    
+    <end type="TARGET" refId="33"/>  
+  </dependency>  
+  <association id="71">    
+    <end type="SOURCE" refId="35" navigable="false">      
+      <attribute id="72" name="livro"/>      
+      <multiplicity id="73" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="4" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <dependency id="74">    
+    <end type="SOURCE" refId="3"/>    
+    <end type="TARGET" refId="57"/>  
+  </dependency>  
+  <dependency id="75">    
+    <end type="SOURCE" refId="21"/>    
+    <end type="TARGET" refId="18"/>  
+  </dependency>  
+  <dependency id="76">    
+    <end type="SOURCE" refId="59"/>    
+    <end type="TARGET" refId="5"/>  
+  </dependency>  
+  <dependency id="77">    
+    <end type="SOURCE" refId="8"/>    
+    <end type="TARGET" refId="18"/>  
+  </dependency>  
+  <association id="78">    
+    <end type="SOURCE" refId="37" navigable="false">      
+      <attribute id="79" name="livros"/>      
+      <multiplicity id="80" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="4" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="81">    
+    <end type="SOURCE" refId="40" navigable="false">      
+      <attribute id="82" name="remover"/>      
+      <multiplicity id="83" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="7" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="84">    
+    <end type="SOURCE" refId="41" navigable="false">      
+      <attribute id="85" name="INSTANCE"/>      
+      <multiplicity id="86" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="41" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="87">    
+    <end type="SOURCE" refId="32" navigable="false">      
+      <attribute id="88" name="INSTANCE"/>      
+      <multiplicity id="89" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="32" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <realization id="90">    
+    <end type="SOURCE" refId="25"/>    
+    <end type="TARGET" refId="47"/>  
+  </realization>  
+  <dependency id="91">    
+    <end type="SOURCE" refId="38"/>    
+    <end type="TARGET" refId="57"/>  
+  </dependency>  
+  <dependency id="92">    
+    <end type="SOURCE" refId="58"/>    
+    <end type="TARGET" refId="41"/>  
+  </dependency>  
+  <dependency id="93">    
+    <end type="SOURCE" refId="61"/>    
+    <end type="TARGET" refId="53"/>  
+  </dependency>  
+  <realization id="94">    
+    <end type="SOURCE" refId="40"/>    
+    <end type="TARGET" refId="47"/>  
+  </realization>  
+  <dependency id="95">    
+    <end type="SOURCE" refId="28"/>    
+    <end type="TARGET" refId="1"/>  
+  </dependency>  
+  <dependency id="96">    
+    <end type="SOURCE" refId="16"/>    
+    <end type="TARGET" refId="24"/>  
+  </dependency>  
+  <dependency id="97">    
+    <end type="SOURCE" refId="18"/>    
+    <end type="TARGET" refId="33"/>  
+  </dependency>  
+  <dependency id="98">    
+    <end type="SOURCE" refId="9"/>    
+    <end type="TARGET" refId="18"/>  
+  </dependency>  
+  <association id="99">    
+    <end type="SOURCE" refId="28" navigable="false">      
+      <attribute id="100" name="INSTANCE"/>      
+      <multiplicity id="101" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="28" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <dependency id="102">    
+    <end type="SOURCE" refId="32"/>    
+    <end type="TARGET" refId="22"/>  
+  </dependency>  
+  <dependency id="103">    
+    <end type="SOURCE" refId="32"/>    
+    <end type="TARGET" refId="52"/>  
+  </dependency>  
+  <dependency id="104">    
+    <end type="SOURCE" refId="11"/>    
+    <end type="TARGET" refId="18"/>  
+  </dependency>  
+  <dependency id="105">    
+    <end type="SOURCE" refId="16"/>    
+    <end type="TARGET" refId="56"/>  
+  </dependency>  
+  <dependency id="106">    
+    <end type="SOURCE" refId="23"/>    
+    <end type="TARGET" refId="49"/>  
+  </dependency>  
+  <association id="107">    
+    <end type="SOURCE" refId="22" navigable="false">      
+      <attribute id="108" name="user"/>      
+      <multiplicity id="109" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="7" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <dependency id="110">    
+    <end type="SOURCE" refId="60"/>    
+    <end type="TARGET" refId="28"/>  
+  </dependency>  
+  <association id="111">    
+    <end type="SOURCE" refId="39" navigable="false">      
+      <attribute id="112" name="remover"/>      
+      <multiplicity id="113" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="4" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <dependency id="114">    
+    <end type="SOURCE" refId="11"/>    
+    <end type="TARGET" refId="10"/>  
+  </dependency>  
+  <dependency id="115">    
+    <end type="SOURCE" refId="18"/>    
+    <end type="TARGET" refId="41"/>  
+  </dependency>  
+  <dependency id="116">    
+    <end type="SOURCE" refId="63"/>    
+    <end type="TARGET" refId="57"/>  
+  </dependency>  
+  <dependency id="117">    
+    <end type="SOURCE" refId="58"/>    
+    <end type="TARGET" refId="13"/>  
+  </dependency>  
+  <association id="118">    
+    <end type="SOURCE" refId="25" navigable="false">      
+      <attribute id="119" name="user">        
+        <position height="18" width="30" x="118" y="380"/>      
+      </attribute>      
+      <multiplicity id="120" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="7" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <dependency id="121">    
+    <end type="SOURCE" refId="11"/>    
+    <end type="TARGET" refId="17"/>  
+  </dependency>  
+  <association id="122">    
+    <end type="SOURCE" refId="24" navigable="false">      
+      <attribute id="123" name="livro"/>      
+      <multiplicity id="124" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="4" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <dependency id="125">    
+    <end type="SOURCE" refId="61"/>    
+    <end type="TARGET" refId="50"/>  
+  </dependency>  
+  <dependency id="126">    
+    <end type="SOURCE" refId="46"/>    
+    <end type="TARGET" refId="13"/>  
+  </dependency>  
+  <dependency id="127">    
+    <end type="SOURCE" refId="10"/>    
+    <end type="TARGET" refId="57"/>  
+  </dependency>  
+  <dependency id="128">    
+    <end type="SOURCE" refId="29"/>    
+    <end type="TARGET" refId="16"/>  
+  </dependency>  
+  <dependency id="129">    
+    <end type="SOURCE" refId="22"/>    
+    <end type="TARGET" refId="28"/>  
+  </dependency>  
+  <association id="130">    
+    <end type="SOURCE" refId="23" navigable="false">      
+      <attribute id="131" name="livro"/>      
+      <multiplicity id="132" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="4" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <dependency id="133">    
+    <end type="SOURCE" refId="13"/>    
+    <end type="TARGET" refId="63"/>  
+  </dependency>  
+  <dependency id="134">    
+    <end type="SOURCE" refId="22"/>    
+    <end type="TARGET" refId="26"/>  
+  </dependency>  
+  <dependency id="135">    
+    <end type="SOURCE" refId="37"/>    
+    <end type="TARGET" refId="49"/>  
+  </dependency>  
+  <dependency id="136">    
+    <end type="SOURCE" refId="28"/>    
+    <end type="TARGET" refId="7"/>  
+  </dependency>  
+  <realization id="137">    
+    <end type="SOURCE" refId="23"/>    
+    <end type="TARGET" refId="47"/>  
+  </realization>  
+  <dependency id="138">    
+    <end type="SOURCE" refId="29"/>    
+    <end type="TARGET" refId="4"/>  
+  </dependency>  
+  <dependency id="139">    
+    <end type="SOURCE" refId="34"/>    
+    <end type="TARGET" refId="10"/>  
+  </dependency>  
+  <dependency id="140">    
+    <end type="SOURCE" refId="23"/>    
+    <end type="TARGET" refId="57"/>  
+  </dependency>  
+  <dependency id="141">    
+    <end type="SOURCE" refId="62"/>    
+    <end type="TARGET" refId="13"/>  
+  </dependency>  
+  <dependency id="142">    
+    <end type="SOURCE" refId="24"/>    
+    <end type="TARGET" refId="49"/>  
+  </dependency>  
+  <nesting id="143">    
+    <end type="SOURCE" refId="32"/>    
+    <end type="TARGET" refId="31"/>  
+  </nesting>  
+  <dependency id="144">    
+    <end type="SOURCE" refId="41"/>    
+    <end type="TARGET" refId="51"/>  
+  </dependency>  
+  <dependency id="145">    
+    <end type="SOURCE" refId="51"/>    
+    <end type="TARGET" refId="57"/>  
+  </dependency>  
+  <dependency id="146">    
+    <end type="SOURCE" refId="33"/>    
+    <end type="TARGET" refId="48"/>  
+  </dependency>  
+  <dependency id="147">    
+    <end type="SOURCE" refId="10"/>    
+    <end type="TARGET" refId="50"/>  
+  </dependency>  
+  <dependency id="148">    
+    <end type="SOURCE" refId="32"/>    
+    <end type="TARGET" refId="60"/>  
+  </dependency>  
+  <dependency id="149">    
+    <end type="SOURCE" refId="37"/>    
+    <end type="TARGET" refId="24"/>  
+  </dependency>  
+  <dependency id="150">    
+    <end type="SOURCE" refId="39"/>    
+    <end type="TARGET" refId="33"/>  
+  </dependency>  
+  <dependency id="151">    
+    <end type="SOURCE" refId="56"/>    
+    <end type="TARGET" refId="13"/>  
+  </dependency>  
+  <dependency id="152">    
+    <end type="SOURCE" refId="16"/>    
+    <end type="TARGET" refId="63"/>  
+  </dependency>  
+  <dependency id="153">    
+    <end type="SOURCE" refId="16"/>    
+    <end type="TARGET" refId="37"/>  
+  </dependency>  
+  <dependency id="154">    
+    <end type="SOURCE" refId="34"/>    
+    <end type="TARGET" refId="50"/>  
+  </dependency>  
+  <realization id="155">    
+    <end type="SOURCE" refId="35"/>    
+    <end type="TARGET" refId="47"/>  
+  </realization>  
+  <dependency id="156">    
+    <end type="SOURCE" refId="14"/>    
+    <end type="TARGET" refId="41"/>  
+  </dependency>  
+  <dependency id="157">    
+    <end type="SOURCE" refId="45"/>    
+    <end type="TARGET" refId="1"/>  
+  </dependency>  
+  <association id="158">    
+    <end type="SOURCE" refId="37" navigable="false">      
+      <attribute id="159" name="INSTANCE"/>      
+      <multiplicity id="160" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="37" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="161">    
+    <end type="SOURCE" refId="5"/>    
+    <end type="TARGET" refId="3"/>  
+  </generalization>  
+  <dependency id="162">    
+    <end type="SOURCE" refId="28"/>    
+    <end type="TARGET" refId="46"/>  
+  </dependency>  
+  <realization id="163">    
+    <end type="SOURCE" refId="36"/>    
+    <end type="TARGET" refId="47"/>  
+  </realization>  
+  <dependency id="164">    
+    <end type="SOURCE" refId="13"/>    
+    <end type="TARGET" refId="7"/>  
+  </dependency>  
+  <association id="165">    
+    <end type="SOURCE" refId="1" navigable="false">      
+      <attribute id="166" name="item"/>      
+      <multiplicity id="167" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="3" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <dependency id="168">    
+    <end type="SOURCE" refId="25"/>    
+    <end type="TARGET" refId="57"/>  
+  </dependency>  
+  <dependency id="169">    
+    <end type="SOURCE" refId="18"/>    
+    <end type="TARGET" refId="17"/>  
+  </dependency>  
+  <dependency id="170">    
+    <end type="SOURCE" refId="13"/>    
+    <end type="TARGET" refId="8"/>  
+  </dependency>  
+  <nesting id="171">    
+    <end type="SOURCE" refId="28"/>    
+    <end type="TARGET" refId="27"/>  
+  </nesting>  
+  <association id="172">    
+    <end type="SOURCE" refId="37" navigable="false">      
+      <attribute id="173" name="undoManager"/>      
+      <multiplicity id="174" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="63" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <dependency id="175">    
+    <end type="SOURCE" refId="29"/>    
+    <end type="TARGET" refId="13"/>  
+  </dependency>  
+  <dependency id="176">    
+    <end type="SOURCE" refId="11"/>    
+    <end type="TARGET" refId="61"/>  
+  </dependency>  
+  <dependency id="177">    
+    <end type="SOURCE" refId="13"/>    
+    <end type="TARGET" refId="57"/>  
+  </dependency>  
+  <dependency id="178">    
+    <end type="SOURCE" refId="33"/>    
+    <end type="TARGET" refId="41"/>  
+  </dependency>  
+  <dependency id="179">    
+    <end type="SOURCE" refId="40"/>    
+    <end type="TARGET" refId="57"/>  
+  </dependency>  
+  <dependency id="180">    
+    <end type="SOURCE" refId="29"/>    
+    <end type="TARGET" refId="44"/>  
+  </dependency>  
+  <nesting id="181">    
+    <end type="SOURCE" refId="37"/>    
+    <end type="TARGET" refId="38"/>  
+  </nesting>  
+  <dependency id="182">    
+    <end type="SOURCE" refId="22"/>    
+    <end type="TARGET" refId="63"/>  
+  </dependency>  
+  <dependency id="183">    
+    <end type="SOURCE" refId="60"/>    
+    <end type="TARGET" refId="52"/>  
+  </dependency>  
+  <dependency id="184">    
+    <end type="SOURCE" refId="17"/>    
+    <end type="TARGET" refId="13"/>  
+  </dependency>  
+  <dependency id="185">    
+    <end type="SOURCE" refId="13"/>    
+    <end type="TARGET" refId="65"/>  
+  </dependency>  
+  <dependency id="186">    
+    <end type="SOURCE" refId="28"/>    
+    <end type="TARGET" refId="45"/>  
+  </dependency>  
+  <association id="187">    
+    <end type="SOURCE" refId="19" navigable="false">      
+      <attribute id="188" name="screen"/>      
+      <multiplicity id="189" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="21" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <dependency id="190">    
+    <end type="SOURCE" refId="37"/>    
+    <end type="TARGET" refId="3"/>  
+  </dependency>  
+  <dependency id="191">    
+    <end type="SOURCE" refId="37"/>    
+    <end type="TARGET" refId="57"/>  
+  </dependency>  
+  <dependency id="192">    
+    <end type="SOURCE" refId="22"/>    
+    <end type="TARGET" refId="57"/>  
+  </dependency>  
+  <association id="193">    
+    <end type="SOURCE" refId="57" navigable="false">      
+      <attribute id="194" name="INSTANCE"/>      
+      <multiplicity id="195" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="57" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <dependency id="196">    
+    <end type="SOURCE" refId="14"/>    
+    <end type="TARGET" refId="34"/>  
+  </dependency>  
+  <generalization id="197">    
+    <end type="SOURCE" refId="6"/>    
+    <end type="TARGET" refId="3"/>  
+  </generalization>  
+  <dependency id="198">    
+    <end type="SOURCE" refId="13"/>    
+    <end type="TARGET" refId="4"/>  
+  </dependency>  
+  <realization id="199">    
+    <end type="SOURCE" refId="26"/>    
+    <end type="TARGET" refId="47"/>  
+  </realization>  
+  <dependency id="200">    
+    <end type="SOURCE" refId="62"/>    
+    <end type="TARGET" refId="17"/>  
+  </dependency>  
+  <dependency id="201">    
+    <end type="SOURCE" refId="20"/>    
+    <end type="TARGET" refId="65"/>  
+  </dependency>  
+  <dependency id="202">    
+    <end type="SOURCE" refId="13"/>    
+    <end type="TARGET" refId="18"/>  
+  </dependency>  
+  <dependency id="203">    
+    <end type="SOURCE" refId="60"/>    
+    <end type="TARGET" refId="13"/>  
+  </dependency>  
+  <dependency id="204">    
+    <end type="SOURCE" refId="16"/>    
+    <end type="TARGET" refId="13"/>  
+  </dependency>  
+  <nesting id="205">    
+    <end type="SOURCE" refId="37"/>    
+    <end type="TARGET" refId="39"/>  
+  </nesting>  
+  <association id="206">    
+    <end type="SOURCE" refId="63" navigable="false">      
+      <attribute id="207" name="undoStack"/>      
+      <multiplicity id="208" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="47" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <dependency id="209">    
+    <end type="SOURCE" refId="60"/>    
+    <end type="TARGET" refId="7"/>  
+  </dependency>  
+  <nesting id="210">    
+    <end type="SOURCE" refId="18"/>    
+    <end type="TARGET" refId="19"/>  
+  </nesting>  
+  <association id="211">    
+    <end type="SOURCE" refId="59" navigable="false">      
+      <attribute id="212" name="emprestimo"/>      
+      <multiplicity id="213" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="1" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <dependency id="214">    
+    <end type="SOURCE" refId="25"/>    
+    <end type="TARGET" refId="53"/>  
+  </dependency>  
+  <dependency id="215">    
+    <end type="SOURCE" refId="50"/>    
+    <end type="TARGET" refId="57"/>  
+  </dependency>  
+  <dependency id="216">    
+    <end type="SOURCE" refId="14"/>    
+    <end type="TARGET" refId="37"/>  
+  </dependency>  
+  <dependency id="217">    
+    <end type="SOURCE" refId="13"/>    
+    <end type="TARGET" refId="32"/>  
+  </dependency>  
+  <dependency id="218">    
+    <end type="SOURCE" refId="60"/>    
+    <end type="TARGET" refId="41"/>  
+  </dependency>  
+  <dependency id="219">    
+    <end type="SOURCE" refId="59"/>    
+    <end type="TARGET" refId="4"/>  
+  </dependency>  
+  <dependency id="220">    
+    <end type="SOURCE" refId="28"/>    
+    <end type="TARGET" refId="44"/>  
+  </dependency>  
+  <dependency id="221">    
+    <end type="SOURCE" refId="29"/>    
+    <end type="TARGET" refId="60"/>  
+  </dependency>  
+  <association id="222">    
+    <end type="SOURCE" refId="41" navigable="false">      
+      <attribute id="223" name="users"/>      
+      <multiplicity id="224" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="7" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <dependency id="225">    
+    <end type="SOURCE" refId="11"/>    
+    <end type="TARGET" refId="33"/>  
+  </dependency>  
+  <dependency id="226">    
+    <end type="SOURCE" refId="24"/>    
+    <end type="TARGET" refId="57"/>  
+  </dependency>  
+  <nesting id="227">    
+    <end type="SOURCE" refId="63"/>    
+    <end type="TARGET" refId="64"/>  
+  </nesting>  
+  <dependency id="228">    
+    <end type="SOURCE" refId="33"/>    
+    <end type="TARGET" refId="3"/>  
+  </dependency>  
+  <nesting id="229">    
+    <end type="SOURCE" refId="13"/>    
+    <end type="TARGET" refId="12"/>  
+  </nesting>  
+  <dependency id="230">    
+    <end type="SOURCE" refId="58"/>    
+    <end type="TARGET" refId="57"/>  
+  </dependency>  
+  <dependency id="231">    
+    <end type="SOURCE" refId="20"/>    
+    <end type="TARGET" refId="18"/>  
+  </dependency>  
+  <dependency id="232">    
+    <end type="SOURCE" refId="15"/>    
+    <end type="TARGET" refId="34"/>  
+  </dependency>  
+  <association id="233">    
+    <end type="SOURCE" refId="61" navigable="false">      
+      <attribute id="234" name="INSTANCE"/>      
+      <multiplicity id="235" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="61" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <dependency id="236">    
+    <end type="SOURCE" refId="59"/>    
+    <end type="TARGET" refId="3"/>  
+  </dependency>  
+  <dependency id="237">    
+    <end type="SOURCE" refId="10"/>    
+    <end type="TARGET" refId="53"/>  
+  </dependency>  
+  <dependency id="238">    
+    <end type="SOURCE" refId="59"/>    
+    <end type="TARGET" refId="17"/>  
+  </dependency>  
+  <dependency id="239">    
+    <end type="SOURCE" refId="62"/>    
+    <end type="TARGET" refId="57"/>  
+  </dependency>  
+  <dependency id="240">    
+    <end type="SOURCE" refId="22"/>    
+    <end type="TARGET" refId="41"/>  
+  </dependency>  
+  <dependency id="241">    
+    <end type="SOURCE" refId="33"/>    
+    <end type="TARGET" refId="57"/>  
+  </dependency>  
+  <dependency id="242">    
+    <end type="SOURCE" refId="60"/>    
+    <end type="TARGET" refId="58"/>  
+  </dependency>  
+  <dependency id="243">    
+    <end type="SOURCE" refId="9"/>    
+    <end type="TARGET" refId="57"/>  
+  </dependency>  
+  <dependency id="244">    
+    <end type="SOURCE" refId="33"/>    
+    <end type="TARGET" refId="7"/>  
+  </dependency>  
+  <dependency id="245">    
+    <end type="SOURCE" refId="55"/>    
+    <end type="TARGET" refId="3"/>  
+  </dependency>  
+  <dependency id="246">    
+    <end type="SOURCE" refId="13"/>    
+    <end type="TARGET" refId="11"/>  
+  </dependency>  
+  <dependency id="247">    
+    <end type="SOURCE" refId="45"/>    
+    <end type="TARGET" refId="13"/>  
+  </dependency>  
+  <dependency id="248">    
+    <end type="SOURCE" refId="60"/>    
+    <end type="TARGET" refId="3"/>  
+  </dependency>  
+  <dependency id="249">    
+    <end type="SOURCE" refId="59"/>    
+    <end type="TARGET" refId="6"/>  
+  </dependency>  
+  <dependency id="250">    
+    <end type="SOURCE" refId="42"/>    
+    <end type="TARGET" refId="57"/>  
+  </dependency>  
+  <dependency id="251">    
+    <end type="SOURCE" refId="28"/>    
+    <end type="TARGET" refId="13"/>  
+  </dependency>  
+  <dependency id="252">    
+    <end type="SOURCE" refId="40"/>    
+    <end type="TARGET" refId="51"/>  
+  </dependency>  
+  <dependency id="253">    
+    <end type="SOURCE" refId="41"/>    
+    <end type="TARGET" refId="25"/>  
+  </dependency>  
+  <dependency id="254">    
+    <end type="SOURCE" refId="41"/>    
+    <end type="TARGET" refId="53"/>  
+  </dependency>  
+  <dependency id="255">    
+    <end type="SOURCE" refId="32"/>    
+    <end type="TARGET" refId="7"/>  
+  </dependency>  
+  <dependency id="256">    
+    <end type="SOURCE" refId="25"/>    
+    <end type="TARGET" refId="51"/>  
+  </dependency>  
+  <dependency id="257">    
+    <end type="SOURCE" refId="49"/>    
+    <end type="TARGET" refId="57"/>  
+  </dependency>  
+  <realization id="258">    
+    <end type="SOURCE" refId="38"/>    
+    <end type="TARGET" refId="47"/>  
+  </realization>  
+  <dependency id="259">    
+    <end type="SOURCE" refId="37"/>    
+    <end type="TARGET" refId="26"/>  
+  </dependency>  
+  <dependency id="260">    
+    <end type="SOURCE" refId="34"/>    
+    <end type="TARGET" refId="57"/>  
+  </dependency>  
+  <association id="261">    
+    <end type="SOURCE" refId="16" navigable="false">      
+      <attribute id="262" name="l"/>      
+      <multiplicity id="263" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="4" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="264">    
+    <end type="SOURCE" refId="13" navigable="false">      
+      <attribute id="265" name="INSTANCE"/>      
+      <multiplicity id="266" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="13" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="267">    
+    <end type="SOURCE" refId="1" navigable="false">      
+      <attribute id="268" name="user"/>      
+      <multiplicity id="269" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="7" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <dependency id="270">    
+    <end type="SOURCE" refId="32"/>    
+    <end type="TARGET" refId="44"/>  
+  </dependency>  
+  <dependency id="271">    
+    <end type="SOURCE" refId="49"/>    
+    <end type="TARGET" refId="18"/>  
+  </dependency>  
+  <dependency id="272">    
+    <end type="SOURCE" refId="16"/>    
+    <end type="TARGET" refId="60"/>  
+  </dependency>  
+  <dependency id="273">    
+    <end type="SOURCE" refId="61"/>    
+    <end type="TARGET" refId="57"/>  
+  </dependency>  
+  <dependency id="274">    
+    <end type="SOURCE" refId="10"/>    
+    <end type="TARGET" refId="13"/>  
+  </dependency>  
+  <dependency id="275">    
+    <end type="SOURCE" refId="41"/>    
+    <end type="TARGET" refId="57"/>  
+  </dependency>  
+  <dependency id="276">    
+    <end type="SOURCE" refId="9"/>    
+    <end type="TARGET" refId="65"/>  
+  </dependency>  
+  <dependency id="277">    
+    <end type="SOURCE" refId="9"/>    
+    <end type="TARGET" refId="17"/>  
+  </dependency>  
+  <dependency id="278">    
+    <end type="SOURCE" refId="28"/>    
+    <end type="TARGET" refId="62"/>  
+  </dependency>  
+  <dependency id="279">    
+    <end type="SOURCE" refId="11"/>    
+    <end type="TARGET" refId="1"/>  
+  </dependency>  
+  <association id="280">    
+    <end type="SOURCE" refId="63" navigable="false">      
+      <attribute id="281" name="redoStack"/>      
+      <multiplicity id="282" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="47" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <dependency id="283">    
+    <end type="SOURCE" refId="59"/>    
+    <end type="TARGET" refId="7"/>  
+  </dependency>  
+  <association id="284">    
+    <end type="SOURCE" refId="33" navigable="false">      
+      <attribute id="285" name="INSTANCE"/>      
+      <multiplicity id="286" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="33" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <dependency id="287">    
+    <end type="SOURCE" refId="13"/>    
+    <end type="TARGET" refId="54"/>  
+  </dependency>  
+  <dependency id="288">    
+    <end type="SOURCE" refId="16"/>    
+    <end type="TARGET" refId="26"/>  
+  </dependency>  
+  <association id="289">    
+    <end type="SOURCE" refId="29" navigable="false">      
+      <attribute id="290" name="modelLivro"/>      
+      <multiplicity id="291" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="37" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <dependency id="292">    
+    <end type="SOURCE" refId="37"/>    
+    <end type="TARGET" refId="33"/>  
+  </dependency>  
+  <dependency id="293">    
+    <end type="SOURCE" refId="32"/>    
+    <end type="TARGET" refId="4"/>  
+  </dependency>  
+  <realization id="294">    
+    <end type="SOURCE" refId="39"/>    
+    <end type="TARGET" refId="47"/>  
+  </realization>  
+  <dependency id="295">    
+    <end type="SOURCE" refId="45"/>    
+    <end type="TARGET" refId="33"/>  
+  </dependency>  
+  <nesting id="296">    
+    <end type="SOURCE" refId="37"/>    
+    <end type="TARGET" refId="35"/>  
+  </nesting>  
+  <dependency id="297">    
+    <end type="SOURCE" refId="60"/>    
+    <end type="TARGET" refId="48"/>  
+  </dependency>  
+  <dependency id="298">    
+    <end type="SOURCE" refId="14"/>    
+    <end type="TARGET" refId="33"/>  
+  </dependency>  
+  <nesting id="299">    
+    <end type="SOURCE" refId="37"/>    
+    <end type="TARGET" refId="36"/>  
+  </nesting>  
+  <dependency id="300">    
+    <end type="SOURCE" refId="20"/>    
+    <end type="TARGET" refId="13"/>  
+  </dependency>  
+  <association id="301">    
+    <end type="SOURCE" refId="60" navigable="false">      
+      <attribute id="302" name="emp"/>      
+      <multiplicity id="303" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="1" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <dependency id="304">    
+    <end type="SOURCE" refId="18"/>    
+    <end type="TARGET" refId="34"/>  
+  </dependency>  
+  <dependency id="305">    
+    <end type="SOURCE" refId="32"/>    
+    <end type="TARGET" refId="62"/>  
+  </dependency>  
+  <dependency id="306">    
+    <end type="SOURCE" refId="39"/>    
+    <end type="TARGET" refId="29"/>  
+  </dependency>  
+  <association id="307">    
+    <end type="SOURCE" refId="42" navigable="false">      
+      <attribute id="308" name="user"/>      
+      <multiplicity id="309" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="7" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <dependency id="310">    
+    <end type="SOURCE" refId="13"/>    
+    <end type="TARGET" refId="14"/>  
+  </dependency>  
+  <dependency id="311">    
+    <end type="SOURCE" refId="28"/>    
+    <end type="TARGET" refId="41"/>  
+  </dependency>  
+  <dependency id="312">    
+    <end type="SOURCE" refId="17"/>    
+    <end type="TARGET" refId="53"/>  
+  </dependency>  
+  <dependency id="313">    
+    <end type="SOURCE" refId="61"/>    
+    <end type="TARGET" refId="17"/>  
+  </dependency>  
+  <dependency id="314">    
+    <end type="SOURCE" refId="28"/>    
+    <end type="TARGET" refId="32"/>  
+  </dependency>  
+  <dependency id="315">    
+    <end type="SOURCE" refId="29"/>    
+    <end type="TARGET" refId="62"/>  
+  </dependency>  
+  <association id="316">    
+    <end type="SOURCE" refId="36" navigable="false">      
+      <attribute id="317" name="modificou"/>      
+      <multiplicity id="318" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="4" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <dependency id="319">    
+    <end type="SOURCE" refId="32"/>    
+    <end type="TARGET" refId="46"/>  
+  </dependency>  
+  <dependency id="320">    
+    <end type="SOURCE" refId="7"/>    
+    <end type="TARGET" refId="51"/>  
+  </dependency>  
+  <dependency id="321">    
+    <end type="SOURCE" refId="61"/>    
+    <end type="TARGET" refId="18"/>  
+  </dependency>  
+  <dependency id="322">    
+    <end type="SOURCE" refId="61"/>    
+    <end type="TARGET" refId="34"/>  
+  </dependency>  
+  <nesting id="323">    
+    <end type="SOURCE" refId="41"/>    
+    <end type="TARGET" refId="40"/>  
+  </nesting>  
+  <dependency id="324">    
+    <end type="SOURCE" refId="60"/>    
+    <end type="TARGET" refId="17"/>  
+  </dependency>  
+  <dependency id="325">    
+    <end type="SOURCE" refId="48"/>    
+    <end type="TARGET" refId="18"/>  
+  </dependency>  
+  <dependency id="326">    
+    <end type="SOURCE" refId="3"/>    
+    <end type="TARGET" refId="13"/>  
+  </dependency>  
+  <association id="327">    
+    <end type="SOURCE" refId="28" navigable="false">      
+      <attribute id="328" name="modelEmprestimo"/>      
+      <multiplicity id="329" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="33" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <dependency id="330">    
+    <end type="SOURCE" refId="60"/>    
+    <end type="TARGET" refId="37"/>  
+  </dependency>  
+  <dependency id="331">    
+    <end type="SOURCE" refId="39"/>    
+    <end type="TARGET" refId="57"/>  
+  </dependency>  
+  <association id="332">    
+    <end type="SOURCE" refId="34" navigable="false">      
+      <attribute id="333" name="funcionarios"/>      
+      <multiplicity id="334" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="2" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <dependency id="335">    
+    <end type="SOURCE" refId="60"/>    
+    <end type="TARGET" refId="59"/>  
+  </dependency>  
+  <dependency id="336">    
+    <end type="SOURCE" refId="17"/>    
+    <end type="TARGET" refId="57"/>  
+  </dependency>  
+  <dependency id="337">    
+    <end type="SOURCE" refId="51"/>    
+    <end type="TARGET" refId="18"/>  
+  </dependency>  
+  <dependency id="338">    
+    <end type="SOURCE" refId="13"/>    
+    <end type="TARGET" refId="9"/>  
+  </dependency>  
+  <dependency id="339">    
+    <end type="SOURCE" refId="36"/>    
+    <end type="TARGET" refId="57"/>  
+  </dependency>  
+  <association id="340">    
+    <end type="SOURCE" refId="26" navigable="false">      
+      <attribute id="341" name="commands"/>      
+      <multiplicity id="342" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="47" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <dependency id="343">    
+    <end type="SOURCE" refId="28"/>    
+    <end type="TARGET" refId="37"/>  
+  </dependency>  
+  <dependency id="344">    
+    <end type="SOURCE" refId="48"/>    
+    <end type="TARGET" refId="57"/>  
+  </dependency>  
+  <association id="345">    
+    <end type="SOURCE" refId="32" navigable="false">      
+      <attribute id="346" name="modelUser"/>      
+      <multiplicity id="347" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="41" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <dependency id="348">    
+    <end type="SOURCE" refId="18"/>    
+    <end type="TARGET" refId="53"/>  
+  </dependency>  
+  <association id="349">    
+    <end type="SOURCE" refId="29" navigable="false">      
+      <attribute id="350" name="INSTANCE"/>      
+      <multiplicity id="351" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="29" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <dependency id="352">    
+    <end type="SOURCE" refId="17"/>    
+    <end type="TARGET" refId="50"/>  
+  </dependency>  
+  <dependency id="353">    
+    <end type="SOURCE" refId="41"/>    
+    <end type="TARGET" refId="13"/>  
+  </dependency>  
+  <nesting id="354">    
+    <end type="SOURCE" refId="41"/>    
+    <end type="TARGET" refId="42"/>  
+  </nesting>  
+  <realization id="355">    
+    <end type="SOURCE" refId="42"/>    
+    <end type="TARGET" refId="47"/>  
+  </realization>  
+  <association id="356">    
+    <end type="SOURCE" refId="17" navigable="false">      
+      <attribute id="357" name="INSTANCE"/>      
+      <multiplicity id="358" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="17" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <dependency id="359">    
+    <end type="SOURCE" refId="18"/>    
+    <end type="TARGET" refId="57"/>  
+  </dependency>  
+  <dependency id="360">    
+    <end type="SOURCE" refId="18"/>    
+    <end type="TARGET" refId="37"/>  
+  </dependency>  
+  <dependency id="361">    
+    <end type="SOURCE" refId="42"/>    
+    <end type="TARGET" refId="32"/>  
+  </dependency>  
+  <dependency id="362">    
+    <end type="SOURCE" refId="60"/>    
+    <end type="TARGET" refId="57"/>  
+  </dependency>  
+  <dependency id="363">    
+    <end type="SOURCE" refId="35"/>    
+    <end type="TARGET" refId="57"/>  
+  </dependency>  
+  <dependency id="364">    
+    <end type="SOURCE" refId="18"/>    
+    <end type="TARGET" refId="3"/>  
+  </dependency>  
+  <dependency id="365">    
+    <end type="SOURCE" refId="37"/>    
+    <end type="TARGET" refId="13"/>  
+  </dependency>  
+  <generalization id="366">    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="3"/>  
+  </generalization>  
+  <dependency id="367">    
+    <end type="SOURCE" refId="40"/>    
+    <end type="TARGET" refId="32"/>  
+  </dependency>  
+  <dependency id="368">    
+    <end type="SOURCE" refId="58"/>    
+    <end type="TARGET" refId="7"/>  
+  </dependency>  
+  <dependency id="369">    
+    <end type="SOURCE" refId="16"/>    
+    <end type="TARGET" refId="28"/>  
+  </dependency>  
+  <association id="370">    
+    <end type="SOURCE" refId="38" navigable="false">      
+      <attribute id="371" name="livro"/>      
+      <multiplicity id="372" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="4" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <dependency id="373">    
+    <end type="SOURCE" refId="18"/>    
+    <end type="TARGET" refId="1"/>  
+  </dependency>  
+  <dependency id="374">    
+    <end type="SOURCE" refId="20"/>    
+    <end type="TARGET" refId="57"/>  
+  </dependency>  
+  <dependency id="375">    
+    <end type="SOURCE" refId="36"/>    
+    <end type="TARGET" refId="29"/>  
+  </dependency>  
+  <dependency id="376">    
+    <end type="SOURCE" refId="11"/>    
+    <end type="TARGET" refId="57"/>  
+  </dependency>  
+  <dependency id="377">    
+    <end type="SOURCE" refId="60"/>    
+    <end type="TARGET" refId="33"/>  
+  </dependency>  
+  <dependency id="378">    
+    <end type="SOURCE" refId="61"/>    
+    <end type="TARGET" refId="2"/>  
+  </dependency>  
+  <dependency id="379">    
+    <end type="SOURCE" refId="11"/>    
+    <end type="TARGET" refId="15"/>  
+  </dependency>  
+  <dependency id="380">    
+    <end type="SOURCE" refId="16"/>    
+    <end type="TARGET" refId="23"/>  
+  </dependency>  
+  <dependency id="381">    
+    <end type="SOURCE" refId="65"/>    
+    <end type="TARGET" refId="57"/>  
+  </dependency>  
+  <dependency id="382">    
+    <end type="SOURCE" refId="50"/>    
+    <end type="TARGET" refId="18"/>  
+  </dependency>  
+  <association id="383">    
+    <end type="SOURCE" refId="41" navigable="false">      
+      <attribute id="384" name="undoManager"/>      
+      <multiplicity id="385" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="63" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <dependency id="386">    
+    <end type="SOURCE" refId="29"/>    
+    <end type="TARGET" refId="46"/>  
+  </dependency>  
+  <dependency id="387">    
+    <end type="SOURCE" refId="7"/>    
+    <end type="TARGET" refId="53"/>  
+  </dependency>  
+  <dependency id="388">    
+    <end type="SOURCE" refId="44"/>    
+    <end type="TARGET" refId="13"/>  
+  </dependency>  
+  <dependency id="389">    
+    <end type="SOURCE" refId="37"/>    
+    <end type="TARGET" refId="23"/>  
+  </dependency>  
+  <nesting id="390">    
+    <end type="SOURCE" refId="29"/>    
+    <end type="TARGET" refId="30"/>  
+  </nesting>  
+  <realization id="391">    
+    <end type="SOURCE" refId="24"/>    
+    <end type="TARGET" refId="47"/>  
+  </realization>  
+  <association id="392">    
+    <end type="SOURCE" refId="33" navigable="false">      
+      <attribute id="393" name="emprestimos"/>      
+      <multiplicity id="394" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="1" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <dependency id="395">    
+    <end type="SOURCE" refId="22"/>    
+    <end type="TARGET" refId="25"/>  
+  </dependency>  
+  <dependency id="396">    
+    <end type="SOURCE" refId="28"/>    
+    <end type="TARGET" refId="29"/>  
+  </dependency>  
+  <dependency id="397">    
+    <end type="SOURCE" refId="32"/>    
+    <end type="TARGET" refId="57"/>  
+  </dependency>  
+  <classifier-display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+    sort-features="false" accessors="true" visibility="true">    
+    <attributes public="true" package="true" protected="true" private="false" static="true"/>    
+    <operations public="false" package="false" protected="false" private="false" static="true"/>  
+  </classifier-display>  
+  <association-display labels="true" multiplicity="true"/>
+</class-diagram>
