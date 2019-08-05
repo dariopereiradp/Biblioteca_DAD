@@ -144,25 +144,39 @@ public class Config extends JDialog {
 									"ALTERAR VALOR DA MULTA", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE,
 									new ImageIcon(getClass().getResource("/DAD_SS.jpg")));
 							if (ok == JOptionPane.OK_OPTION) {
-								Emprestimo.MULTA = multaValor;
-								TableModelEmprestimo.getInstance().atualizarMultas();
-								File conf = new File(System.getenv("APPDATA") + "/BibliotecaDAD/Databases/conf.dad");
-								conf.delete();
-								try {
-									conf.createNewFile();
-									PrintWriter pw = new PrintWriter(conf);
-									pw.println(multaValor);
-									pw.close();
-								} catch (FileNotFoundException e1) {
-									Log.getInstance().printLog(
-											"Erro ao alterar valor da multa: Ficheiro de configuração não encontrado! - "
-													+ e1.getMessage());
-									e1.printStackTrace();
-								} catch (IOException e1) {
-									Log.getInstance().printLog("Erro ao alterar valor da multa! - " + e1.getMessage());
-									e1.printStackTrace();
+								JPasswordField pass = new JPasswordField();
+								int ok1 = JOptionPane.showConfirmDialog(null, pass,
+										"Introduza a senha do administrador", JOptionPane.OK_CANCEL_OPTION,
+										JOptionPane.QUESTION_MESSAGE,
+										new ImageIcon(getClass().getResource("/DAD_SS.jpg")));
+								if (ok1 == JOptionPane.OK_OPTION) {
+									if (String.valueOf(pass.getPassword()).equals(Main.PASS)) {
+										Emprestimo.MULTA = multaValor;
+										TableModelEmprestimo.getInstance().atualizarMultas();
+										File conf = new File(
+												System.getenv("APPDATA") + "/BibliotecaDAD/Databases/conf.dad");
+										conf.delete();
+										try {
+											conf.createNewFile();
+											PrintWriter pw = new PrintWriter(conf);
+											pw.println(multaValor);
+											pw.close();
+										} catch (FileNotFoundException e1) {
+											Log.getInstance().printLog(
+													"Erro ao alterar valor da multa: Ficheiro de configuração não encontrado! - "
+															+ e1.getMessage());
+											e1.printStackTrace();
+										} catch (IOException e1) {
+											Log.getInstance()
+													.printLog("Erro ao alterar valor da multa! - " + e1.getMessage());
+											e1.printStackTrace();
+										}
+										dispose();
+									} else
+										JOptionPane.showMessageDialog(null, "Senha errada!", "SENHA ERRADA",
+												JOptionPane.OK_OPTION,
+												new ImageIcon(getClass().getResource("/DAD_SS.jpg")));
 								}
-								dispose();
 							}
 						} else {
 							dispose();
