@@ -20,14 +20,19 @@ public class User {
 	private String nome;
 	private Date data_nascimento;
 	private String cpf;
+	private String telefone;
 	private int n_emprestimos;
 
-	public User(String nome, Date data_nascimento, String cpf, int n_emprestimos, boolean adicionar) {
+	public User(String nome, Date data_nascimento, String cpf, String telefone, int n_emprestimos, boolean adicionar) {
 		con = ConexaoUser.getConnection();
 		nome = WordUtils.capitalize(nome);
 		this.setNome(nome);
 		this.setData_nascimento(data_nascimento);
 		this.setCpf(cpf);
+		if (telefone.length() == 11)
+			this.setTelefone(telefone);
+		else
+			this.setTelefone("00000000000");
 		this.n_emprestimos = n_emprestimos;
 		if (adicionar) {
 			adicionarNaBaseDeDados();
@@ -50,18 +55,18 @@ public class User {
 			e.printStackTrace();
 		}
 	}
-	
-	public void removerBaseDeDados(){
-			try {
-				CriptografiaAES.setKey(key);
-				CriptografiaAES.encrypt(cpf);
-				pst = con.prepareStatement("delete from usuarios where CPF=?");
-				pst.setString(1, CriptografiaAES.getEncryptedString());
-				pst.execute();
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+
+	public void removerBaseDeDados() {
+		try {
+			CriptografiaAES.setKey(key);
+			CriptografiaAES.encrypt(cpf);
+			pst = con.prepareStatement("delete from usuarios where CPF=?");
+			pst.setString(1, CriptografiaAES.getEncryptedString());
+			pst.execute();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public String getNome() {
@@ -100,13 +105,12 @@ public class User {
 		n_emprestimos++;
 		atualizarEmprestimos();
 	}
-	
+
 	public void decrementar_emprestimos() {
 		n_emprestimos--;
 		atualizarEmprestimos();
 	}
 
-	
 	public void atualizarEmprestimos() {
 		try {
 			String cpf = this.cpf;
@@ -116,13 +120,13 @@ public class User {
 			cpf = CriptografiaAES.getEncryptedString();
 			pst.setInt(1, getN_emprestimos());
 			pst.setString(2, cpf);
-			pst.execute();			
-		} catch (Exception e){
+			pst.execute();
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 	}
-	
+
 	public void atualizarDados() {
 		try {
 			String cpf = this.cpf;
@@ -134,11 +138,11 @@ public class User {
 			String data = new SimpleDateFormat("yyyy-M-d").format(data_nascimento);
 			pst.setDate(2, java.sql.Date.valueOf(data));
 			pst.setString(3, cpf);
-			pst.execute();			
-		} catch (Exception e){
+			pst.execute();
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 	}
 
 	@Override
@@ -189,6 +193,7 @@ public class User {
 	public static User getUser(String cpf) {
 		String nome = "";
 		Date data_nascimento = new Date();
+		String telefone = "";
 		int n_emprestimos = 0;
 		try {
 			CriptografiaAES.setKey(key);
@@ -201,19 +206,22 @@ public class User {
 			nome = rs.getString(2);
 			data_nascimento = rs.getDate(3);
 			n_emprestimos = rs.getInt(4);
+			telefone = rs.getString(5);
+			if (telefone == null)
+				telefone = "-";
 			// data_nascimento =
 			// DateFormat.getDateInstance().parse(rs.getString(3));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return new User(nome, data_nascimento, cpf, n_emprestimos, false);
+		return new User(nome, data_nascimento, cpf, telefone, n_emprestimos, false);
 	}
 
-	public static User newUser(String nome, Date data_nascimento, String cpf, int n_emprestimos) {
+	public static User newUser(String nome, Date data_nascimento, String cpf, String telefone, int n_emprestimos) {
 		if (existe(cpf))
 			return getUser(cpf);
 		else
-			return new User(nome, data_nascimento, cpf, n_emprestimos, true);
+			return new User(nome, data_nascimento, cpf, telefone, n_emprestimos, true);
 	}
 
 	@Override
@@ -224,6 +232,14 @@ public class User {
 	public String toText() {
 		return nome + " | " + cpf + " | " + new SimpleDateFormat("dd/MM/yyyy").format(data_nascimento)
 				+ " | Nº de empréstimos: " + n_emprestimos;
+	}
+
+	public String getTelefone() {
+		return telefone;
+	}
+
+	public void setTelefone(String telefone) {
+		this.telefone = telefone;
 	}
 
 }

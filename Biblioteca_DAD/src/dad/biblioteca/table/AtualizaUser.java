@@ -36,6 +36,9 @@ public class AtualizaUser implements Command {
 		case "Data_Nascimento":
 			old = user.getData_nascimento();
 			break;
+		case "Telefone":
+			old = user.getTelefone();
+			break;
 		default:
 			break;
 		}
@@ -59,6 +62,12 @@ public class AtualizaUser implements Command {
 				String data = new SimpleDateFormat("yyyy-M-d").format(data_nasc);
 				pst.setDate(1, java.sql.Date.valueOf(data));
 				break;
+			case "Telefone":
+				String telefone = ((String) valor).replace("-", "").replace("(", "").replace(")", "").replace(" ", "");
+				if(telefone.length()!=11)
+					telefone = "00000000000";
+				pst.setString(1, telefone);
+				user.setTelefone(telefone);
 			default:
 				break;
 			}
@@ -87,6 +96,10 @@ public class AtualizaUser implements Command {
 				String data = new SimpleDateFormat("yyyy-M-d").format((Date) old);
 				pst.setDate(1, java.sql.Date.valueOf(data));
 				user.setData_nascimento((Date) old);
+				break;
+			case "Telefone":
+				pst.setString(1, (String) old);
+				user.setTelefone((String) old);
 				break;
 			default:
 				break;

@@ -37,7 +37,7 @@ import mdlaf.utils.MaterialColors;
 
 public class UserDetail {
 
-	private JFormattedTextField cpfN;
+	private JFormattedTextField cpfN, telefone;
 	private MaskFormatter mascaraCpf;
 	private boolean editCancel = false;
 	private JDialog novo;
@@ -51,7 +51,7 @@ public class UserDetail {
 		novo.setLocationRelativeTo(null);
 		novo.setMinimumSize(new Dimension(600, 300));
 
-		JPanel cima = new JPanel(new GridLayout(3, 2));
+		JPanel cima = new JPanel(new GridLayout(4, 2));
 		JPanel baixo = new JPanel(new BorderLayout());
 		JPanel botoes = new JPanel();
 		novo.getContentPane().setLayout(new BorderLayout());
@@ -99,6 +99,29 @@ public class UserDetail {
 		date_nasc.setDate(user.getData_nascimento());
 		cima.add(date_nasc);
 
+		MaskFormatter maskPhone;
+
+		try {
+			maskPhone = new MaskFormatter("(##) # ####-####");
+			maskPhone.setCommitsOnValidEdit(true);
+			telefone = new JFormattedTextField(maskPhone);
+		} catch (ParseException e1) {
+			telefone = new JFormattedTextField();
+			e1.printStackTrace();
+		}
+		
+		telefone.setFont(new Font("Arial", Font.PLAIN, 15));
+		telefone.setBounds(90, 162, 181, 20);
+		telefone.setColumns(12);
+		telefone.setText(user.getTelefone());
+		telefone.setEditable(false);
+
+		JLabel lPhone = new JLabel("Telefone: ");
+		lPhone.setFont(new Font("Roboto", Font.BOLD, 15));
+
+		cima.add(lPhone);
+		cima.add(telefone);
+
 		JButton editar = new JButton("Editar");
 		editar.setFont(new Font("Roboto", Font.PLAIN, 12));
 		editar.setBackground(MaterialColors.RED_300);
@@ -119,12 +142,13 @@ public class UserDetail {
 					JOptionPane.showMessageDialog(novo, "Escreva um nome!", "Nome vazio", JOptionPane.ERROR_MESSAGE,
 							new ImageIcon(getClass().getResource("/DAD_SS.jpg")));
 				else {
-//					user.setNome(nomeN.getText());
-//					user.setData_nascimento(date_nasc.getDate());
+					// user.setNome(nomeN.getText());
+					// user.setData_nascimento(date_nasc.getDate());
 					TableModelUser.getInstance().getUndoManager()
 							.execute(new CompositeCommand("Atualizar dados do cliente",
 									new AtualizaUser(TableModelUser.getInstance(), "Nome", user, nomeN.getText()),
-									new AtualizaUser(TableModelUser.getInstance(), "Data_Nascimento", user, new SimpleDateFormat("dd/MM/yyyy").format(date_nasc.getDate()))));
+									new AtualizaUser(TableModelUser.getInstance(), "Data_Nascimento", user, new SimpleDateFormat("dd/MM/yyyy").format(date_nasc.getDate())),
+									new AtualizaUser(TableModelUser.getInstance(), "Telefone", user, telefone.getText())));
 					TableModelUser.getInstance().fireTableDataChanged();
 					Log.getInstance().printLog("Dados do cliente adicionados com sucesso!\n" + user.toText());
 					novo.dispose();
@@ -138,6 +162,7 @@ public class UserDetail {
 			public void actionPerformed(ActionEvent e) {
 				if (!editCancel) {
 					nomeN.setEditable(true);
+					telefone.setEditable(true);
 					date_nasc.setEnabled(true);
 					editCancel = true;
 					editar.setText("Cancelar");

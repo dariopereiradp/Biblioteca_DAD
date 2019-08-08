@@ -23,11 +23,14 @@ import java.util.List;
 import java.util.Locale;
 
 import javax.swing.AbstractAction;
+import javax.swing.ActionMap;
 import javax.swing.BorderFactory;
 import javax.swing.DefaultCellEditor;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
+import javax.swing.InputMap;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
@@ -46,6 +49,7 @@ import javax.swing.UIManager;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 import javax.swing.table.JTableHeader;
+import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.text.MaskFormatter;
 
@@ -69,8 +73,8 @@ public class UserPanel extends JPanel {
 	private TableModelUser modelUser;
 	private JPanel panelAdd, pInferior, panel2, panel3;
 	private JTextField nome;
-	private JFormattedTextField cpf;
-	private MaskFormatter mascaraCpf;
+	private JFormattedTextField cpf, telefone;
+	private MaskFormatter mascaraCpf, maskPhone;
 	private JTextField jtfTotal;
 	private JDateChooser date_nasc;
 	private JButton bAdd;
@@ -80,7 +84,7 @@ public class UserPanel extends JPanel {
 	 */
 	private static final long serialVersionUID = -5439324224974968781L;
 	private String[] columnToolTips = { "CPF do cliente", "Nome do cliente", "Data de Nascimento do Cliente",
-			"Número de Empréstimos que o cliente fez" };
+			"Telefone do cliente", "Número de Empréstimos que o cliente fez" };
 
 	public UserPanel() {
 		super();
@@ -95,7 +99,7 @@ public class UserPanel extends JPanel {
 
 			@Override
 			public boolean isCellEditable(int data, int columns) {
-				if (columns == 0 || columns == 3)
+				if (columns == 0 || columns == 4)
 					return false;
 				return true;
 			}
@@ -204,7 +208,8 @@ public class UserPanel extends JPanel {
 		users.getColumnModel().getColumn(0).setCellRenderer(new CellRendererNoImage());
 		users.getColumnModel().getColumn(1).setCellRenderer(new CellRenderer());
 		users.getColumnModel().getColumn(2).setCellRenderer(new CellRenderer());
-		users.getColumnModel().getColumn(3).setCellRenderer(new CellRendererNoImage());
+		users.getColumnModel().getColumn(3).setCellRenderer(new CellRenderer());
+		users.getColumnModel().getColumn(4).setCellRenderer(new CellRendererNoImage());
 
 		MaskFormatter mascaraData;
 		JFormattedTextField data;
@@ -218,9 +223,58 @@ public class UserPanel extends JPanel {
 			e1.printStackTrace();
 		}
 		data.setFont(new Font("Arial", Font.PLAIN, 15));
-		users.getColumnModel().getColumn(2).setCellEditor(new DefaultCellEditor(data));
+		
+		final TableCellEditor dataEditor = new DefaultCellEditor(data);
+		
+		users.getColumnModel().getColumn(2).setCellEditor(dataEditor);
 		// users.getColumnModel().getColumn(2).setCellEditor(new
 		// JDateChooserCellEditor());
+		
+		InputMap iMap = data.getInputMap(JComponent.WHEN_FOCUSED);
+		iMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), KeyEvent.getKeyText(KeyEvent.VK_ENTER));
+		ActionMap aMap = data.getActionMap();
+		aMap.put(KeyEvent.getKeyText(KeyEvent.VK_ENTER), new AbstractAction() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				dataEditor.stopCellEditing();
+			}
+		});
+
+		MaskFormatter maskPhone;
+		JFormattedTextField phone;
+
+		try {
+			maskPhone = new MaskFormatter("(##) # ####-####");
+			maskPhone.setCommitsOnValidEdit(true);
+			phone = new JFormattedTextField(maskPhone);
+		} catch (ParseException e1) {
+			phone = new JFormattedTextField();
+			e1.printStackTrace();
+		}
+		phone.setFont(new Font("Arial", Font.PLAIN, 15));
+
+		final TableCellEditor phoneEditor = new DefaultCellEditor(phone);
+		users.getColumnModel().getColumn(3).setCellEditor(phoneEditor);
+
+		InputMap iMap1 = phone.getInputMap(JComponent.WHEN_FOCUSED);
+		iMap1.put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), KeyEvent.getKeyText(KeyEvent.VK_ENTER));
+		ActionMap aMap1 = phone.getActionMap();
+		aMap1.put(KeyEvent.getKeyText(KeyEvent.VK_ENTER), new AbstractAction() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				phoneEditor.stopCellEditing();
+			}
+		});
 
 		JScrollPane jsLivros = new JScrollPane(users);
 		add(jsLivros, BorderLayout.CENTER);
@@ -415,9 +469,9 @@ public class UserPanel extends JPanel {
 		panelAdd.add(panelNome);
 
 		JPanel panelDataNascimento = new JPanel(new BorderLayout());
-		JLabel lAutor = new JLabel("Data de Nascimento: ");
-		lAutor.setFont(new Font("Roboto", Font.BOLD, 15));
-		panelDataNascimento.add(lAutor, BorderLayout.WEST);
+		JLabel lDateNasc = new JLabel("Data de Nascimento: ");
+		lDateNasc.setFont(new Font("Roboto", Font.BOLD, 15));
+		panelDataNascimento.add(lDateNasc, BorderLayout.WEST);
 
 		date_nasc = new JDateChooser();
 		date_nasc.setLocale(new Locale("pt", "BR"));
@@ -465,6 +519,25 @@ public class UserPanel extends JPanel {
 
 		last.add(lCpf);
 		last.add(cpf);
+
+		try {
+			maskPhone = new MaskFormatter("(##) # ####-####");
+			maskPhone.setCommitsOnValidEdit(true);
+			telefone = new JFormattedTextField(maskPhone);
+		} catch (ParseException e1) {
+			telefone = new JFormattedTextField();
+			e1.printStackTrace();
+		}
+
+		telefone.setFont(new Font("Arial", Font.PLAIN, 15));
+		telefone.setBounds(120, 162, 181, 20);
+		telefone.setColumns(12);
+
+		JLabel lPhone = new JLabel("Telefone: ");
+		lPhone.setFont(new Font("Roboto", Font.BOLD, 15));
+
+		last.add(lPhone);
+		last.add(telefone);
 
 		addKeyListener(new KeyAdapter() {
 			@Override
@@ -518,8 +591,10 @@ public class UserPanel extends JPanel {
 					JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource("/DAD_SS.jpg")));
 		else {
 			if (validar()) {
-				TableModelUser.getInstance().addUser(new User(nome.getText(), date_nasc.getDate(),
-						cpf.getText().replace(".", "").replace("-", ""), 0, false));
+				TableModelUser.getInstance().addUser(
+						new User(nome.getText(), date_nasc.getDate(), cpf.getText().replace(".", "").replace("-", ""),
+								telefone.getText().replace("-", "").replace("(", "").replace(")", "").replace(" ", ""),
+								0, false));
 				Log.getInstance().printLog("Cliente adicionado com sucesso!");
 			} else
 				JOptionPane.showMessageDialog(this, "CPF inválido!", "ADICIONAR", JOptionPane.INFORMATION_MESSAGE,
@@ -540,6 +615,7 @@ public class UserPanel extends JPanel {
 		nome.setText("");
 		date_nasc.cleanup();
 		cpf.setText("");
+		telefone.setText("");
 	}
 
 	public void removerUsers() {

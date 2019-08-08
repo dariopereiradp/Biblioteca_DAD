@@ -5,6 +5,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+
 import javax.swing.table.AbstractTableModel;
 
 import dad.biblioteca.User;
@@ -23,7 +25,7 @@ public class TableModelUser extends AbstractTableModel {
 	private static final long serialVersionUID = 3247984074345998765L;
 	private static TableModelUser INSTANCE;
 	private ArrayList<User> users;
-	private String[] colunas = { "CPF", "Nome", "Data de Nascimento", "Número de Empréstmos" };
+	private String[] colunas = { "CPF", "Nome", "Data de Nascimento", "Telefone", "Número de Empréstmos" };
 	private Connection con;
 	private PreparedStatement pst;
 	private ResultSet rs;
@@ -133,6 +135,10 @@ public class TableModelUser extends AbstractTableModel {
 		case 2:
 			return new SimpleDateFormat("dd/MM/yyyy").format(users.get(rowIndex).getData_nascimento());
 		case 3:
+			String phone = users.get(rowIndex).getTelefone();
+			return "(" + phone.substring(0, 2) + ") " + phone.substring(2, 3) + " " + phone.substring(3, 7) + "-"
+					+ phone.substring(7);
+		case 4:
 			return users.get(rowIndex).getN_emprestimos();
 		default:
 			return users.get(rowIndex);
@@ -145,7 +151,7 @@ public class TableModelUser extends AbstractTableModel {
 		switch (column) {
 		case 0:
 			return Long.class;
-		case 3:
+		case 4:
 			return Integer.class;
 		default:
 			return String.class;
@@ -161,10 +167,22 @@ public class TableModelUser extends AbstractTableModel {
 				User user = users.get(rowIndex);
 				switch (columnIndex) {
 				case 1:
-					undoManager.execute(new AtualizaUser(this, "Nome", user, valor));
+					if (!((String) valor).equals(user.getNome())) {
+						undoManager.execute(new AtualizaUser(this, "Nome", user, valor));
+					}
 					break;
 				case 2:
-					undoManager.execute(new AtualizaUser(this, "Data_Nascimento", user, valor));
+					SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+					Date data_nasc = dateFormat.parse((String) valor);
+					if (!dateFormat.format(user.getData_nascimento()).equals(dateFormat.format(data_nasc)))
+						undoManager.execute(new AtualizaUser(this, "Data_Nascimento", user, valor));
+					break;
+				case 3:
+					String telefone = ((String) valor).replace("-", "").replace("(", "").replace(")", "").replace(" ",
+							"");
+					if (!user.getTelefone().equals(telefone))
+						if (telefone.length() == 11)
+							undoManager.execute(new AtualizaUser(this, "Telefone", user, valor));
 					break;
 				default:
 					users.get(rowIndex);

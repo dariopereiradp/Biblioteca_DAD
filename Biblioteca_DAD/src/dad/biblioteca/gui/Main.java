@@ -14,6 +14,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.SQLSyntaxErrorException;
 import java.sql.Statement;
 import java.util.InputMismatchException;
 import java.util.Locale;
@@ -39,6 +40,7 @@ import dad.recursos.ConexaoUser;
 import dad.recursos.CriptografiaAES;
 import dad.recursos.Log;
 import mdlaf.MaterialLookAndFeel;
+import net.ucanaccess.jdbc.UcanaccessSQLException;
 
 public class Main {
 
@@ -51,7 +53,7 @@ public class Main {
 	public static final String BACKUP_DIR = System.getProperty("user.home") + System.getProperty("file.separator")
 			+ "Documents/BibliotecaDAD/Backups/";
 	public static final String BUG_REPORTS_DIR = System.getProperty("user.home") + System.getProperty("file.separator")
-	+ "Documents/BibliotecaDAD/BugReports/";
+			+ "Documents/BibliotecaDAD/BugReports/";
 	public static final String DATA_DIR = System.getenv("APPDATA") + "/BibliotecaDAD/";
 	public static final String DATABASE_DIR = DATA_DIR + "Databases/";
 	public static long inicialTime;
@@ -142,9 +144,9 @@ public class Main {
 		File backdir = new File(Main.BACKUP_DIR);
 		if (!backdir.exists())
 			backdir.mkdirs();
-		
+
 		File bugDir = new File(Main.BUG_REPORTS_DIR);
-		if(!bugDir.exists())
+		if (!bugDir.exists())
 			bugDir.mkdirs();
 
 		restaurar();
@@ -229,9 +231,18 @@ public class Main {
 				try (ResultSet rs = dmd.getTables(null, null, "Usuários", new String[] { "TABLE" })) {
 					try (Statement s = con.createStatement()) {
 						s.executeUpdate("CREATE TABLE Usuarios (CPF varchar(255) NOT NULL, Nome varchar(255) NOT NULL,"
-								+ "Data_Nascimento date, N_Emprestimos int, CONSTRAINT PK_Usuarios PRIMARY KEY (CPF));");
+								+ "Data_Nascimento date, N_Emprestimos int, Telefone varchar(15), CONSTRAINT PK_Usuarios PRIMARY KEY (CPF));");
 						Log.getInstance().printLog("Base de dados users.mbd criada com sucesso");
 					}
+				}
+				con.close();
+			} else {
+				con = ConexaoUser.getConnection();
+				try (Statement s = con.createStatement()) {
+					s.executeUpdate("ALTER TABLE Usuarios ADD COLUMN Telefone varchar(15);");
+					Log.getInstance().printLog("Base de dados users.mbd atualizada com sucesso");
+				} catch(SQLSyntaxErrorException | UcanaccessSQLException e3){
+					System.out.println("Coluna 'Telefone' já existe!");
 				}
 				con.close();
 			}
