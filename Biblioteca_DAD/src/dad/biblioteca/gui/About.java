@@ -20,6 +20,12 @@ import javax.swing.JLabel;
 import java.awt.Font;
 import javax.swing.SwingConstants;
 
+
+/**
+ * 
+ * @author Dário Pereira
+ *
+ */
 public class About extends JDialog {
 
 	/**
