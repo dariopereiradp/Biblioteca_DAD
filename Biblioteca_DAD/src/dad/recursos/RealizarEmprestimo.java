@@ -79,12 +79,12 @@ public class RealizarEmprestimo {
 	public RealizarEmprestimo(Emprestimo emp) {
 		this.emp = emp;
 		inicializar(emp.getItem());
-		cpf.setText(emp.getUser().getCpf());
+		cpf.setText(emp.getCliente().getCpf());
 		cpf.setEditable(false);
 		idEmp.setText(String.valueOf(emp.getId()));
 		date_emp.setDate(emp.getData_emprestimo());
 		date_entrega.setDate(emp.getData_entrega());
-		nome.setText(emp.getUser().getNome());
+		nome.setText(emp.getCliente().getNome());
 		bValidar.setEnabled(false);
 		alterar.setEnabled(true);
 		bConf.setVisible(false);
@@ -453,7 +453,7 @@ public class RealizarEmprestimo {
 					pst.setString(2, String.valueOf(emprestimo.getItem().getId()));
 					pst.setDate(3, new java.sql.Date(emprestimo.getData_emprestimo().getTime()));
 					pst.setDate(4, new java.sql.Date(emprestimo.getData_entrega().getTime()));
-					pst.setString(5, emprestimo.getUser().getCpf());
+					pst.setString(5, emprestimo.getCliente().getCpf());
 					pst.setString(6, String.valueOf(emprestimo.getFuncionario()));
 					pst.setString(7, "Sim");
 					pst.setString(8, "0.0");
@@ -467,7 +467,7 @@ public class RealizarEmprestimo {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-				emprestimo.getUser().incrementar_emprestimos();
+				emprestimo.getCliente().incrementar_emprestimos();
 				TableModelUser.getInstance().fireTableDataChanged();
 				emprestimo.getItem().inc_exemp_emprestados(); // salvar na base
 																// de dados
@@ -486,10 +486,10 @@ public class RealizarEmprestimo {
 									+ idEmp.getText());
 					emp.setData_emprestimo(date_emp.getDate());
 					emp.setData_entrega(date_entrega.getDate());
-					if (!emp.getUser().getCpf().equals(cpfN)) {
-						emp.getUser().decrementar_emprestimos();
-						emp.setUser(TableModelUser.getInstance().getUserByCpf(cpfN));
-						emp.getUser().incrementar_emprestimos();
+					if (!emp.getCliente().getCpf().equals(cpfN)) {
+						emp.getCliente().decrementar_emprestimos();
+						emp.setCliente(TableModelUser.getInstance().getUserByCpf(cpfN));
+						emp.getCliente().incrementar_emprestimos();
 					}
 					pst.setDate(1, new java.sql.Date(date_emp.getDate().getTime()));
 					pst.setDate(2, new java.sql.Date(date_entrega.getDate().getTime()));

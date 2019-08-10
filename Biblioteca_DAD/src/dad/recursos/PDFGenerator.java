@@ -230,7 +230,7 @@ public class PDFGenerator {
 		g2d.drawString(text, (int) (width / 8) + 5, 220 + 215 + 20 + 10 + 10 + 5);
 
 		g2d.setFont(PDFGraphics.COURIER.deriveFont(10f).deriveFont(Font.ITALIC));
-		text = emprestimo.getUser().getNome();
+		text = emprestimo.getCliente().getNome();
 		g2d.drawString(text, (int) (width / 8) + 5 + sWidth + 3, 220 + 215 + 20 + 10 + 10 + 5);
 		g2d.setFont(PDFGraphics.COURIER.deriveFont(10f).deriveFont(Font.PLAIN));
 
@@ -239,7 +239,7 @@ public class PDFGenerator {
 		g2d.drawString(text, (int) (width / 8) + 5, 220 + 230 + 20 + 10 + 10 + 5);
 
 		g2d.setFont(PDFGraphics.COURIER.deriveFont(10f).deriveFont(Font.ITALIC));
-		text = new SimpleDateFormat("dd/MMM/yyyy").format(emprestimo.getUser().getData_nascimento());
+		text = new SimpleDateFormat("dd/MMM/yyyy").format(emprestimo.getCliente().getData_nascimento());
 		g2d.drawString(text, (int) (width / 8) + 5 + sWidth + 3, 220 + 230 + 20 + 10 + 10 + 5);
 		g2d.setFont(PDFGraphics.COURIER.deriveFont(10f).deriveFont(Font.PLAIN));
 
@@ -248,7 +248,7 @@ public class PDFGenerator {
 		g2d.drawString(text, (int) (width / 8) + 5, 220 + 245 + 20 + 10 + 10 + 5);
 
 		g2d.setFont(PDFGraphics.COURIER.deriveFont(10f).deriveFont(Font.ITALIC));
-		text = String.valueOf(emprestimo.getUser().getCpf());
+		text = String.valueOf(emprestimo.getCliente().getCpf());
 		g2d.drawString(text, (int) (width / 8) + 5 + sWidth + 3, 220 + 245 + 20 + 10 + 10 + 5);
 		g2d.setFont(PDFGraphics.COURIER.deriveFont(10f).deriveFont(Font.PLAIN));
 

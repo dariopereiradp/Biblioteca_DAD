@@ -2,6 +2,11 @@ package dad.biblioteca;
 
 import java.util.Date;
 
+/**
+ * 
+ * @author Dário Pereira
+ *
+ */
 public class Funcionario {
 
 	private String nome;

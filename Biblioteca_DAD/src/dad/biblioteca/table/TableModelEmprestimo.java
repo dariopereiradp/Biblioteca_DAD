@@ -200,7 +200,7 @@ public class TableModelEmprestimo extends AbstractTableModel {
 			if (recibo.exists())
 				recibo.delete();
 			toDelete.add(emp);
-			emp.getUser().decrementar_emprestimos();
+			emp.getCliente().decrementar_emprestimos();
 			fireTableDataChanged();
 		} catch (SQLException e1) {
 			e1.printStackTrace();
@@ -224,7 +224,7 @@ public class TableModelEmprestimo extends AbstractTableModel {
 		case 4:
 			return new SimpleDateFormat("dd/MM/yyyy").format(emprestimos.get(rowIndex).getData_entrega());
 		case 5:
-			return emprestimos.get(rowIndex).getUser().getCpf();
+			return emprestimos.get(rowIndex).getCliente().getCpf();
 		case 6:
 			return emprestimos.get(rowIndex).getFuncionario();
 		case 7:
