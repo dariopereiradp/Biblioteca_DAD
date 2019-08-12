@@ -122,7 +122,7 @@ public class UserDetail {
 		telefone.setEditable(false);
 
 		JLabel lPhone = new JLabel("Telefone: ");
-		lPhone.setFont(new Font("Roboto", Font.BOLD, 15));
+		lPhone.setFont(new Font("Roboto", Font.PLAIN, 12));
 
 		cima.add(lPhone);
 		cima.add(telefone);
