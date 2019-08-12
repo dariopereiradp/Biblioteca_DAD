@@ -13,7 +13,13 @@ import dad.biblioteca.gui.DataGui;
 import dad.biblioteca.table.TableModelEmprestimo;
 import mdlaf.utils.MaterialColors;
 
-public class CellRenderer2 extends DefaultTableCellRenderer {
+/** Classe para renderer da célula de multa, indicando se existe multa pendente ou não.
+ * Também está adaptada para pesquisa e filtragem, desenhando um retângulo amarelo em volta do filtro.
+ * 
+ * @author Dário Pereira
+ *
+ */
+public class CellRendererMulta extends DefaultTableCellRenderer {
 	/**
 	 * 
 	 */

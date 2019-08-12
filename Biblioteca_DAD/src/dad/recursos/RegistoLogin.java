@@ -45,6 +45,11 @@ import java.awt.Color;
 import javax.swing.JCheckBox;
 import javax.swing.JDialog;
 
+/**
+ * Classe para fazer um registo de funcionário no programa.
+ * @author Dário Pereira
+ *
+ */
 public class RegistoLogin {
 
 	private JDialog dialog;
@@ -114,7 +119,7 @@ public class RegistoLogin {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				registo();
+				verify();
 
 			}
 		});
@@ -167,7 +172,7 @@ public class RegistoLogin {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				if (e.getKeyCode() == KeyEvent.VK_ENTER)
-					registo();
+					verify();
 			}
 
 		});
@@ -177,7 +182,7 @@ public class RegistoLogin {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				if (e.getKeyCode() == KeyEvent.VK_ENTER)
-					registo();
+					verify();
 			}
 
 		});
@@ -187,20 +192,16 @@ public class RegistoLogin {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				if (e.getKeyCode() == KeyEvent.VK_ENTER)
-					registo();
+					verify();
 			}
 
 		});
 	}
 
-	public static RegistoLogin getInstance() {
-		if (INSTANCE == null) {
-			new RegistoLogin();
-		}
-		return INSTANCE;
-	}
-
-	public void registo() {
+	/**
+	 * Verifica se os campos foram preenchidos corretamente e se o usuário ainda não existe e depois faz o registo
+	 */
+	public void verify() {
 		String username = user.getText();
 		String password = String.valueOf(pass.getPassword());
 		if (username.trim().equals("") || password.trim().equals("")) {
@@ -234,6 +235,11 @@ public class RegistoLogin {
 
 	}
 
+	/**
+	 * Insere o funcionário na base de dados.
+	 * @param username
+	 * @param password
+	 */
 	private void inserir(String username, String password) {
 		try {
 			CriptografiaAES.setKey(password);
@@ -263,10 +269,21 @@ public class RegistoLogin {
 
 	}
 
+	/**
+	 * Torna o diálogo visível.
+	 * @param login
+	 */
 	public void open(boolean login) {
 		this.login = login;
 		dialog.setVisible(true);
 		user.setText("");
 		pass.setText("");
+	}
+	
+	public static RegistoLogin getInstance() {
+		if (INSTANCE == null) {
+			new RegistoLogin();
+		}
+		return INSTANCE;
 	}
 }

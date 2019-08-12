@@ -21,6 +21,8 @@ import dad.biblioteca.Outros;
 import dad.biblioteca.gui.Login;
 
 /**
+ * Classe para criar um recibo PDF do empréstimo dado. <br>
+ * 
  * Library <a href="https://www.qoppa.com/pdfwriter/">jPDFWriter</a>
  * 
  * @author Dário Pereira

@@ -54,18 +54,22 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.text.MaskFormatter;
 
 import com.toedter.calendar.JDateChooser;
-import dad.biblioteca.Livro;
 import dad.biblioteca.User;
+import dad.biblioteca.gui.LivroDetail;
 import dad.biblioteca.gui.UserDetail;
 import dad.recursos.CellRenderer;
 import dad.recursos.CellRendererNoImage;
 import dad.recursos.CpfValidator;
 import dad.recursos.Log;
-import dad.recursos.RealizarEmprestimo;
 import dad.recursos.SairAction;
-import mdlaf.animation.MaterialUIMovement;
 import mdlaf.utils.MaterialColors;
 
+/**
+ * Classe que representa a tabela de Clientes na DataGui.
+ * 
+ * @author Dário Pereira
+ *
+ */
 public class UserPanel extends JPanel {
 
 	private static UserPanel INSTANCE;
@@ -223,13 +227,11 @@ public class UserPanel extends JPanel {
 			e1.printStackTrace();
 		}
 		data.setFont(new Font("Arial", Font.PLAIN, 15));
-		
+
 		final TableCellEditor dataEditor = new DefaultCellEditor(data);
-		
+
 		users.getColumnModel().getColumn(2).setCellEditor(dataEditor);
-		// users.getColumnModel().getColumn(2).setCellEditor(new
-		// JDateChooserCellEditor());
-		
+
 		InputMap iMap = data.getInputMap(JComponent.WHEN_FOCUSED);
 		iMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), KeyEvent.getKeyText(KeyEvent.VK_ENTER));
 		ActionMap aMap = data.getActionMap();
@@ -303,6 +305,47 @@ public class UserPanel extends JPanel {
 
 		inicializarPanelAdd();
 
+		inicializarMenus();
+
+		users.getInputMap().put(KeyStroke.getKeyStroke("DELETE"), "deleteRow");
+		users.getActionMap().put("deleteRow", new DeleteAction());
+
+		users.addMouseListener(new MouseAdapter() {
+			public void mousePressed(MouseEvent mouseEvent) {
+				JTable table = (JTable) mouseEvent.getSource();
+				Point point = mouseEvent.getPoint();
+				int column = table.columnAtPoint(point);
+				int rowAtPoint = table.rowAtPoint(point);
+				if (rowAtPoint != -1) {
+					int row = table.convertRowIndexToModel(rowAtPoint);
+					if (mouseEvent.getClickCount() == 2 && !table.isCellEditable(row, column)
+							&& table.getSelectedRow() != -1) {
+						abrir(modelUser.getUser(row));
+					}
+				}
+			}
+		});
+
+		KeyStroke enter = KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0);
+		users.getInputMap(JTable.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(enter, "solve");
+		users.getActionMap().put("solve", new AbstractAction() {
+
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = -833616209546223519L;
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (users.getSelectedRows().length == 1)
+					abrir(modelUser.getUser(users.convertRowIndexToModel(users.getSelectedRow())));
+
+			}
+		});
+
+	}
+
+	private void inicializarMenus() {
 		JMenuItem delete = new JMenuItem("Apagar");
 		delete.addActionListener(new ActionListener() {
 
@@ -381,43 +424,6 @@ public class UserPanel extends JPanel {
 		popupMenu.setPopupSize(350, 150);
 
 		users.setComponentPopupMenu(popupMenu);
-
-		users.getInputMap().put(KeyStroke.getKeyStroke("DELETE"), "deleteRow");
-		users.getActionMap().put("deleteRow", new DeleteAction());
-
-		users.addMouseListener(new MouseAdapter() {
-			public void mousePressed(MouseEvent mouseEvent) {
-				JTable table = (JTable) mouseEvent.getSource();
-				Point point = mouseEvent.getPoint();
-				int column = table.columnAtPoint(point);
-				int rowAtPoint = table.rowAtPoint(point);
-				if (rowAtPoint != -1) {
-					int row = table.convertRowIndexToModel(rowAtPoint);
-					if (mouseEvent.getClickCount() == 2 && !table.isCellEditable(row, column)
-							&& table.getSelectedRow() != -1) {
-						abrir(modelUser.getUser(row));
-					}
-				}
-			}
-		});
-
-		KeyStroke enter = KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0);
-		users.getInputMap(JTable.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(enter, "solve");
-		users.getActionMap().put("solve", new AbstractAction() {
-
-			/**
-			 * 
-			 */
-			private static final long serialVersionUID = -833616209546223519L;
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if (users.getSelectedRows().length == 1)
-					abrir(modelUser.getUser(users.convertRowIndexToModel(users.getSelectedRow())));
-
-			}
-		});
-
 	}
 
 	public void inicializarBotoes() {
@@ -425,7 +431,7 @@ public class UserPanel extends JPanel {
 		JButton bSair = new JButton("SAIR");
 		bSair.setBackground(new Color(247, 247, 255));
 		bSair.setForeground(MaterialColors.LIGHT_BLUE_400);
-		personalizarBotao(bSair);
+		LivroDetail.personalizarBotao(bSair);
 		bSair.addActionListener(new SairAction());
 		panel2.add(bSair);
 
@@ -435,7 +441,7 @@ public class UserPanel extends JPanel {
 		bAdd = new JButton("ADICIONAR");
 		bAdd.setForeground(MaterialColors.WHITE);
 		bAdd.setBackground(MaterialColors.LIGHT_GREEN_500);
-		personalizarBotao(bAdd);
+		LivroDetail.personalizarBotao(bAdd);
 		bAdd.setEnabled(false);
 		bAdd.addActionListener(new ActionListener() {
 
@@ -446,6 +452,19 @@ public class UserPanel extends JPanel {
 			}
 		});
 		panel4.add(bAdd);
+		
+		JButton bLimpar = new JButton("Limpar campos");
+		bLimpar.setForeground(MaterialColors.WHITE);
+		bLimpar.setBackground(MaterialColors.RED_300);
+		LivroDetail.personalizarBotao(bLimpar);
+		bLimpar.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				clearTextFields();
+			}
+		});
+		panel4.add(bLimpar);
 	}
 
 	private void inicializarPanelAdd() {
@@ -554,6 +573,13 @@ public class UserPanel extends JPanel {
 		pInferior.add(both, BorderLayout.CENTER);
 	}
 
+	/**
+	 * Verifica se o número de CPF introduzido é válido e se já não está
+	 * registrado na base de dados.
+	 * 
+	 * @return - true se o CPF é válido e ainda não está registrado <br>
+	 *         - false caso contrário
+	 */
 	public boolean validar() {
 		String cpfString;
 		cpfString = cpf.getText();
@@ -580,11 +606,10 @@ public class UserPanel extends JPanel {
 		return false;
 	}
 
-	public void personalizarBotao(JButton jb) {
-		jb.setFont(new Font("Roboto", Font.PLAIN, 15));
-		MaterialUIMovement.add(jb, MaterialColors.GRAY_300, 5, 1000 / 30);
-	}
-
+	/**
+	 * Verifica se os campos introduzidos estão certos e cria um novo cliente
+	 * com os dados introduzidos.
+	 */
 	public void adicionarUser() {
 		if (nome.getText().trim().equals(""))
 			JOptionPane.showMessageDialog(this, "Deve inserir um nome para o cliente!", "ADICIONAR",
@@ -600,7 +625,16 @@ public class UserPanel extends JPanel {
 				JOptionPane.showMessageDialog(this, "CPF inválido!", "ADICIONAR", JOptionPane.INFORMATION_MESSAGE,
 						new ImageIcon(getClass().getResource("/DAD_SS.jpg")));
 		}
+	}
 
+	/**
+	 * Limpa os campos de introdução de detalhes após introduzir um novo User.
+	 */
+	public void clearTextFields() {
+		nome.setText("");
+		date_nasc.cleanup();
+		cpf.setText("");
+		telefone.setText("");
 	}
 
 	public int[] convertRowsIndextoModel() {
@@ -611,13 +645,9 @@ public class UserPanel extends JPanel {
 		return rows;
 	}
 
-	public void clearTextFields() {
-		nome.setText("");
-		date_nasc.cleanup();
-		cpf.setText("");
-		telefone.setText("");
-	}
-
+	/**
+	 * Remove os clientes selecionados.
+	 */
 	public void removerUsers() {
 		int[] rows = convertRowsIndextoModel();
 		if (rows.length > 0) {
@@ -634,17 +664,23 @@ public class UserPanel extends JPanel {
 		return users;
 	}
 
-	public void abrir(User user) {
-		new UserDetail(user).open();
-	}
-
-	public void realizarEmprestimo(Livro l) {
-		new RealizarEmprestimo(l).open();
-
+	public JButton getbAdd() {
+		return bAdd;
 	}
 
 	public JTextField getJtfTotal() {
 		return jtfTotal;
+	}
+
+	/**
+	 * Inicializa uma nova instância da classe UserDetail com o User passado
+	 * como parâmetro
+	 * 
+	 * @param user
+	 *            - cliente que se quer ver os detalhes
+	 */
+	public void abrir(User user) {
+		new UserDetail(user).open();
 	}
 
 	private class DeleteAction extends AbstractAction {
@@ -664,10 +700,6 @@ public class UserPanel extends JPanel {
 		if (INSTANCE == null)
 			INSTANCE = new UserPanel();
 		return INSTANCE;
-	}
-
-	public JButton getbAdd() {
-		return bAdd;
 	}
 
 }

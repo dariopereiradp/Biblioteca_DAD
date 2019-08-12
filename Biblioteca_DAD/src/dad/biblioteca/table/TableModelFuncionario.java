@@ -47,6 +47,12 @@ import dad.recursos.ConexaoLogin;
 import dad.recursos.Log;
 import mdlaf.utils.MaterialColors;
 
+/**
+ * Classe que representa o TableModel para os funcionários.
+ * 
+ * @author Dário Pereira
+ *
+ */
 public class TableModelFuncionario extends AbstractTableModel {
 
 	/**
@@ -65,6 +71,10 @@ public class TableModelFuncionario extends AbstractTableModel {
 		INSTANCE = this;
 	}
 
+	/**
+	 * Faz upload da base de dados e cria o ArrayList com os funcionários que
+	 * existirem na base de dados Logins.
+	 */
 	public void uploadDataBase() {
 		funcionarios = new ArrayList<>();
 		try {
@@ -90,13 +100,6 @@ public class TableModelFuncionario extends AbstractTableModel {
 		}
 	}
 
-	public static TableModelFuncionario getInstance() {
-		if (INSTANCE == null) {
-			INSTANCE = new TableModelFuncionario();
-		}
-		return INSTANCE;
-	}
-
 	@Override
 	public int getRowCount() {
 		return funcionarios.size();
@@ -116,6 +119,10 @@ public class TableModelFuncionario extends AbstractTableModel {
 		return funcionarios;
 	}
 
+	/**
+	 * Adiciona um funcionário.
+	 * @param func - funcionário a adicionar
+	 */
 	public void addFuncionario(Funcionario func) {
 		funcionarios.add(func);
 	}
@@ -123,7 +130,24 @@ public class TableModelFuncionario extends AbstractTableModel {
 	public Funcionario getFuncionario(int rowIndex) {
 		return funcionarios.get(rowIndex);
 	}
+	
+	/**
+	 * @param table - tabela que se pretende converter os indexes
+	 * @return um array com todos os indexes do modelo dos funcionários que estão
+	 *         selecionados.
+	 */
+	public int[] convertRowsIndextoModel(JTable table) {
+		int[] rows = table.getSelectedRows();
+		for (int i = 0; i < rows.length; i++) {
+			rows[i] = table.convertRowIndexToModel(rows[i]);
+		}
+		return rows;
+	}
 
+	/**
+	 * Remove os funcionários que estão nas posições indicadas pelo array rows.
+	 * @param rows - array que contém as posições dos funcionários a remover.
+	 */
 	public void removeFuncionarios(int[] rows) {
 		ArrayList<Funcionario> toDelete = new ArrayList<>();
 		for (int i = 0; i < rows.length; i++) {
@@ -134,6 +158,11 @@ public class TableModelFuncionario extends AbstractTableModel {
 		funcionarios.removeAll(toDelete);
 	}
 
+	/**
+	 * Remove um funcionário da base de dados.
+	 * @param func - funcionários a remover
+	 * @param toDelete
+	 */
 	private void apagar(Funcionario func, ArrayList<Funcionario> toDelete) {
 		try {
 			con = ConexaoLogin.getConnection();
@@ -178,14 +207,11 @@ public class TableModelFuncionario extends AbstractTableModel {
 		return String.class;
 	}
 
-	public int[] convertRowsIndextoModel(JTable table) {
-		int[] rows = table.getSelectedRows();
-		for (int i = 0; i < rows.length; i++) {
-			rows[i] = table.convertRowIndexToModel(rows[i]);
-		}
-		return rows;
-	}
-
+	/**
+	 * Devolve uma nova tabela de Funcionarios
+	 * 
+	 * @return - a nova tabela
+	 */
 	public JTable getSmallTable() {
 		JTable small = new JTable(TableModelFuncionario.getInstance()) {
 			/**
@@ -428,5 +454,12 @@ public class TableModelFuncionario extends AbstractTableModel {
 		});
 
 		return small;
+	}
+	
+	public static TableModelFuncionario getInstance() {
+		if (INSTANCE == null) {
+			INSTANCE = new TableModelFuncionario();
+		}
+		return INSTANCE;
 	}
 }

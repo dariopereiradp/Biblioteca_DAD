@@ -4,6 +4,11 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.Stack;
 
+/**
+ * Classe que representa o gerenciador de Undo e Redo.
+ * @author Dário Pereira
+ *
+ */
 public class UndoManager {
 
 	private PropertyChangeSupport pcs = new PropertyChangeSupport(this);

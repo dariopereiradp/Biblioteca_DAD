@@ -31,6 +31,11 @@ import dad.recursos.ConexaoLogin;
 import dad.recursos.CriptografiaAES;
 import dad.recursos.Log;
 
+/**
+ * Classe que representa um diálogo para alterar a senha de um funcionário.
+ * @author Dário Pereira
+ *
+ */
 public class ChangePassword extends JDialog {
 
 	/**
@@ -167,6 +172,9 @@ public class ChangePassword extends JDialog {
 		}
 	}
 
+	/**
+	 * Verifica se a 'oldPass' corresponde à senha antiga.
+	 */
 	public void verify() {
 		String oldPass = String.valueOf(passAtual.getPassword());
 		String pass = String.valueOf(newPass.getPassword());
@@ -207,6 +215,9 @@ public class ChangePassword extends JDialog {
 		}
 	}
 
+	/**
+	 * Verifica se as senhas introduzidas coincidem entre si. Se sim, altera a senha atual.
+	 */
 	public void change() {
 		String pass = String.valueOf(newPass.getPassword());
 		String conf = String.valueOf(confPass.getPassword());
@@ -238,6 +249,9 @@ public class ChangePassword extends JDialog {
 
 	}
 
+	/**
+	 * Torna o diálogo visível.
+	 */
 	public void open() {
 		setVisible(true);
 	}

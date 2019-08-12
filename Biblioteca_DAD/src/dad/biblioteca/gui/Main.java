@@ -42,14 +42,20 @@ import dad.recursos.Log;
 import mdlaf.MaterialLookAndFeel;
 import net.ucanaccess.jdbc.UcanaccessSQLException;
 
+/**
+ * Classe responsável por inicializar todo o programa e bases de dados.
+ * 
+ * @author Dário Pereira
+ *
+ */
 public class Main {
 
 	public static final String TITLE = "BIBLIOTECA DÁDIVA DE DEUS";
 	public static final String VERSION = "1.0";
 	public static final String DATA_PUBLICACAO = "12 de Agosto de 2019";
 	public static final String EMAIL_SUPORTE = "pereira13.dario@gmail.com";
-	public static final String USER = "admin";
-	public static final String PASS = "dad";
+	public static final String ADMIN_USER = "admin";
+	public static final String ADMIN_PASS = "dad";
 	public static final String BACKUP_DIR = System.getProperty("user.home") + System.getProperty("file.separator")
 			+ "Documents/BibliotecaDAD/Backups/";
 	public static final String BUG_REPORTS_DIR = System.getProperty("user.home") + System.getProperty("file.separator")
@@ -59,6 +65,9 @@ public class Main {
 	public static long inicialTime;
 	private Connection con;
 
+	/**
+	 * Inicializa o LookAndFeel, as bases de dados e a splash screen.
+	 */
 	public Main() {
 		try {
 			UIManager.setLookAndFeel(new MaterialLookAndFeel());
@@ -122,6 +131,13 @@ public class Main {
 		}
 	}
 
+	/**
+	 * Classe que representa uma thread que incrementa o valor da porcentagem na
+	 * splash screen.
+	 * 
+	 * @author Dário Pereira
+	 *
+	 */
 	private class Incrementar implements Runnable {
 		private int i;
 		private Splash screen;
@@ -136,6 +152,9 @@ public class Main {
 		}
 	}
 
+	/**
+	 * Cria as pastas e tabelas das bases de dados, caso não existam.
+	 */
 	private void createTables() {
 		File dir = new File(DATABASE_DIR);
 		if (!dir.exists())
@@ -172,7 +191,7 @@ public class Main {
 				pw.println(Emprestimo.MULTA);
 				pw.close();
 			} catch (FileNotFoundException e1) {
-				// TODO Auto-generated catch block
+				Log.getInstance().printLog("Erro ao carregar configurações! - " + e1.getMessage());
 				e1.printStackTrace();
 			}
 		}
@@ -205,11 +224,11 @@ public class Main {
 								+ "Pass varchar(50) NOT NULL, Num_acessos int, Ultimo_Acesso date,Data_Criacao date, CONSTRAINT PK_Logins PRIMARY KEY (Nome));");
 						Log.getInstance().printLog("Base de dados logins.mbd criada com sucesso");
 					}
-					CriptografiaAES.setKey(PASS);
-					CriptografiaAES.encrypt(PASS);
+					CriptografiaAES.setKey(ADMIN_PASS);
+					CriptografiaAES.encrypt(ADMIN_PASS);
 					PreparedStatement pst = con.prepareStatement(
 							"insert into logins(Nome,Pass,Num_acessos,Ultimo_Acesso,Data_Criacao) values (?,?,?,?,?)");
-					pst.setString(1, USER);
+					pst.setString(1, ADMIN_USER);
 					pst.setString(2, CriptografiaAES.getEncryptedString());
 					pst.setInt(3, 0);
 					pst.setDate(4, new Date(System.currentTimeMillis()));
@@ -217,7 +236,7 @@ public class Main {
 					pst.execute();
 					Log.getInstance().printLog("Utilizador admin criado com sucesso!");
 				} catch (Exception e) {
-					// TODO Auto-generated catch block
+					Log.getInstance().printLog("Erro ao criar o utilizador admin!");
 					e.printStackTrace();
 				}
 				con.close();
@@ -241,7 +260,7 @@ public class Main {
 				try (Statement s = con.createStatement()) {
 					s.executeUpdate("ALTER TABLE Usuarios ADD COLUMN Telefone varchar(15);");
 					Log.getInstance().printLog("Base de dados users.mbd atualizada com sucesso");
-				} catch(SQLSyntaxErrorException | UcanaccessSQLException e3){
+				} catch (SQLSyntaxErrorException | UcanaccessSQLException e3) {
 					System.out.println("Coluna 'Telefone' já existe!");
 				}
 				con.close();
@@ -278,6 +297,11 @@ public class Main {
 
 	}
 
+	/**
+	 * Caso o programa esteja a iniciar após o restauro de uma cópia de
+	 * segurança, esse método trata de substituir as bases de dados e apagar as
+	 * temporárias.
+	 */
 	public void restaurar() {
 		String path = DATA_DIR + "temp/";
 		File tmp = new File(path);

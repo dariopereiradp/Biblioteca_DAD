@@ -51,8 +51,18 @@ import dad.recursos.SairAction;
 import mdlaf.animation.MaterialUIMovement;
 import mdlaf.utils.MaterialColors;
 
+/**
+ * Classe que representa a tabela de Livros na DataGui.
+ * 
+ * @author Dário Pereira
+ *
+ */
 public class LivroPanel extends JPanel {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -5439324224974968781L;
 	private static LivroPanel INSTANCE;
 	private JTable livros;
 	private TableModelLivro modelLivro;
@@ -61,10 +71,6 @@ public class LivroPanel extends JPanel {
 	private JTextField jtfTotal;
 	private JButton bAdd;
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -5439324224974968781L;
 	private String[] columnToolTips = { "ID do livro", "Título do livro", "Autor que escreveu o livro",
 			"Editora que publicou o livro", "Classificação/gênero do livro (ex: aventura, ficção, etc)",
 			"Número de exemplares do livro", "Número de exemplares do livro que estão disponíveis para empréstimo",
@@ -238,6 +244,47 @@ public class LivroPanel extends JPanel {
 
 		inicializarPanelAdd();
 
+		inicializarMenus();
+
+		livros.getInputMap().put(KeyStroke.getKeyStroke("DELETE"), "deleteRow");
+		livros.getActionMap().put("deleteRow", new DeleteAction());
+
+		livros.addMouseListener(new MouseAdapter() {
+			public void mousePressed(MouseEvent mouseEvent) {
+				JTable table = (JTable) mouseEvent.getSource();
+				Point point = mouseEvent.getPoint();
+				int column = table.columnAtPoint(point);
+				int rowAtPoint = table.rowAtPoint(point);
+				if (rowAtPoint != -1) {
+					int row = table.convertRowIndexToModel(rowAtPoint);
+					if (mouseEvent.getClickCount() == 2 && !table.isCellEditable(row, column)
+							&& table.getSelectedRow() != -1) {
+						abrir(modelLivro.getLivro(row));
+					}
+				}
+			}
+		});
+
+		KeyStroke enter = KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0);
+		livros.getInputMap(JTable.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(enter, "solve");
+		livros.getActionMap().put("solve", new AbstractAction() {
+
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = -833616209546223519L;
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (livros.getSelectedRows().length == 1)
+					abrir(modelLivro.getLivro(livros.convertRowIndexToModel(livros.getSelectedRow())));
+
+			}
+		});
+
+	}
+
+	private void inicializarMenus() {
 		JMenuItem deleteItem = new JMenuItem("Apagar");
 		deleteItem.addActionListener(new ActionListener() {
 
@@ -377,43 +424,6 @@ public class LivroPanel extends JPanel {
 		popupMenu.setPopupSize(350, 150);
 
 		livros.setComponentPopupMenu(popupMenu);
-
-		livros.getInputMap().put(KeyStroke.getKeyStroke("DELETE"), "deleteRow");
-		livros.getActionMap().put("deleteRow", new DeleteAction());
-
-		livros.addMouseListener(new MouseAdapter() {
-			public void mousePressed(MouseEvent mouseEvent) {
-				JTable table = (JTable) mouseEvent.getSource();
-				Point point = mouseEvent.getPoint();
-				int column = table.columnAtPoint(point);
-				int rowAtPoint = table.rowAtPoint(point);
-				if (rowAtPoint != -1) {
-					int row = table.convertRowIndexToModel(rowAtPoint);
-					if (mouseEvent.getClickCount() == 2 && !table.isCellEditable(row, column)
-							&& table.getSelectedRow() != -1) {
-						abrir(modelLivro.getLivro(row));
-					}
-				}
-			}
-		});
-
-		KeyStroke enter = KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0);
-		livros.getInputMap(JTable.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(enter, "solve");
-		livros.getActionMap().put("solve", new AbstractAction() {
-
-			/**
-			 * 
-			 */
-			private static final long serialVersionUID = -833616209546223519L;
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if (livros.getSelectedRows().length == 1)
-					abrir(modelLivro.getLivro(livros.convertRowIndexToModel(livros.getSelectedRow())));
-
-			}
-		});
-
 	}
 
 	public void inicializarBotoes() {
@@ -441,6 +451,19 @@ public class LivroPanel extends JPanel {
 			}
 		});
 		panel4.add(bAdd);
+		
+		JButton bLimpar = new JButton("Limpar campos");
+		bLimpar.setForeground(MaterialColors.WHITE);
+		bLimpar.setBackground(MaterialColors.RED_300);
+		LivroDetail.personalizarBotao(bLimpar);
+		bLimpar.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				clearTextFields();
+			}
+		});
+		panel4.add(bLimpar);
 	}
 
 	private void inicializarPanelAdd() {
@@ -549,6 +572,9 @@ public class LivroPanel extends JPanel {
 		MaterialUIMovement.add(jb, MaterialColors.GRAY_300, 5, 1000 / 30);
 	}
 
+	/**
+	 * Adiciona um novo livro de acordo com as informações inseridas.
+	 */
 	public void adicionarLivro() {
 		if (titulo.getText().trim().equals(""))
 			JOptionPane.showMessageDialog(this, "Deve inserir pelo menos o título!", "ADICIONAR",
@@ -563,6 +589,22 @@ public class LivroPanel extends JPanel {
 		}
 	}
 
+	/**
+	 * Limpa o texto inserido nos campos de texto para inserir novos livros.
+	 */
+	public void clearTextFields() {
+		titulo.setText("");
+		autor.setText("");
+		editora.setText("");
+		classificacao.setText("");
+		local.setText("");
+	}
+
+	/**
+	 * 
+	 * @return um array com todos os indexes do modelo dos livros que estão
+	 *         selecionados.
+	 */
 	public int[] convertRowsIndextoModel() {
 		int[] rows = livros.getSelectedRows();
 		for (int i = 0; i < rows.length; i++) {
@@ -571,13 +613,9 @@ public class LivroPanel extends JPanel {
 		return rows;
 	}
 
-	public void clearTextFields() {
-		titulo.setText("");
-		autor.setText("");
-		editora.setText("");
-		classificacao.setText("");
-	}
-
+	/**
+	 * Remove os livros que estão selecionados.
+	 */
 	public void removerLivros() {
 		int[] rows = convertRowsIndextoModel();
 		if (rows.length > 0) {
@@ -590,6 +628,9 @@ public class LivroPanel extends JPanel {
 		}
 	}
 
+	/**
+	 * Remove um exemplar dos livros selecionados.
+	 */
 	public void removerExemplar() {
 		int[] rows = convertRowsIndextoModel();
 		if (rows.length > 0) {
@@ -606,17 +647,35 @@ public class LivroPanel extends JPanel {
 		return livros;
 	}
 
+	public JTextField getJtfTotal() {
+		return jtfTotal;
+	}
+
+	public JButton getbAdd() {
+		return bAdd;
+	}
+
+	/**
+	 * Abre uma instância da classe LivroDetail com os detalhe do livro dado
+	 * como parâmetro.
+	 * 
+	 * @param l
+	 *            - livro que se pretende abrir.
+	 */
 	public void abrir(Livro l) {
 		new LivroDetail(l).open();
 	}
 
+	/**
+	 * Abre um novo diálogo para realizar um empréstimo do livro passado como
+	 * parâmetro.
+	 * 
+	 * @param l
+	 *            - livro que se pretende realizar um empréstimo.
+	 */
 	public void realizarEmprestimo(Livro l) {
 		new RealizarEmprestimo(l).open();
 
-	}
-
-	public JTextField getJtfTotal() {
-		return jtfTotal;
 	}
 
 	private class DeleteAction extends AbstractAction {
@@ -637,9 +696,4 @@ public class LivroPanel extends JPanel {
 			INSTANCE = new LivroPanel();
 		return INSTANCE;
 	}
-
-	public JButton getbAdd() {
-		return bAdd;
-	}
-
 }

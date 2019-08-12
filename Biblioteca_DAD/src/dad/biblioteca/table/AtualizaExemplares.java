@@ -9,6 +9,13 @@ import dad.recursos.Command;
 import dad.recursos.ConexaoLivros;
 import dad.recursos.Log;
 
+/**
+ * Classe que representa um comando para atualizar o número de exemplares de um livro,
+ * implementando as funções de undo e redo e guardando na base de dados.
+ * 
+ * @author Dário Pereira
+ *
+ */
 public class AtualizaExemplares implements Command {
 
 	private Connection con;

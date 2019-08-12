@@ -17,6 +17,12 @@ import dad.recursos.CriptografiaAES;
 import dad.recursos.Log;
 import dad.recursos.UndoManager;
 
+/**
+ * Classe que representa o TableModel para os clientes.
+ * 
+ * @author Dário Pereira
+ *
+ */
 public class TableModelUser extends AbstractTableModel {
 
 	/**
@@ -36,6 +42,10 @@ public class TableModelUser extends AbstractTableModel {
 		undoManager = new UndoManager();
 	}
 
+	/**
+	 * Faz upload da base de dados e cria o ArrayList com os clientes que
+	 * existirem na base de dados Users.
+	 */
 	public void uploadDataBase() {
 		users = new ArrayList<>();
 		try {
@@ -61,22 +71,21 @@ public class TableModelUser extends AbstractTableModel {
 		}
 	}
 
-	public static TableModelUser getInstance() {
-		if (INSTANCE == null) {
-			INSTANCE = new TableModelUser();
-		}
-		return INSTANCE;
-	}
-
 	public UndoManager getUndoManager() {
 		return undoManager;
 	}
 
+	/**
+	 * Configura os listeners para mudar o estado dos menus undo e redo.
+	 */
 	public void addListeners() {
 		undoManager.addPropertyChangeListener(e -> updateItems());
 		updateItems();
 	}
 
+	/**
+	 * Atualiza a disponibilidade e o texto dos menus Undo e Redo
+	 */
 	public void updateItems() {
 		DataGui.getInstance().getMenuAnular().setEnabled(undoManager.isUndoAvailable());
 		DataGui.getInstance().getMenuAnular().setText("Anular (Ctrl+Z) - (" + undoManager.getUndoName() + ")");
@@ -103,6 +112,10 @@ public class TableModelUser extends AbstractTableModel {
 		return users;
 	}
 
+	/**
+	 * Adiciona um cliente à base de dados.
+	 * @param user - cliente que se pretende adicionar.
+	 */
 	public void addUser(User user) {
 		undoManager.execute(new AddUser(user));
 		UserPanel.getInstance().clearTextFields();
@@ -113,6 +126,11 @@ public class TableModelUser extends AbstractTableModel {
 		return users.get(rowIndex);
 	}
 
+	/**
+	 * 
+	 * @param cpf - CPF que do cliente que se pretende consultar.
+	 * @return o cliente que tem o CPF dado, se existir; caso contrário retorna null
+	 */
 	public User getUserByCpf(String cpf) {
 		for (User user : users) {
 			if (user.getCpf().equals(cpf))
@@ -121,6 +139,12 @@ public class TableModelUser extends AbstractTableModel {
 		return null;
 	}
 
+	/**
+	 * Remove os cliente que têm os indexes passados no array rows.
+	 * 
+	 * @param rows
+	 *            - array que contém os indexes dos clientes para apagar.
+	 */
 	public void removeUser(int[] rows) {
 		undoManager.execute(new RemoverUser(rows));
 	}
@@ -196,12 +220,23 @@ public class TableModelUser extends AbstractTableModel {
 		}
 	}
 
+	/**
+	 * Método para inserir um cliente na base de dados, na posição pretendida.
+	 * @param user - cliente que se pretende inserir.
+	 * @param row - linha em que se pretende inserir o cliente.
+	 */
 	public void insertUser(User user, int pos) {
 		user.adicionarNaBaseDeDados();
 		users.add(pos, user);
 
 	}
 
+	/**
+	 * Classe que representa um comando para remover um ou vários clientes.
+	 * 
+	 * @author Dário Pereira
+	 *
+	 */
 	private class RemoverUser implements Command {
 
 		private int[] rows;
@@ -248,6 +283,12 @@ public class TableModelUser extends AbstractTableModel {
 		}
 	}
 
+	/**
+	 * Classe que representa um comando para adicionar um cliente.
+	 * 
+	 * @author Dário Pereira
+	 *
+	 */
 	private class AddUser implements Command {
 
 		private User user;
@@ -285,6 +326,13 @@ public class TableModelUser extends AbstractTableModel {
 		public String getName() {
 			return "Adicionar Cliente";
 		}
+	}
+	
+	public static TableModelUser getInstance() {
+		if (INSTANCE == null) {
+			INSTANCE = new TableModelUser();
+		}
+		return INSTANCE;
 	}
 
 }

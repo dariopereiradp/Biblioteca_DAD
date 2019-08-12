@@ -3,15 +3,21 @@ package dad.biblioteca;
 import java.util.Date;
 
 /**
- * 
+ * Classe que representa os funcionários (pessoas que têm login para entrar no programa).
  * @author Dário Pereira
  *
  */
 public class Funcionario {
 
 	private String nome;
+	/**
+	 * Número de vezes que esse funcionário fez login.
+	 */
 	private int num_acessos;
 	private Date data_ultimo_acesso;
+	/**
+	 * Data em que o funcionário foi registrado no programa.
+	 */
 	private Date data_criacao;
 
 	public Funcionario(String nome, int num_acessos, Date data_ultimo_acesso, Date data_criacao) {
@@ -38,11 +44,6 @@ public class Funcionario {
 		this.num_acessos = num_acessos;
 	}
 
-	public void novoAcesso() {
-		num_acessos++;
-		data_ultimo_acesso = new Date();
-	}
-
 	public Date getData_ultimo_acesso() {
 		return data_ultimo_acesso;
 	}
@@ -57,6 +58,14 @@ public class Funcionario {
 
 	public void setData_criacao(Date data_criacao) {
 		this.data_criacao = data_criacao;
+	}
+	
+	/**
+	 * Regista um novo login feito por esse funcionário.
+	 */
+	public void novoAcesso() {
+		num_acessos++;
+		data_ultimo_acesso = new Date();
 	}
 
 }

@@ -1,5 +1,10 @@
 package dad.biblioteca;
 
+/**
+ * Classe que representa um livro.
+ * @author Dário Pereira
+ *
+ */
 public class Livro extends Item implements Comparable<Livro> {
 
 	private String editora;
@@ -25,11 +30,6 @@ public class Livro extends Item implements Comparable<Livro> {
 		this.editora = editora;
 	}
 
-	@Override
-	public String toString() {
-		return super.getNome() + " | " + getAutor() + " | " + editora + " | " + getClassificacao() + " | " + isDisponivel()
-				+ " | " + getNumero_exemplares();
-	}
 
 	@Override
 	public int hashCode() {
@@ -65,6 +65,12 @@ public class Livro extends Item implements Comparable<Livro> {
 	@Override
 	public int compareTo(Livro o) {
 		return this.getNome().compareToIgnoreCase(o.getNome());
+	}
+	
+	@Override
+	public String toString() {
+		return super.getNome() + " | " + getAutor() + " | " + editora + " | " + getClassificacao() + " | " + isDisponivel()
+				+ " | " + getNumero_exemplares();
 	}
 
 }

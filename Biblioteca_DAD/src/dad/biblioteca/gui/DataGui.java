@@ -68,7 +68,10 @@ public class DataGui extends JFrame {
 	 * 
 	 */
 	private static final long serialVersionUID = 5748160687318648477L;
-	private static final int DELAY = 2200;
+	/**
+	 * Tempo de espera para a janela de informações fechar.
+	 */
+	private static final int DELAY = 2000;
 	private static DataGui INSTANCE;
 	private JTabbedPane tabbedPane;
 	private JTable media, outros;
@@ -111,69 +114,7 @@ public class DataGui extends JFrame {
 		filtrosPanel = new JPanel();
 		pesquisaPanel.add(filtrosPanel, BorderLayout.EAST);
 
-		checkID = new JCheckBox("ID");
-		checkID.setSelected(true);
-		filtrosPanel.add(checkID);
-
-		checkIDItem = new JCheckBox("ID do Item");
-		checkIDItem.setSelected(true);
-		filtrosPanel.add(checkIDItem);
-		checkIDItem.setVisible(false);
-
-		checkTitulo = new JCheckBox("T\u00EDtulo");
-		checkTitulo.setSelected(true);
-		filtrosPanel.add(checkTitulo);
-
-		checkAutor = new JCheckBox("Autor");
-		checkAutor.setSelected(true);
-		filtrosPanel.add(checkAutor);
-
-		checkEditora = new JCheckBox("Editora");
-		checkEditora.setSelected(true);
-		filtrosPanel.add(checkEditora);
-
-		checkClassificacao = new JCheckBox("Classifica\u00E7\u00E3o");
-		checkClassificacao.setSelected(true);
-		filtrosPanel.add(checkClassificacao);
-
-		checkLocal = new JCheckBox("Localiza\u00E7\u00E3o");
-		checkLocal.setSelected(true);
-		filtrosPanel.add(checkLocal);
-
-		checkDataEmp = new JCheckBox("Data do Empréstimo");
-		checkDataEmp.setSelected(true);
-		filtrosPanel.add(checkDataEmp);
-		checkDataEmp.setVisible(false);
-
-		checkDataDevol = new JCheckBox("Data de Devolução");
-		checkDataDevol.setSelected(true);
-		filtrosPanel.add(checkDataDevol);
-		checkDataDevol.setVisible(false);
-
-		checkCliente = new JCheckBox("Cliente");
-		checkCliente.setSelected(true);
-		filtrosPanel.add(checkCliente);
-		checkCliente.setVisible(false);
-
-		checkFuncionario = new JCheckBox("Funcionário");
-		checkFuncionario.setSelected(true);
-		filtrosPanel.add(checkFuncionario);
-		checkFuncionario.setVisible(false);
-
-		checkCpf = new JCheckBox("CPF");
-		checkCpf.setSelected(true);
-		filtrosPanel.add(checkCpf);
-		checkCpf.setVisible(false);
-
-		checkNome = new JCheckBox("Nome");
-		checkNome.setSelected(true);
-		filtrosPanel.add(checkNome);
-		checkNome.setVisible(false);
-
-		checkData_Nasc = new JCheckBox("Data de Nascimento");
-		checkData_Nasc.setSelected(true);
-		filtrosPanel.add(checkData_Nasc);
-		checkData_Nasc.setVisible(false);
+		inicializarFiltros();
 
 		tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		getContentPane().add(tabbedPane, BorderLayout.CENTER);
@@ -297,8 +238,8 @@ public class DataGui extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				String path = System.getenv("ProgramFiles(X86)") + System.getProperty("file.separator") + "Biblioteca Dádiva de Deus/"
-						+ "Manual_Instrucoes_Biblioteca_DAD_v" + Main.VERSION + ".pdf";
+				String path = System.getenv("ProgramFiles(X86)") + System.getProperty("file.separator")
+						+ "Biblioteca Dádiva de Deus/" + "Manual_Instrucoes_Biblioteca_DAD_v" + Main.VERSION + ".pdf";
 				try {
 					Desktop.getDesktop().open(new File(path));
 				} catch (Exception e1) {
@@ -391,6 +332,99 @@ public class DataGui extends JFrame {
 
 	}
 
+	/**
+	 * Abre a a DataGui e um diálogo de boas vindas
+	 */
+	public void open() {
+		setVisible(true);
+		JOptionPane pane = new JOptionPane("Bem vindo " + Login.NOME + "!", JOptionPane.INFORMATION_MESSAGE,
+				JOptionPane.DEFAULT_OPTION, new ImageIcon(getClass().getResource("/DAD_SS.jpg")), new Object[] {},
+				null);
+		final JDialog dialog = pane.createDialog("Boas vindas");
+		dialog.setModal(true);
+		dialog.setIconImage(Toolkit.getDefaultToolkit().getImage((getClass().getResource("/DAD.jpg"))));
+		Timer timer = new Timer(DELAY, new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				dialog.dispose();
+			}
+		});
+		timer.setRepeats(false);
+		timer.start();
+		dialog.setVisible(true);
+	}
+
+	/**
+	 * Inicializa as várias check-box de filtros.
+	 */
+	private void inicializarFiltros() {
+		checkID = new JCheckBox("ID");
+		checkID.setSelected(true);
+		filtrosPanel.add(checkID);
+
+		checkIDItem = new JCheckBox("ID do Item");
+		checkIDItem.setSelected(true);
+		filtrosPanel.add(checkIDItem);
+		checkIDItem.setVisible(false);
+
+		checkTitulo = new JCheckBox("T\u00EDtulo");
+		checkTitulo.setSelected(true);
+		filtrosPanel.add(checkTitulo);
+
+		checkAutor = new JCheckBox("Autor");
+		checkAutor.setSelected(true);
+		filtrosPanel.add(checkAutor);
+
+		checkEditora = new JCheckBox("Editora");
+		checkEditora.setSelected(true);
+		filtrosPanel.add(checkEditora);
+
+		checkClassificacao = new JCheckBox("Classifica\u00E7\u00E3o");
+		checkClassificacao.setSelected(true);
+		filtrosPanel.add(checkClassificacao);
+
+		checkLocal = new JCheckBox("Localiza\u00E7\u00E3o");
+		checkLocal.setSelected(true);
+		filtrosPanel.add(checkLocal);
+
+		checkDataEmp = new JCheckBox("Data do Empréstimo");
+		checkDataEmp.setSelected(true);
+		filtrosPanel.add(checkDataEmp);
+		checkDataEmp.setVisible(false);
+
+		checkDataDevol = new JCheckBox("Data de Devolução");
+		checkDataDevol.setSelected(true);
+		filtrosPanel.add(checkDataDevol);
+		checkDataDevol.setVisible(false);
+
+		checkCliente = new JCheckBox("Cliente");
+		checkCliente.setSelected(true);
+		filtrosPanel.add(checkCliente);
+		checkCliente.setVisible(false);
+
+		checkFuncionario = new JCheckBox("Funcionário");
+		checkFuncionario.setSelected(true);
+		filtrosPanel.add(checkFuncionario);
+		checkFuncionario.setVisible(false);
+
+		checkCpf = new JCheckBox("CPF");
+		checkCpf.setSelected(true);
+		filtrosPanel.add(checkCpf);
+		checkCpf.setVisible(false);
+
+		checkNome = new JCheckBox("Nome");
+		checkNome.setSelected(true);
+		filtrosPanel.add(checkNome);
+		checkNome.setVisible(false);
+
+		checkData_Nasc = new JCheckBox("Data de Nascimento");
+		checkData_Nasc.setSelected(true);
+		filtrosPanel.add(checkData_Nasc);
+		checkData_Nasc.setVisible(false);
+	}
+
+	/**
+	 * Apaga os logs dos meses anteriores, para limpar espaço no sistema.
+	 */
 	public void limpar() {
 		String logPath = Main.DATA_DIR + "Logs/";
 		String month_year = LocalDateTime.now().format(DateTimeFormatter.ofPattern("MMMyyyy")).toUpperCase();
@@ -418,6 +452,9 @@ public class DataGui extends JFrame {
 
 	}
 
+	/**
+	 * Cria um backup das bases de dados e imagens.
+	 */
 	public void backup() {
 		String message = "Deseja criar uma cópia de segurança de todas as bases de dados do programa?"
 				+ "\nObs: A cópia irá incluir as configurações, livros, empréstimos, clientes, funcionários e imagens, que serão salvos em um único ficheiro.\n"
@@ -441,6 +478,10 @@ public class DataGui extends JFrame {
 		}
 	}
 
+	/**
+	 * Atualiza os menus anular e refazer, de acordo com a tabela que estiver
+	 * ativa no momento.
+	 */
 	public void updateItems() {
 		if (tabbedPane.getSelectedIndex() == 0) {
 			TableModelLivro.getInstance().updateItems();
@@ -453,6 +494,13 @@ public class DataGui extends JFrame {
 
 	}
 
+	/**
+	 * Responsável por captar as teclas CTRL+Z e CTRL+Y, para anular e refazer,
+	 * respetivamente.
+	 * 
+	 * @author Dário Pereira
+	 *
+	 */
 	private class MyDispatcher implements KeyEventDispatcher {
 		@Override
 		public boolean dispatchKeyEvent(KeyEvent e) {
@@ -462,7 +510,6 @@ public class DataGui extends JFrame {
 				} else if ((e.getKeyCode() == KeyEvent.VK_Y) && ((e.getModifiers() & KeyEvent.CTRL_MASK) != 0)) {
 					refazer();
 				}
-
 			}
 			return false;
 		}
@@ -475,25 +522,43 @@ public class DataGui extends JFrame {
 	public JMenuItem getMenuRefazer() {
 		return menuRefazer;
 	}
-
-	public void open() {
-		setVisible(true);
-		JOptionPane pane = new JOptionPane("Bem vindo " + Login.NOME + "!", JOptionPane.INFORMATION_MESSAGE,
-				JOptionPane.DEFAULT_OPTION, new ImageIcon(getClass().getResource("/DAD_SS.jpg")), new Object[] {},
-				null);
-		final JDialog dialog = pane.createDialog("Boas vindas");
-		dialog.setModal(true);
-		dialog.setIconImage(Toolkit.getDefaultToolkit().getImage((getClass().getResource("/DAD.jpg"))));
-		Timer timer = new Timer(DELAY, new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				dialog.dispose();
-			}
-		});
-		timer.setRepeats(false);
-		timer.start();
-		dialog.setVisible(true);
+	
+	public JTextField getPesquisa() {
+		return pesquisa;
 	}
 
+	/**
+	 * Chama o método undo da tabela que estiver ativa.
+	 */
+	public void anular() {
+		if (tabbedPane.getSelectedIndex() == 0)
+			TableModelLivro.getInstance().getUndoManager().undo();
+		else if (tabbedPane.getSelectedIndex() == 4)
+			TableModelUser.getInstance().getUndoManager().undo();
+	}
+
+	/**
+	 * Chama o método redo da tabela que estiver ativa.
+	 */
+	public void refazer() {
+		if (tabbedPane.getSelectedIndex() == 0)
+			TableModelLivro.getInstance().getUndoManager().redo();
+		else if (tabbedPane.getSelectedIndex() == 4)
+			TableModelUser.getInstance().getUndoManager().redo();
+	}
+
+	/**
+	 * Ordena a tabela que estiver ativa, caso esteja disponível essa função.
+	 */
+	public void ordenar() {
+		if (tabbedPane.getSelectedIndex() == 0)
+			TableModelLivro.getInstance().ordenar();
+	}
+	
+	/**
+	 * Atualiza quais check-box estarão visíveis, dependendo da tabela que
+	 * estiver ativa.
+	 */
 	public void visibleBoxes() {
 		if (tabbedPane.getSelectedIndex() == 0) {
 			menuOrdenar.setEnabled(true);
@@ -564,33 +629,13 @@ public class DataGui extends JFrame {
 			checkData_Nasc.setVisible(true);
 			checkNome.setVisible(true);
 		}
-		// TODO
 		filtrosPanel.repaint();
 	}
 
-	public void anular() {
-		if (tabbedPane.getSelectedIndex() == 0)
-			TableModelLivro.getInstance().getUndoManager().undo();
-		else if (tabbedPane.getSelectedIndex() == 4)
-			TableModelUser.getInstance().getUndoManager().undo();
-		// TODO
-	}
-
-	public void refazer() {
-		if (tabbedPane.getSelectedIndex() == 0)
-			TableModelLivro.getInstance().getUndoManager().redo();
-		else if (tabbedPane.getSelectedIndex() == 4)
-			TableModelUser.getInstance().getUndoManager().redo();
-		// TODO
-	}
-
-	public void ordenar() {
-		if (tabbedPane.getSelectedIndex() == 0)
-			TableModelLivro.getInstance().ordenar();
-		// else if (tabbedPane.getSelectedIndex() == 1)
-		// TODO
-	}
-
+	/**
+	 * Verifica quantas check-box estão marcadas.
+	 * @return o número de check-box marcadas na tabela ativa.
+	 */
 	private int num_checkboxEnabled() {
 		int count = 0;
 		if (tabbedPane.getSelectedIndex() == 0) {
@@ -632,6 +677,10 @@ public class DataGui extends JFrame {
 		return count;
 	}
 
+	/**
+	 * 
+	 * @return um array contendo os indexes das colunas que estarão ativas no filtro, de acordo com as check box que estiverem marcadas.
+	 */
 	public int[] checkBoxEnabled() {
 		int count = 0;
 		int[] columns = new int[num_checkboxEnabled() + 3];
@@ -682,12 +731,10 @@ public class DataGui extends JFrame {
 		return columns;
 	}
 
-	public static DataGui getInstance() {
-		if (INSTANCE == null)
-			INSTANCE = new DataGui();
-		return INSTANCE;
-	}
-
+	/**
+	 * Realiza o filtro de pesquisa na tabela que estiver ativa e de acordo com as check box marcadas.
+	 * @param filtro - expressão que se pretende pesquisar
+	 */
 	public void filter(String filtro) {
 		if (tabbedPane.getSelectedIndex() == 0) {
 			TableRowSorter<TableModelLivro> sorter = new TableRowSorter<TableModelLivro>(TableModelLivro.getInstance());
@@ -713,6 +760,10 @@ public class DataGui extends JFrame {
 		}
 	}
 
+	/**
+	 * Realiza o filtro na tabela Empréstimos.
+	 * @param filtro - expressão que se pretende pesquisar
+	 */
 	public void filtrarEmprestimos(String filtro) {
 		TableRowSorter<TableModelEmprestimo> sorter = new TableRowSorter<TableModelEmprestimo>(
 				TableModelEmprestimo.getInstance());
@@ -732,6 +783,10 @@ public class DataGui extends JFrame {
 		}
 	}
 
+	/**
+	 * Realiza o filtro na tabela Clientes.
+	 * @param filtro - expressão que se pretende pesquisar
+	 */
 	public void filtrarUsers(String filtro) {
 		TableRowSorter<TableModelUser> sorter = new TableRowSorter<TableModelUser>(TableModelUser.getInstance());
 		UserPanel.getInstance().getUsers().setRowSorter(sorter);
@@ -750,6 +805,11 @@ public class DataGui extends JFrame {
 		}
 	}
 
+	/**
+	 * Filtra apenas os empréstimos que existem para o livro dado como argumento.
+	 * @param l - livro que se pretende filtrar.
+	 * @param table - tabela a que se pretende adicionar o filtro (em geral é a tabela pequena que se encontro no LivroDetail)
+	 */
 	public void filtrarEmprestimos(Livro l, JTable table) {
 		String filtro = String.valueOf(l.getId());
 		TableRowSorter<TableModelEmprestimo> sorter = new TableRowSorter<TableModelEmprestimo>(
@@ -761,6 +821,11 @@ public class DataGui extends JFrame {
 		setRenderers();
 	}
 
+	/**
+	 * Filtra apenas os empréstimos que existem para o cliente dado como argumento.
+	 * @param user - cliente que se pretende filtrar.
+	 * @param table - tabela a que se pretende adicionar o filtro (em geral é a tabela pequena que se encontro no UserDetail)
+	 */
 	public void filtrarEmprestimos(User user, JTable table) {
 		String filtro = String.valueOf(user.getCpf());
 		TableRowSorter<TableModelEmprestimo> sorter = new TableRowSorter<TableModelEmprestimo>(
@@ -772,6 +837,9 @@ public class DataGui extends JFrame {
 		setRenderers();
 	}
 
+	/**
+	 * Configura os renderers para cada coluna, de acordo com as check box que estão marcadas, indicando qual filtro está a ser utilizado.
+	 */
 	public void setRenderers() {
 		if (tabbedPane.getSelectedIndex() == 0) {
 			TableColumnModel tcl = LivroPanel.getInstance().getLivros().getColumnModel();
@@ -856,9 +924,11 @@ public class DataGui extends JFrame {
 		}
 
 	}
-
-	public JTextField getPesquisa() {
-		return pesquisa;
+	
+	public static DataGui getInstance() {
+		if (INSTANCE == null)
+			INSTANCE = new DataGui();
+		return INSTANCE;
 	}
 
 }

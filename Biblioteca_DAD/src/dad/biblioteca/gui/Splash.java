@@ -8,6 +8,11 @@ import javax.swing.ImageIcon;
 import javax.swing.SwingConstants;
 import java.awt.Font;
 
+/**
+ * Classe que representa a SplashScreen de abertura do programa.
+ * @author Dário Pereira
+ *
+ */
 public class Splash extends JWindow {
 
 	/**
@@ -49,6 +54,10 @@ public class Splash extends JWindow {
 
 	}
 	
+	/**
+	 * Incrementa a porcentagem para o valor definido em i.
+	 * @param i - valor que se pretende ficar na barra de progresso.
+	 */
 	public void incrementar(int i){
 		progressBar.setValue(i);
 	}

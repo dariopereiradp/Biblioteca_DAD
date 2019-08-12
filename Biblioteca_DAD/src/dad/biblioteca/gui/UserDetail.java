@@ -28,13 +28,18 @@ import com.toedter.calendar.JDateChooser;
 
 import dad.biblioteca.User;
 import dad.biblioteca.table.AtualizaUser;
-import dad.biblioteca.table.CompositeCommand;
 import dad.biblioteca.table.EmprestimoPanel;
 import dad.biblioteca.table.TableModelUser;
+import dad.recursos.CompositeCommand;
 import dad.recursos.Log;
 import mdlaf.animation.MaterialUIMovement;
 import mdlaf.utils.MaterialColors;
 
+/**
+ * Classe que permite visualizar e editar os detalhes de um cliente.
+ * @author Dário Pereira
+ *
+ */
 public class UserDetail {
 
 	private JFormattedTextField cpfN, telefone;
@@ -142,8 +147,6 @@ public class UserDetail {
 					JOptionPane.showMessageDialog(novo, "Escreva um nome!", "Nome vazio", JOptionPane.ERROR_MESSAGE,
 							new ImageIcon(getClass().getResource("/DAD_SS.jpg")));
 				else {
-					// user.setNome(nomeN.getText());
-					// user.setData_nascimento(date_nasc.getDate());
 					TableModelUser.getInstance().getUndoManager()
 							.execute(new CompositeCommand("Atualizar dados do cliente",
 									new AtualizaUser(TableModelUser.getInstance(), "Nome", user, nomeN.getText()),
@@ -191,6 +194,9 @@ public class UserDetail {
 		});
 	}
 
+	/**
+	 * Torna o diálogo visível.
+	 */
 	public void open() {
 		novo.setVisible(true);
 	}

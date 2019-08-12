@@ -45,25 +45,31 @@ import dad.biblioteca.Livro;
 import dad.biblioteca.User;
 import dad.biblioteca.gui.DataGui;
 import dad.recursos.CellRenderer;
-import dad.recursos.CellRenderer2;
+import dad.recursos.CellRendererMulta;
 import dad.recursos.CellRendererNoImage;
 import dad.recursos.RealizarEmprestimo;
 import dad.recursos.SairAction;
 import mdlaf.animation.MaterialUIMovement;
 import mdlaf.utils.MaterialColors;
 
+/**
+ * Classe que representa a tabela de Empréstimos na DataGui.
+ * 
+ * @author Dário Pereira
+ *
+ */
 public class EmprestimoPanel extends JPanel {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -5439324224974968781L;
 
 	private static EmprestimoPanel INSTANCE;
 	private JTable emprestimos;
 	private TableModelEmprestimo modelEmprestimo;
 	private JPanel pInferior, panel2, panel3;
 	private JTextField jtfTotal;
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -5439324224974968781L;
 	private String[] columnToolTips = { "ID do empréstimo", "ID do item", "Título do item",
 			"Data em que o empréstimo foi realizado", "Data máxima de devolução do empréstimo",
 			"CPF do cliente a quem foi feito o empréstimo", "Funcionário que realizou o empréstimo",
@@ -214,7 +220,7 @@ public class EmprestimoPanel extends JPanel {
 		emprestimos.getColumnModel().getColumn(0).setCellRenderer(new CellRendererNoImage());
 		emprestimos.getColumnModel().getColumn(1).setCellRenderer(new CellRendererNoImage());
 		emprestimos.getColumnModel().getColumn(7).setCellRenderer(new CellRendererNoImage());
-		emprestimos.getColumnModel().getColumn(8).setCellRenderer(new CellRenderer2());
+		emprestimos.getColumnModel().getColumn(8).setCellRenderer(new CellRendererMulta());
 
 		JScrollPane jsEmprestimos = new JScrollPane(emprestimos);
 		add(jsEmprestimos, BorderLayout.CENTER);
@@ -241,6 +247,73 @@ public class EmprestimoPanel extends JPanel {
 
 		inicializarBotoes();
 
+		inicializarMenus();
+
+		emprestimos.getInputMap().put(KeyStroke.getKeyStroke("DELETE"), "deleteRow");
+		emprestimos.getActionMap().put("deleteRow", new DeleteAction());
+
+		emprestimos.addMouseListener(new MouseAdapter() {
+			public void mousePressed(MouseEvent mouseEvent) {
+				JTable table = (JTable) mouseEvent.getSource();
+				Point point = mouseEvent.getPoint();
+				int column = table.columnAtPoint(point);
+				int rowAtPoint = table.rowAtPoint(point);
+				if (rowAtPoint != -1) {
+					int row = table.convertRowIndexToModel(rowAtPoint);
+					if (mouseEvent.getClickCount() == 2 && table.getSelectedRow() != -1) {
+						if (column == 0 || column == 2 || column == 3 || column == 4 || column == 6 || column == 7
+								|| column == 8)
+							abrir(modelEmprestimo.getEmprestimo(row));
+						else if (column == 1) {
+							try {
+								LivroPanel.getInstance().abrir(TableModelLivro.getInstance()
+										.getLivroById((Integer) table.getValueAt(rowAtPoint, column)));
+							} catch (NullPointerException e) {
+								JOptionPane.showMessageDialog(null,
+										"Atenção! O livro já não existe na base de dados. Deve ter sido apagado!",
+										"ERRO", JOptionPane.ERROR_MESSAGE,
+										new ImageIcon(getClass().getResource("/DAD_SS.jpg")));
+							}
+						} else if (column == 5) {
+							try {
+								UserPanel.getInstance().abrir(TableModelUser.getInstance()
+										.getUserByCpf((String) table.getValueAt(rowAtPoint, column)));
+							} catch (NullPointerException e) {
+								JOptionPane.showMessageDialog(null,
+										"Atenção! O cliente já não existe na base de dados. Deve ter sido apagado!",
+										"ERRO", JOptionPane.ERROR_MESSAGE,
+										new ImageIcon(getClass().getResource("/DAD_SS.jpg")));
+							}
+						}
+					}
+				}
+			}
+		});
+
+		KeyStroke enter = KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0);
+		emprestimos.getInputMap(JTable.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(enter, "solve");
+		emprestimos.getActionMap().put("solve", new AbstractAction() {
+
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = -833616209546223519L;
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (emprestimos.getSelectedRows().length == 1)
+					abrir(modelEmprestimo
+							.getEmprestimo(emprestimos.convertRowIndexToModel(emprestimos.getSelectedRow())));
+
+			}
+		});
+
+	}
+
+	/**
+	 * Inicializa o menu do botão direito da tabela Empréstimos.
+	 */
+	private void inicializarMenus() {
 		JMenuItem deleteItem = new JMenuItem("Apagar");
 		deleteItem.addActionListener(new ActionListener() {
 
@@ -319,68 +392,11 @@ public class EmprestimoPanel extends JPanel {
 		popupMenu.setPopupSize(225, 75);
 
 		emprestimos.setComponentPopupMenu(popupMenu);
-
-		emprestimos.getInputMap().put(KeyStroke.getKeyStroke("DELETE"), "deleteRow");
-		emprestimos.getActionMap().put("deleteRow", new DeleteAction());
-
-		emprestimos.addMouseListener(new MouseAdapter() {
-			public void mousePressed(MouseEvent mouseEvent) {
-				JTable table = (JTable) mouseEvent.getSource();
-				Point point = mouseEvent.getPoint();
-				int column = table.columnAtPoint(point);
-				int rowAtPoint = table.rowAtPoint(point);
-				if (rowAtPoint != -1) {
-					int row = table.convertRowIndexToModel(rowAtPoint);
-					if (mouseEvent.getClickCount() == 2 && table.getSelectedRow() != -1) {
-						if (column == 0 || column == 2 || column == 3 || column == 4 || column == 6 || column == 7
-								|| column == 8)
-							abrir(modelEmprestimo.getEmprestimo(row));
-						else if (column == 1) {
-							try {
-								LivroPanel.getInstance().abrir(TableModelLivro.getInstance()
-										.getLivroById((Integer) table.getValueAt(rowAtPoint, column)));
-							} catch (NullPointerException e) {
-								JOptionPane.showMessageDialog(null,
-										"Atenção! O livro já não existe na base de dados. Deve ter sido apagado!",
-										"ERRO", JOptionPane.ERROR_MESSAGE,
-										new ImageIcon(getClass().getResource("/DAD_SS.jpg")));
-							}
-						} else if (column == 5) {
-							try {
-								UserPanel.getInstance().abrir(TableModelUser.getInstance()
-										.getUserByCpf((String) table.getValueAt(rowAtPoint, column)));
-							} catch (NullPointerException e) {
-								JOptionPane.showMessageDialog(null,
-										"Atenção! O cliente já não existe na base de dados. Deve ter sido apagado!",
-										"ERRO", JOptionPane.ERROR_MESSAGE,
-										new ImageIcon(getClass().getResource("/DAD_SS.jpg")));
-							}
-						}
-					}
-				}
-			}
-		});
-
-		KeyStroke enter = KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0);
-		emprestimos.getInputMap(JTable.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(enter, "solve");
-		emprestimos.getActionMap().put("solve", new AbstractAction() {
-
-			/**
-			 * 
-			 */
-			private static final long serialVersionUID = -833616209546223519L;
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if (emprestimos.getSelectedRows().length == 1)
-					abrir(modelEmprestimo
-							.getEmprestimo(emprestimos.convertRowIndexToModel(emprestimos.getSelectedRow())));
-
-			}
-		});
-
 	}
 
+	/**
+	 * Inicializa os botões da tabela.
+	 */
 	public void inicializarBotoes() {
 		pInferior.add(panel2, BorderLayout.WEST);
 		JButton bSair = new JButton("SAIR");
@@ -400,6 +416,11 @@ public class EmprestimoPanel extends JPanel {
 		MaterialUIMovement.add(jb, MaterialColors.GRAY_300, 5, 1000 / 30);
 	}
 
+	/**
+	 * 
+	 * @return um array com todos os indexes do modelo dos empréstimos que estão
+	 *         selecionados.
+	 */
 	public int[] convertRowsIndextoModel() {
 		int[] rows = emprestimos.getSelectedRows();
 		for (int i = 0; i < rows.length; i++) {
@@ -408,6 +429,9 @@ public class EmprestimoPanel extends JPanel {
 		return rows;
 	}
 
+	/**
+	 * Remove os empréstimos que estiverem selecionados.
+	 */
 	public void removerEmprestimos() {
 		int[] rows = convertRowsIndextoModel();
 		if (rows.length > 0) {
@@ -429,13 +453,13 @@ public class EmprestimoPanel extends JPanel {
 		this.emprestimos = emprestimos;
 	}
 
+	/**
+	 * Abre as informações e detalhes de um empréstimo.
+	 * 
+	 * @param emp
+	 */
 	public void abrir(Emprestimo emp) {
 		new RealizarEmprestimo(emp).open();
-	}
-
-	public void realizarEmprestimo(Livro l) {
-		new RealizarEmprestimo(l).open();
-
 	}
 
 	public JTextField getJtfTotal() {
@@ -461,6 +485,14 @@ public class EmprestimoPanel extends JPanel {
 		return INSTANCE;
 	}
 
+	/**
+	 * Devolve uma nova tabela de Empréstimos com o filtro ativo para o objeto
+	 * passado como parâmetro (User ou Livro)
+	 * 
+	 * @param object
+	 *            - User ou Livro que se pretende filtrar
+	 * @return - a nova tabela
+	 */
 	public JTable getSmallTable(Object object) {
 		JTable small = new JTable(TableModelEmprestimo.getInstance()) {
 			/**
@@ -520,12 +552,12 @@ public class EmprestimoPanel extends JPanel {
 			Livro l = (Livro) object;
 			small.removeColumn(small.getColumnModel().getColumn(1));
 			small.removeColumn(small.getColumnModel().getColumn(1));
-			small.getColumnModel().getColumn(6).setCellRenderer(new CellRenderer2());
+			small.getColumnModel().getColumn(6).setCellRenderer(new CellRendererMulta());
 			DataGui.getInstance().filtrarEmprestimos(l, small);
-		} else if(object instanceof User){
+		} else if (object instanceof User) {
 			User user = (User) object;
 			small.removeColumn(small.getColumnModel().getColumn(5));
-			small.getColumnModel().getColumn(7).setCellRenderer(new CellRenderer2());
+			small.getColumnModel().getColumn(7).setCellRenderer(new CellRendererMulta());
 			DataGui.getInstance().filtrarEmprestimos(user, small);
 		}
 

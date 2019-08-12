@@ -1,7 +1,10 @@
-package dad.biblioteca.table;
+package dad.recursos;
 
-import dad.recursos.Command;
-
+/**
+ * Classe que representa um comando composto por vários outros comandos.
+ * @author Dário Pereira
+ *
+ */
 public class CompositeCommand implements Command {
 
 	private Command[] commands;

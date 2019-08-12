@@ -19,8 +19,8 @@ import javax.swing.ImageIcon;
 import dad.biblioteca.Item;
 
 /**
- * 
- * @author https://www.oodlestechnologies.com/blogs/Image-Compression-In-Java
+ * Classe para realizar a compressão de uma imagem.
+ * @author <a href=" https://www.oodlestechnologies.com/blogs/Image-Compression-In-Java">Link</a>
  *
  */
 public class ImageCompression {

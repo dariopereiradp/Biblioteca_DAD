@@ -8,6 +8,7 @@ import dad.biblioteca.Item;
 import dad.biblioteca.Livro;
 import dad.biblioteca.gui.DataGui;
 import dad.recursos.Command;
+import dad.recursos.CompositeCommand;
 import dad.recursos.ConexaoLivros;
 import dad.recursos.Log;
 import dad.recursos.UndoManager;
@@ -18,6 +19,12 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * Classe que representa o TableModel para os livros.
+ * 
+ * @author Dário Pereira
+ *
+ */
 public class TableModelLivro extends AbstractTableModel {
 
 	/**
@@ -39,6 +46,10 @@ public class TableModelLivro extends AbstractTableModel {
 		undoManager = new UndoManager();
 	}
 
+	/**
+	 * Faz upload da base de dados e cria o ArrayList com os livros que
+	 * existirem na base de dados Livros.
+	 */
 	public void uploadDataBase() {
 		livros = new ArrayList<>();
 		int maior = 0;
@@ -81,6 +92,15 @@ public class TableModelLivro extends AbstractTableModel {
 		}
 	}
 
+	/**
+	 * Devolve um livro igual ao livro passado como parâmetro e que existe no
+	 * ArrayList.
+	 * 
+	 * @param l
+	 *            - livro que se pretende verificar
+	 * @return se existir um livro igual, devolve esse livro; se não existir,
+	 *         devolve o próprio livro passado como argumento
+	 */
 	public Livro getLivro(Livro l) {
 		for (int i = 0; i < livros.size(); i++) {
 			if (livros.get(i).equals(l))
@@ -89,6 +109,14 @@ public class TableModelLivro extends AbstractTableModel {
 		return l;
 	}
 
+	/**
+	 * 
+	 * @param id
+	 *            - id que se pretende consultar para devolver o livro
+	 *            correspondente.
+	 * @return - o livro que tem o id passado como parâmetro, caso exista. Caso
+	 *         contrário devolve null.
+	 */
 	public Livro getLivroById(int id) {
 		for (int i = 0; i < livros.size(); i++) {
 			if (livros.get(i).getId() == id)
@@ -97,11 +125,20 @@ public class TableModelLivro extends AbstractTableModel {
 		return null;
 	}
 
+	/**
+	 * Configura os listeners para mudar o estado dos menus undo e redo.
+	 */
 	public void addListeners() {
 		undoManager.addPropertyChangeListener(e -> updateItems());
 		updateItems();
 	}
 
+	/**
+	 * Adiciona um livro à base de dados.
+	 * 
+	 * @param livro
+	 *            - livro que se pretende adicionar.
+	 */
 	public void addLivro(Livro livro) {
 		if (livros.contains(livro))
 			incrementarLivro(livro, false);
@@ -112,10 +149,23 @@ public class TableModelLivro extends AbstractTableModel {
 
 	}
 
+	/**
+	 * Remove os livros que têm os indexes passados no array rows.
+	 * 
+	 * @param rows
+	 *            - array que contém os indexes dos livros para apagar.
+	 */
 	public void removeLivros(int[] rows) {
 		undoManager.execute(new RemoverLivro(rows));
 	}
 
+	/**
+	 * Remove um exemplar dos livros que têm os indexes passados no array rows.
+	 * 
+	 * @param rows
+	 *            - array que contém os indexes dos livros para apagar o
+	 *            exemplar.
+	 */
 	public void removeExemplar(int[] rows) {
 		undoManager.execute(new RemoverExemplar(rows));
 	}
@@ -124,9 +174,17 @@ public class TableModelLivro extends AbstractTableModel {
 		return livros.get(rowIndex);
 	}
 
+	/**
+	 * Pergunta se quer incrementar um exemplar ao livro já existente.
+	 * 
+	 * @param l
+	 * @return true - se pretende incrementar e apagar os empréstimos ligados
+	 *         àquele livro (se existirem) <br>
+	 *         - false caso contrário
+	 */
 	public boolean perguntaIncrementar(Livro l) {
 		int ok = JOptionPane.showConfirmDialog(DataGui.getInstance(),
-				"Esse livro já existe! Deseja aumentar uma unidade ao livro já existente?", "Livro já existe",
+				"Esse livro já existe! Deseja aumentar um exemplar ao livro já existente?", "Livro já existe",
 				JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE,
 				new ImageIcon(getClass().getResource("/DAD_SS.jpg")));
 		if (ok == JOptionPane.OK_OPTION) {
@@ -148,6 +206,15 @@ public class TableModelLivro extends AbstractTableModel {
 			return false;
 	}
 
+	/**
+	 * Incrementa um exemplar ao livro passado como parâmetro, se deseja
+	 * confirmar.
+	 * 
+	 * @param livro
+	 * @param undo
+	 *            - verifica se o método é chamado manualmente ou através de uma
+	 *            operação de undo.
+	 */
 	public void incrementarLivro(Livro livro, boolean undo) {
 		if (!undo) {
 			if (perguntaIncrementar(livro)) {
@@ -169,6 +236,11 @@ public class TableModelLivro extends AbstractTableModel {
 		return livros.size();
 	}
 
+	/**
+	 *
+	 * @param l
+	 * @return a linha que o livro está posicionado no ArrayList.
+	 */
 	public int getRow(Livro l) {
 		for (int i = 0; i < livros.size(); i++) {
 			if (livros.get(i).getId() == l.getId())
@@ -177,6 +249,10 @@ public class TableModelLivro extends AbstractTableModel {
 		return -1;
 	}
 
+	/**
+	 * 
+	 * @return o número de livros que estão disponíveis para empréstimo.
+	 */
 	public int getNumLivrosDisponiveis() {
 		int n = 0;
 		for (Livro l : livros) {
@@ -311,13 +387,11 @@ public class TableModelLivro extends AbstractTableModel {
 		}
 	}
 
-	public static TableModelLivro getInstance() {
-		if (INSTANCE == null)
-			INSTANCE = new TableModelLivro();
-		return INSTANCE;
-	}
-
-	public void atualizaExemplares(Livro livro) {
+	/**
+	 * Comando para atualizar o número de exemplares disponíveis e a coluna Disponível na base de dados.
+	 * @param livro - livro que se pretende atualizar.
+	 */
+	public void atualizaExemplaresDisponiveis(Livro livro) {
 		try {
 			pst = con.prepareStatement("update livros set Disponíveis=? where ID=" + livro.getId());
 			pst.setString(1, String.valueOf(livro.getN_exemp_disponiveis()));
@@ -332,7 +406,7 @@ public class TableModelLivro extends AbstractTableModel {
 		} catch (
 
 		SQLException e) {
-			Log.getInstance().printLog("Erro ao atualizar número de exemplares");
+			Log.getInstance().printLog("Erro ao atualizar número de exemplares disponíveis");
 		}
 	}
 
@@ -345,6 +419,9 @@ public class TableModelLivro extends AbstractTableModel {
 		return undoManager;
 	}
 
+	/**
+	 * Atualiza a disponibilidade e o texto dos menus Undo e Redo
+	 */
 	public void updateItems() {
 		DataGui.getInstance().getMenuAnular().setEnabled(undoManager.isUndoAvailable());
 		DataGui.getInstance().getMenuAnular().setText("Anular (Ctrl+Z) - (" + undoManager.getUndoName() + ")");
@@ -352,6 +429,11 @@ public class TableModelLivro extends AbstractTableModel {
 		DataGui.getInstance().getMenuRefazer().setText("Refazer (Ctrl+Y) - (" + undoManager.getRedoName() + ")");
 	}
 
+	/**
+	 * Método para inserir um livro na base de dados, na posição pretendida.
+	 * @param livro - livro que se pretende inserir.
+	 * @param row - linha em que se pretende inserir o livro.
+	 */
 	private void insertLivro(Livro livro, int row) {
 		try {
 			pst = con.prepareStatement(
@@ -381,6 +463,10 @@ public class TableModelLivro extends AbstractTableModel {
 		}
 	}
 
+	/**
+	 * Método para incrementar os exemplares de um livro na base de dados.
+	 * @param livro - livro que se pretende incrementar
+	 */
 	private void incLivro(Livro livro) {
 		try {
 			Livro l = getLivro(livro);
@@ -399,6 +485,12 @@ public class TableModelLivro extends AbstractTableModel {
 		}
 	}
 
+	/**
+	 * Classe que representa um comando para adicionar um livro.
+	 * 
+	 * @author Dário Pereira
+	 *
+	 */
 	private class AddLivro implements Command {
 
 		private Livro livro;
@@ -437,6 +529,12 @@ public class TableModelLivro extends AbstractTableModel {
 		}
 	}
 
+	/**
+	 * Classe que representa um comando para incrementar os exemplares de um livro.
+	 * 
+	 * @author Dário Pereira
+	 *
+	 */
 	private class IncLivro implements Command {
 
 		private Livro livro;
@@ -480,6 +578,12 @@ public class TableModelLivro extends AbstractTableModel {
 		}
 	}
 
+	/**
+	 * Classe que representa um comando para remover um ou vários livros.
+	 * 
+	 * @author Dário Pereira
+	 *
+	 */
 	private class RemoverLivro implements Command {
 
 		private int[] rows;
@@ -542,6 +646,13 @@ public class TableModelLivro extends AbstractTableModel {
 		}
 	}
 
+	/**
+	 * Classe que representa um comando para remover um exemlar de um ou vários
+	 * livros ou remover o livro, se existir apenas um exemplar.
+	 * 
+	 * @author Dário Pereira
+	 *
+	 */
 	private class RemoverExemplar implements Command {
 
 		private int[] rows;
@@ -557,10 +668,25 @@ public class TableModelLivro extends AbstractTableModel {
 				ArrayList<Livro> remover = new ArrayList<>();
 				for (int i = 0; i < rows.length; i++) {
 					if (livros.get(rows[i]).getNumero_exemplares() == 1) {
-						pst = con.prepareStatement("delete from livros where ID=" + livros.get(rows[i]).getId());
-						pst.execute();
-						remover.add(livros.get(rows[i]));
-						modificou.add(livros.get(rows[i]));
+						Livro l = livros.get(rows[i]);
+						if (TableModelEmprestimo.getInstance().getEmprestimosByItem(l).length > 0) {
+							int ok = JOptionPane.showConfirmDialog(null,
+									"ATENÇÃO! O livro " + l.getNome()
+											+ " tem empréstimos registados na base de dados!\nSe clicar em 'OK' todos os empréstimos ligados a esse livro serão apagados!\n"
+											+ "Embora seja possível anular a ação de apagar o livro, os histórico de empréstimos para esse livro será perdido definitivamente!\n"
+											+ "Tem a certeza que quer apagar?",
+									"APAGAR", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE,
+									new ImageIcon(getClass().getResource("/DAD_SS.jpg")));
+							if (ok == JOptionPane.OK_OPTION) {
+								pst = con
+										.prepareStatement("delete from livros where ID=" + livros.get(rows[i]).getId());
+								pst.execute();
+								remover.add(livros.get(rows[i]));
+								modificou.add(livros.get(rows[i]));
+								TableModelEmprestimo.getInstance()
+										.removeEmprestimos(TableModelEmprestimo.getInstance().getEmprestimosByItem(l));
+							}
+						}
 					} else {
 						pst = con.prepareStatement(
 								"update livros set Exemplares=? where ID=" + livros.get(rows[i]).getId());
@@ -607,10 +733,19 @@ public class TableModelLivro extends AbstractTableModel {
 		}
 	}
 
+	/**
+	 * Ordena a tabela de livros pela ordem natural.
+	 */
 	public void ordenar() {
 		livros.sort(null);
 		fireTableDataChanged();
 		Log.getInstance().printLog("Livros ordenados com sucesso");
+	}
+
+	public static TableModelLivro getInstance() {
+		if (INSTANCE == null)
+			INSTANCE = new TableModelLivro();
+		return INSTANCE;
 	}
 
 }

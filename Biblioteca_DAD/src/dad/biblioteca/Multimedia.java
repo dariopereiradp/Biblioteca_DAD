@@ -1,5 +1,10 @@
 package dad.biblioteca;
 
+/**
+ *  Classe que representa itens de multimédia: cds, dvds e outros.
+ * @author Dário Pereira
+ *
+ */
 public class Multimedia extends Item {
 
 	// título (nome), artista (autor), classificação

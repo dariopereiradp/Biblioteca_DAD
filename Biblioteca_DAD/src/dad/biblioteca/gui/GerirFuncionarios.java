@@ -15,6 +15,11 @@ import dad.biblioteca.table.TableModelFuncionario;
 
 import javax.swing.JTable;
 
+/**
+ * Classe que mostra os funcionários que estão registrados no sistema.
+ * @author Dário Pereira
+ *
+ */
 public class GerirFuncionarios extends JDialog {
 
 	/**
@@ -61,6 +66,9 @@ public class GerirFuncionarios extends JDialog {
 		}
 	}
 	
+	/**
+	 * Torna o diálogo visível.
+	 */
 	public void open(){
 		setVisible(true);
 	}

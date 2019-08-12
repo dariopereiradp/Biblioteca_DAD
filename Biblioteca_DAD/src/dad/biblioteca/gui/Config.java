@@ -30,6 +30,11 @@ import java.text.ParseException;
 import java.awt.Color;
 import javax.swing.JFormattedTextField;
 
+/**
+ * Classe que representa o diálogo de configurações.
+ * @author Dário Pereira
+ *
+ */
 public class Config extends JDialog {
 
 	/**
@@ -84,6 +89,7 @@ public class Config extends JDialog {
 			}
 		});
 		bAddFuncionrio.setBounds(25, 130, 240, 25);
+		LivroDetail.personalizarBotao(bAddFuncionrio);
 		contentPanel.add(bAddFuncionrio);
 
 		JLabel lBemVindo = new JLabel("Bem vindo! Est\u00E1 ligado como " + Login.NOME);
@@ -99,7 +105,7 @@ public class Config extends JDialog {
 						JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE,
 						new ImageIcon(getClass().getResource("/DAD_SS.jpg")));
 				if (ok == JOptionPane.OK_OPTION) {
-					if (String.valueOf(pass.getPassword()).equals(Main.PASS))
+					if (String.valueOf(pass.getPassword()).equals(Main.ADMIN_PASS))
 						new GerirFuncionarios().open();
 					else
 						JOptionPane.showMessageDialog(null, "Senha errada!", "SENHA ERRADA", JOptionPane.OK_OPTION,
@@ -109,6 +115,7 @@ public class Config extends JDialog {
 			}
 		});
 		bGerirFunc.setBounds(25, 166, 240, 25);
+		LivroDetail.personalizarBotao(bGerirFunc);
 		contentPanel.add(bGerirFunc);
 		if (!Login.NOME.equals("admin")) {
 			bGerirFunc.setEnabled(false);
@@ -122,6 +129,7 @@ public class Config extends JDialog {
 			}
 		});
 		bAlterarPass.setBounds(25, 202, 240, 25);
+		LivroDetail.personalizarBotao(bAlterarPass);
 		if (Login.NOME.equals("admin")) {
 			bAlterarPass.setEnabled(false);
 			bAlterarPass.setToolTipText("Não é possível alterar a senha do utilizador 'admin'!");
@@ -133,8 +141,12 @@ public class Config extends JDialog {
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			{
 				JButton okButton = new JButton("OK");
+				LivroDetail.personalizarBotao(okButton);
 				okButton.addActionListener(new ActionListener() {
 
+					/**
+					 * Se o funcionário alterou o valor da multa, esse método salva um novo ficheiro 'conf.dad' com o novo valor da multa.
+					 */
 					@Override
 					public void actionPerformed(ActionEvent e) {
 						double multaValor = Double.valueOf(multa.getText().trim().replace("R$", ""));
@@ -150,7 +162,7 @@ public class Config extends JDialog {
 										JOptionPane.QUESTION_MESSAGE,
 										new ImageIcon(getClass().getResource("/DAD_SS.jpg")));
 								if (ok1 == JOptionPane.OK_OPTION) {
-									if (String.valueOf(pass.getPassword()).equals(Main.PASS)) {
+									if (String.valueOf(pass.getPassword()).equals(Main.ADMIN_PASS)) {
 										Emprestimo.MULTA = multaValor;
 										TableModelEmprestimo.getInstance().atualizarMultas();
 										File conf = new File(
@@ -188,6 +200,7 @@ public class Config extends JDialog {
 			}
 			{
 				JButton cancelButton = new JButton("Cancelar");
+				LivroDetail.personalizarBotao(cancelButton);
 				cancelButton.addActionListener(new ActionListener() {
 
 					@Override
@@ -201,6 +214,9 @@ public class Config extends JDialog {
 		}
 	}
 
+	/**
+	 * Torna o diálogo visível.
+	 */
 	public void open() {
 		this.setVisible(true);
 	}

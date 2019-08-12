@@ -32,6 +32,13 @@ import java.util.Date;
 import javax.swing.SwingConstants;
 import javax.swing.JCheckBox;
 
+/**
+ * Classe que permite escolher o que se deseja restaurar de uma cópia de
+ * segurança.
+ * 
+ * @author Dário Pereira
+ *
+ */
 public class Restauro extends JDialog {
 
 	/**
@@ -138,6 +145,11 @@ public class Restauro extends JDialog {
 		}
 	}
 
+	/**
+	 * Extrai os arquivos da cópia de segurança para uma pasta temporária,
+	 * mantendo apenas aqueles que foram selecionados nas check-box e depois
+	 * encerra o programa.
+	 */
 	public void restaurar() {
 		String tempDir = Main.DATA_DIR + "temp/";
 		File temp = new File(tempDir);
@@ -178,6 +190,10 @@ public class Restauro extends JDialog {
 
 	}
 
+	/**
+	 * Abre um JFileChooser para escolher a base de dados que se deseja
+	 * restaurar, depois abre os diálogos.
+	 */
 	public void open() {
 		JFileChooser jfc = new JFileChooser(Main.BACKUP_DIR);
 		jfc.setDialogTitle("Selecione o arquivo da cópia de segurança que deseja restaurar");

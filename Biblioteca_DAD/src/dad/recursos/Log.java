@@ -11,6 +11,11 @@ import java.util.logging.SimpleFormatter;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
+/**
+ * Classe para criar ficheiros de log do programa.
+ * @author Dário Pereira
+ *
+ */
 public class Log {
 
 	private static Log INSTANCE;
@@ -44,6 +49,9 @@ public class Log {
 
 	}
 
+	/**
+	 * Cria a conexão com o ficheiro de log correspondente, deixando pronto para escrever.
+	 */
 	public void open() {
 		try {
 			fh = new FileHandler(name);
@@ -60,19 +68,26 @@ public class Log {
 			e.printStackTrace();
 		}
 	}
-
-	public static Log getInstance() {
-		if (INSTANCE == null)
-			INSTANCE = new Log();
-		return INSTANCE;
+	
+	/**
+	 * Fecha a conexão com o ficheiro do log.
+	 */
+	public void close(){
+		fh.close();
 	}
-
+	
+	/**
+	 * Imprime uma mensagem de log no ficheiro de log correspondente.
+	 * @param message
+	 */
 	public void printLog(String message) {
 		logger.info(message + "\n");
 	}
 	
-	public void close(){
-		fh.close();
+	public static Log getInstance() {
+		if (INSTANCE == null)
+			INSTANCE = new Log();
+		return INSTANCE;
 	}
 
 }

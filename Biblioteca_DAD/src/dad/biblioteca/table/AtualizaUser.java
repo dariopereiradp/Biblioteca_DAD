@@ -13,6 +13,13 @@ import dad.recursos.ConexaoUser;
 import dad.recursos.CriptografiaAES;
 import dad.recursos.Log;
 
+/**
+ * Classe que representa um comando para atualizar as informações de um cliente,
+ * implementando as funções de undo e redo e guardando na base de dados.
+ * 
+ * @author Dário Pereira
+ *
+ */
 public class AtualizaUser implements Command {
 
 	private Connection con;

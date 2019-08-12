@@ -13,6 +13,11 @@ import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.Toolkit;
 
+/**
+ * Classe para visualizar uma imagem.
+ * @author Dário Pereira
+ *
+ */
 public class ImageViewer {
 
 	public static void show(ImageIcon img) {

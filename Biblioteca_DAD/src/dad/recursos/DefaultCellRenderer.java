@@ -6,6 +6,10 @@ import javax.swing.ImageIcon;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 
+/** Classe para renderer padrão das células de uma tabela.
+ * @author Dário Pereira
+ *
+ */
 public class DefaultCellRenderer extends DefaultTableCellRenderer {
 	
 	/**

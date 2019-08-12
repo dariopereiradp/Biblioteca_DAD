@@ -21,6 +21,11 @@ import java.awt.event.ActionListener;
 import java.awt.Color;
 import javax.swing.JTextField;
 
+/**
+ * Classe que representa e mostra as estatísticas das bases de dados da biblioteca.
+ * @author Dário Pereira
+ *
+ */
 public class Estatisticas extends JDialog {
 
 	/**
@@ -141,6 +146,9 @@ public class Estatisticas extends JDialog {
 		}
 	}
 	
+	/**
+	 * Torna o diálogo visível.
+	 */
 	public void open(){
 		setVisible(true);
 	}

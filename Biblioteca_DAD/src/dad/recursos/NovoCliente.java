@@ -28,6 +28,11 @@ import dad.biblioteca.table.TableModelUser;
 import mdlaf.animation.MaterialUIMovement;
 import mdlaf.utils.MaterialColors;
 
+/**
+ * Classe que apresenta um diálogo para criar um novo cliente.
+ * @author Dário Pereira
+ *
+ */
 public class NovoCliente {
 
 	private static JFormattedTextField telefone;
@@ -88,7 +93,7 @@ public class NovoCliente {
 			}
 
 			JLabel lPhone = new JLabel("Telefone: ");
-			lPhone.setFont(new Font("Roboto", Font.BOLD, 15));
+			lPhone.setFont(new Font("Roboto", Font.PLAIN, 12));
 
 			novo.getContentPane().add(lPhone);
 			novo.getContentPane().add(telefone);
@@ -119,9 +124,9 @@ public class NovoCliente {
 						JOptionPane.showMessageDialog(novo, "Escreva um nome!", "Nome vazio", JOptionPane.ERROR_MESSAGE,
 								new ImageIcon(getClass().getResource("/DAD_SS.jpg")));
 					else {
-						User user = User.newUser(nomeN.getText(), date_nasc.getDate(), cpfString,
+						User user = new User(nomeN.getText(), date_nasc.getDate(), cpfString,
 								telefone.getText().replace("-", "").replace("(", "").replace(")", "").replace(" ", ""),
-								1);
+								1, false);
 						TableModelUser.getInstance().addUser(user);
 						Log.getInstance().printLog("Novo cliente criado com sucesso:\n" + user.toText());
 						emp.getNome().setText(nomeN.getText());

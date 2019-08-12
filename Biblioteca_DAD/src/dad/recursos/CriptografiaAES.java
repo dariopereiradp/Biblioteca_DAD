@@ -11,6 +11,7 @@ import javax.swing.JOptionPane;
 import org.apache.commons.codec.binary.Base64;
 
 /**
+ * Classe para fazer criptografia usando a tecnologia AES. <br>
  * Aes encryption
  */
 public class CriptografiaAES {

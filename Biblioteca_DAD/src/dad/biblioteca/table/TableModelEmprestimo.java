@@ -18,6 +18,12 @@ import dad.recursos.ConexaoEmprestimos;
 import dad.recursos.Log;
 import dad.recursos.RealizarEmprestimo;
 
+/**
+ * Classe que representa o TableModel para os empréstimos.
+ * 
+ * @author Dário Pereira
+ *
+ */
 public class TableModelEmprestimo extends AbstractTableModel {
 
 	/**
@@ -31,13 +37,15 @@ public class TableModelEmprestimo extends AbstractTableModel {
 	private Connection con;
 	private PreparedStatement pst;
 	private ResultSet rs;
-	// private UndoManager undoManager;
 
 	private TableModelEmprestimo() {
 		INSTANCE = this;
-		// undoManager = new UndoManager();
 	}
 
+	/**
+	 * Faz upload da base de dados e cria o ArrayList com os empréstimos que
+	 * existirem na base de dados Empréstimos.
+	 */
 	public void uploadDataBase() {
 		emprestimos = new ArrayList<>();
 		int maior = 0;
@@ -80,6 +88,9 @@ public class TableModelEmprestimo extends AbstractTableModel {
 		}
 	}
 
+	/**
+	 * Atualiza o valor das multas na base de dados.
+	 */
 	public void atualizarMultas() {
 		for (int i = 0; i < emprestimos.size(); i++) {
 			try {
@@ -101,10 +112,15 @@ public class TableModelEmprestimo extends AbstractTableModel {
 		}
 	}
 
+	/**
+	 * Atualiza o valor das multas para o empréstimo passado como parâmetro.
+	 * 
+	 * @param emp - empréstimo que se pretende atualizar as multas.
+	 * @throws Exception
+	 */
 	public void atualizarMultas(Emprestimo emp) throws Exception {
 		if (!emp.isEntregue()) {
 			pst = con.prepareStatement("update emprestimos set Multa=?,Pago=? where ID=" + emp.getId());
-
 			pst.setString(1, String.valueOf(emp.getMulta()));
 			if (emp.isPago())
 				pst.setString(2, "Sim");
@@ -125,20 +141,28 @@ public class TableModelEmprestimo extends AbstractTableModel {
 	public int getRowCount() {
 		return emprestimos.size();
 	}
-	
-	public int getNumEmprestimosAtivos(){
+
+	/**
+	 *
+	 * @return o número de empréstimos que ainda não foram devolvidos.
+	 */
+	public int getNumEmprestimosAtivos() {
 		int n = 0;
-		for(Emprestimo emp: emprestimos){
-			if(!emp.isEntregue())
+		for (Emprestimo emp : emprestimos) {
+			if (!emp.isEntregue())
 				n++;
 		}
 		return n;
 	}
-	
-	public int getNumEmprestimosAtivosComMulta(){
+
+	/**
+	 *
+	 * @return o número de empréstimos que ainda não foram devolvidos e têm multa pendente de pagamento.
+	 */
+	public int getNumEmprestimosAtivosComMulta() {
 		int n = 0;
-		for(Emprestimo emp: emprestimos){
-			if(!emp.isEntregue() && emp.getMulta()>0 && !emp.isPago())
+		for (Emprestimo emp : emprestimos) {
+			if (!emp.isEntregue() && emp.getMulta() > 0 && !emp.isPago())
 				n++;
 		}
 		return n;
@@ -158,6 +182,10 @@ public class TableModelEmprestimo extends AbstractTableModel {
 		return emprestimos;
 	}
 
+	/**
+	 * Adiciona um novo empréstimo ao ArrayList
+	 * @param emp
+	 */
 	public void addEmprestimo(Emprestimo emp) {
 		emprestimos.add(emp);
 	}
@@ -166,18 +194,25 @@ public class TableModelEmprestimo extends AbstractTableModel {
 		return emprestimos.get(rowIndex);
 	}
 
+	/**
+	 * @param item - Item que se deseja consultar os empréstimos.
+	 * @return um array contendo os indexes dos empréstimos que o Item passado como parâmetro tem.
+	 */
 	public int[] getEmprestimosByItem(Item item) {
-		ArrayList<Integer> apagar = new ArrayList<>();
+		ArrayList<Integer> emps = new ArrayList<>();
 		for (int i = 0; i < emprestimos.size(); i++) {
 			Emprestimo emp = emprestimos.get(i);
 			if (emp.getItem().getId() == item.getId())
-				apagar.add(i);
+				emps.add(i);
 		}
-		return apagar.stream().mapToInt(Integer::intValue).toArray();
+		return emps.stream().mapToInt(Integer::intValue).toArray();
 	}
 
+	/**
+	 * Remove os empréstimos com indexes passados no array rows
+	 * @param rows - array que contém os indexes dos empréstimos que se pretende apagar.
+	 */
 	public void removeEmprestimos(int[] rows) {
-		// undoManager.execute(new RemoverExemplar(rows));
 		ArrayList<Emprestimo> toDelete = new ArrayList<>();
 		for (int i = 0; i < rows.length; i++) {
 			Emprestimo emp = emprestimos.get(rows[i]);
@@ -186,6 +221,11 @@ public class TableModelEmprestimo extends AbstractTableModel {
 		emprestimos.removeAll(toDelete);
 	}
 
+	/**
+	 * Apaga da base de dados o empréstimo passado como parâmetro e o recibo correspondente.
+	 * @param emp - empréstimo que se pretende apagar.
+	 * @param toDelete
+	 */
 	private void apagar(Emprestimo emp, ArrayList<Emprestimo> toDelete) {
 		try {
 			if (!emp.isEntregue()) {
@@ -242,7 +282,7 @@ public class TableModelEmprestimo extends AbstractTableModel {
 				if (rs.next())
 					multa = rs.getDouble(1);
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
+				Log.getInstance().printLog("TableModelEmprestimo - getValueAt() - case 8 -- " + e.getMessage());
 				e.printStackTrace();
 			}
 			if (emprestimos.get(rowIndex).isEntregue())

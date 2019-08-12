@@ -11,23 +11,38 @@ import dad.recursos.Log;
 
 /**
  * 
- * @author Dário Pereira
- *
+ * @author Dário Pereira Classe geral que representa um item da biblioteca:
+ *         livro, multimédia ou outros.
  */
 public class Item {
 
+	/**
+	 * Caminho para a pasta das imagens dos livros.
+	 */
 	public static final String imgPath = System.getenv("APPDATA") + "/BibliotecaDAD/Databases/Imagens/";
+	/**
+	 * Variável usada para controle do próximo id a ser atribuído a um novo
+	 * item.
+	 */
 	public static int countID = 0;
 	private int id;
 	private String nome;
+	/**
+	 * Localização física do item na biblioteca.
+	 */
 	private String local;
 	private String classificacao;
 	private String autor;
+	/**
+	 * Indica se o item está disponível para empréstimo ou não.
+	 */
 	private boolean disponivel;
 	private int numero_exemplares;
 	private int n_exemp_disponiveis;
-	// private int n_exemp_emprestados;
 	private ImageIcon img;
+	/**
+	 * Indica o tipo do item: livro, cd, dvd, revista, jornal, etc...
+	 */
 	private String tipo;
 
 	public Item(String nome, String tipo) {
@@ -40,7 +55,6 @@ public class Item {
 		id = ++countID;
 		numero_exemplares = 1;
 		setN_exemp_disponiveis(1);
-		// n_exemp_emprestados = 0;
 	}
 
 	public Item(String nome, String autor, String classificacao, String local, ImageIcon img, String tipo) {
@@ -66,20 +80,23 @@ public class Item {
 		id = ++countID;
 		numero_exemplares = 1;
 		setN_exemp_disponiveis(1);
-		// n_exemp_emprestados = 0;
 		this.img = img;
 	}
 
 	public String getNome() {
 		return nome;
 	}
+	
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
+	
+	public int getId() {
+		return id;
+	}
 
 	public void setId(int id) {
 		this.id = id;
-	}
-
-	public void setNome(String nome) {
-		this.nome = nome;
 	}
 
 	public String getTipo() {
@@ -110,29 +127,15 @@ public class Item {
 		this.disponivel = disponivel;
 	}
 
+	/**
+	 * Diz se está disponível ou não de acordo com o valor salvo na base de dados: 'Sim' ou 'Não'
+	 * @param s 'Sim' se está disponível. 'Não' se não está disponível. Se for introduzida outra string o método não faz nada.
+	 */
 	public void setDisponivel(String s) {
 		if (s.equals("Sim"))
 			disponivel = true;
 		else if (s.equals("Não"))
 			disponivel = false;
-	}
-
-	public int getNumero_exemplares() {
-		return numero_exemplares;
-	}
-
-	public void setNumero_exemplares(int numero_exemplares) {
-		if (numero_exemplares > 0) {
-			if (getN_exemp_emprestados() > 0) {
-				int n_exemp_disp = numero_exemplares - getN_exemp_emprestados();
-				this.numero_exemplares = numero_exemplares;
-				setN_exemp_disponiveis(n_exemp_disp);
-				
-			} else{
-				this.numero_exemplares = numero_exemplares;
-				setN_exemp_disponiveis(numero_exemplares);
-			}
-		}
 	}
 
 	public void incrementar_exemplares() {
@@ -144,9 +147,23 @@ public class Item {
 		numero_exemplares--;
 		n_exemp_disponiveis--;
 	}
+	
+	public int getNumero_exemplares() {
+		return numero_exemplares;
+	}
 
-	public int getId() {
-		return id;
+	public void setNumero_exemplares(int numero_exemplares) {
+		if (numero_exemplares > 0) {
+			if (getN_exemp_emprestados() > 0) {
+				int n_exemp_disp = numero_exemplares - getN_exemp_emprestados();
+				this.numero_exemplares = numero_exemplares;
+				setN_exemp_disponiveis(n_exemp_disp);
+
+			} else {
+				this.numero_exemplares = numero_exemplares;
+				setN_exemp_disponiveis(numero_exemplares);
+			}
+		}
 	}
 
 	public int getN_exemp_disponiveis() {
@@ -169,40 +186,12 @@ public class Item {
 	public void inc_exemp_emprestados() {
 		n_exemp_disponiveis--;
 		if (this instanceof Livro) {
-			TableModelLivro.getInstance().atualizaExemplares((Livro) this);
+			TableModelLivro.getInstance().atualizaExemplaresDisponiveis((Livro) this);
 		}
 	}
 
 	public void dec_exemp_emprestados() {
 		n_exemp_disponiveis++;
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + id;
-		result = prime * result + ((nome == null) ? 0 : nome.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Item other = (Item) obj;
-		if (id != other.id)
-			return false;
-		if (nome.toLowerCase() == null) {
-			if (other.nome.toLowerCase() != null)
-				return false;
-		} else if (!nome.toLowerCase().equals(other.nome.toLowerCase()))
-			return false;
-		return true;
 	}
 
 	public String getLocal() {
@@ -229,6 +218,9 @@ public class Item {
 		this.img = img;
 	}
 
+	/**
+	 * Abre um diálogo para escolher uma imagem para ficar associada ao item.
+	 */
 	public void addImg() {
 		FileDialog fd = new FileDialog(DataGui.getInstance(), "Escolher uma imagem", FileDialog.LOAD);
 		fd.setDirectory(System.getProperty("user.home") + System.getProperty("file.separator") + "Pictures");
@@ -243,14 +235,47 @@ public class Item {
 				Log.getInstance().printLog("Item - addImg: Erro ao copiar a imagem!");
 			}
 	}
-	
-	public static Item getItemById(int id){
-		if(TableModelLivro.getInstance().getLivroById(id) != null)
+
+	/**
+	 *  É dado um 'id' e o programa devolve o item que tem esse 'id', se existir.
+	 * @param id - 'id' do item pretendido.
+	 * @return o item com o 'id' introduzido. Se o 'id' não estiver associado a nenhum item, retorna 'null'
+	 */
+	public static Item getItemById(int id) {
+		if (TableModelLivro.getInstance().getLivroById(id) != null)
 			return TableModelLivro.getInstance().getLivroById(id);
 		// else: verificar na multimedia e outros
-		
+
 		// se não existe em lado nenhum
 		return null;
+	}
+	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + id;
+		result = prime * result + ((nome == null) ? 0 : nome.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Item other = (Item) obj;
+		if (id != other.id)
+			return false;
+		if (nome.toLowerCase() == null) {
+			if (other.nome.toLowerCase() != null)
+				return false;
+		} else if (!nome.toLowerCase().equals(other.nome.toLowerCase()))
+			return false;
+		return true;
 	}
 
 }

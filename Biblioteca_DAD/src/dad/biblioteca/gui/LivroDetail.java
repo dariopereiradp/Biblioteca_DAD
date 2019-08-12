@@ -35,21 +35,25 @@ import dad.biblioteca.Item;
 import dad.biblioteca.Livro;
 import dad.biblioteca.table.AtualizaExemplares;
 import dad.biblioteca.table.AtualizaLivro;
-import dad.biblioteca.table.CompositeCommand;
 import dad.biblioteca.table.EmprestimoPanel;
 import dad.biblioteca.table.TableModelLivro;
+import dad.recursos.CompositeCommand;
 import dad.recursos.ImageViewer;
 import dad.recursos.RealizarEmprestimo;
 import mdlaf.animation.MaterialUIMovement;
 import mdlaf.utils.MaterialColors;
 import net.miginfocom.swing.MigLayout;
 
+/**
+ * Classe que representa os detalhes de um livro e permite editar os detalhes.
+ * @author Dário Pereira
+ *
+ */
 public class LivroDetail {
 
 	private Livro l;
 	private JTextField titulo, autor, editora, classificacao, local, exemp, exempDisp, disp, exempEmp;
 	private JDialog dial;
-	// private JTable emprestimos;
 
 	public LivroDetail(Livro l) {
 		this.l = l;
@@ -62,7 +66,6 @@ public class LivroDetail {
 
 		JPanel principal = new JPanel(new BorderLayout());
 		JPanel botoesPrincipais = new JPanel();
-		// emprestimos = EmprestimoPanel.getInstance().getSmallTable(l);
 		JPanel cimaPanel = new JPanel(new BorderLayout());
 		JPanel infoPanelWithButtons = new JPanel(new BorderLayout());
 		JPanel infoPanel = new JPanel(new GridLayout(10, 2));
@@ -371,6 +374,12 @@ public class LivroDetail {
 
 	}
 
+	/**
+	 * Salva as modificações feitas no livro.
+	 * 
+	 * @param oldExemplares
+	 * @param close
+	 */
 	public void save(int oldExemplares, boolean close) {
 		titulo.setEditable(false);
 		autor.setEditable(false);
@@ -411,11 +420,19 @@ public class LivroDetail {
 
 	}
 
-	public void personalizarBotao(JButton jb) {
+	/**
+	 * Personaliza o aspecto dos botões.
+	 * 
+	 * @param jb - botão a ser personalizado.
+	 */
+	public static void personalizarBotao(JButton jb) {
 		jb.setFont(new Font("Roboto", Font.PLAIN, 15));
 		MaterialUIMovement.add(jb, MaterialColors.GRAY_300, 5, 1000 / 30);
 	}
 
+	/**
+	 * Torna o diálogo visível.
+	 */
 	public void open() {
 		dial.setVisible(true);
 

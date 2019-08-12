@@ -1,7 +1,15 @@
 package dad.biblioteca;
 
+/**
+ * Classe que representa outros itens, que não são livros nem multimedia, como por exemplo: revistas, jornais e outros.
+ * @author Dário Pereira
+ *
+ */
 public class Outros extends Item {
 
+	/**
+	 * Informação relevante sobre o item.
+	 */
 	private String outrasInf;
 
 	public Outros(String nome, String tipo) {

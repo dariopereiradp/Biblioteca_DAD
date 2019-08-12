@@ -46,6 +46,11 @@ import java.awt.event.ActionEvent;
 import javax.swing.JCheckBox;
 import javax.swing.SwingConstants;
 
+/**
+ * Classe que permite tanto realizar um novo empréstimo como ver e alterar um empréstimo existente.
+ * @author Dário Pereira
+ *
+ */
 public class RealizarEmprestimo {
 
 	public static final String EMPRESTIMOS_PATH = System.getProperty("user.home") + System.getProperty("file.separator")
@@ -61,11 +66,12 @@ public class RealizarEmprestimo {
 	private Emprestimo emp = null;
 	private Connection con;
 	private PreparedStatement pst;
-	// private ResultSet rs;
 
 	/**
+	 *  Abre o diálogo preparado para criar um novo empréstimo.
 	 * @wbp.parser.constructor
 	 *
+	 * @param item - o item que se pretende realizar o empréstimo.
 	 */
 	public RealizarEmprestimo(Item item) {
 		inicializar(item);
@@ -76,6 +82,10 @@ public class RealizarEmprestimo {
 		pagar.setVisible(false);
 	}
 
+	/**
+	 * Abre o diálogo para ver e alterar um empréstimo existente.
+	 * @param emp - empréstimo que se pretende ver e alterar.
+	 */
 	public RealizarEmprestimo(Emprestimo emp) {
 		this.emp = emp;
 		inicializar(emp.getItem());
@@ -115,6 +125,10 @@ public class RealizarEmprestimo {
 
 	}
 
+	/**
+	 * Inicializa o diálogo do empréstimo.
+	 * @param item
+	 */
 	public void inicializar(Item item) {
 		String month_year = LocalDateTime.now().format(DateTimeFormatter.ofPattern("MMMyyyy")).toUpperCase();
 		dirPath = RealizarEmprestimo.EMPRESTIMOS_PATH + month_year + "/";
@@ -419,9 +433,13 @@ public class RealizarEmprestimo {
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
 				String ant = dias.getText();
+				try{
 				dias.setText(String.valueOf(
 						ChronoUnit.DAYS.between(date_emp.getDate().toInstant(), date_entrega.getDate().toInstant())
 								+ 1));
+				} catch (NullPointerException e){
+					Log.getInstance().printLog("Data null - " + e.getMessage());
+				}
 				if (!ant.equals(dias.getText()))
 					bSave.setEnabled(true);
 			}
@@ -512,6 +530,10 @@ public class RealizarEmprestimo {
 		});
 	}
 
+	/**
+	 * Verifica se o CPF introduzido é válido e se existe na base de dados. Se não existir, pede para criar um novo cliente com esse CPF.
+	 * @return - true se o CPF é válido. <br> - false caso contrário
+	 */
 	public boolean validar() {
 		String cpfString;
 		cpfString = cpf.getText();
@@ -536,6 +558,10 @@ public class RealizarEmprestimo {
 		}
 	}
 
+	/**
+	 * Salva um novo recibo para o empréstimo.
+	 * @param emprestimo
+	 */
 	private void save(Emprestimo emprestimo) {
 		PDFDocument pdf = new PDFGenerator(emprestimo).generatePDF();
 		try {
@@ -558,6 +584,10 @@ public class RealizarEmprestimo {
 
 	}
 
+	/**
+	 * Abre o recibo associado a esse empréstimo, se existir.
+	 * @param emprestimo
+	 */
 	public void abrirRecibo(Emprestimo emprestimo) {
 		try {
 			Desktop.getDesktop().open(new File(dirPath));
@@ -569,10 +599,6 @@ public class RealizarEmprestimo {
 			e.printStackTrace();
 		}
 
-	}
-
-	public void open() {
-		dial.setVisible(true);
 	}
 
 	public JTextField getNome() {
@@ -593,5 +619,12 @@ public class RealizarEmprestimo {
 
 	public JButton getbConf() {
 		return bConf;
+	}
+	
+	/**
+	 * Torna o diálogo visível.
+	 */
+	public void open() {
+		dial.setVisible(true);
 	}
 }

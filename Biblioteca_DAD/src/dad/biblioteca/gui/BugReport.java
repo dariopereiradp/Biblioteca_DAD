@@ -30,6 +30,11 @@ import java.awt.Font;
 import java.awt.Color;
 import java.awt.Desktop;
 
+/**
+ * Classe que representa um Diálogo para reportar bugs no programa.
+ * @author Dário Pereira
+ *
+ */
 public class BugReport extends JDialog{
 
 	/**
@@ -100,7 +105,9 @@ public class BugReport extends JDialog{
 			}
 		}
 	}
-	
+	/**
+	 * Cria um ficheiro '.zip' com os ficheiros log do mês atual e com um ficheiro '.txt' contendo a descrição do problema. 
+	 */
 	public void criarRelatorio() {
 		String data_hora = new SimpleDateFormat("dd/MM/yyyy 'às' HH'h'mm'm'ss").format(new Date());
 		String data = new SimpleDateFormat("ddMMMyyyy_HH'h'mm").format(new Date());
@@ -144,6 +151,9 @@ public class BugReport extends JDialog{
 		
 	}
 
+	/**
+	 * Torna o diálogo visível.
+	 */
 	public void open(){
 		setVisible(true);
 	}

@@ -22,7 +22,7 @@ import javax.swing.SwingConstants;
 
 
 /**
- * 
+ * Diálogo que apresenta as informações sobre o programa.
  * @author Dário Pereira
  *
  */
@@ -33,6 +33,25 @@ public class About extends JDialog {
 	 */
 	private static final long serialVersionUID = 8083357425196226363L;
 	private final JPanel contentPanel = new JPanel();
+	/**
+	 * Informações a sserem mostradas no diálogo 'Sobre'.
+	 */
+	private String info = "\u00A9 DPSoft 2019 <br>Feito por D\u00E1rio Pereira\r\n<br>Email de Suporte: <a href=\"#\">" + Main.EMAIL_SUPORTE + "</a>"
+			+ "<br><br>Código Fonte (GitHub): <a href=\"https://github.com/dariopereiradp/Biblioteca_DAD\">Biblioteca DAD</a><br><br>"
+			+ "Compat\u00EDvel com <a href=\"https://www.java.com/download\">Java 8</a><br><br>"
+			+ "Bibliotecas usadas:<br><br><a href=\"https://github.com/atarw/material-ui-swing\">Material UI Swing 0.9.6.1</a><br>"
+			+ "<a href=\"https://sourceforge.net/projects/ucanaccess\">UCanAccess 4.0.4</a><br>"
+			+ "<a href=\"https://github.com/srikanth-lingala/zip4j\">Zip4j 2.1.1</a><br>"
+			+ "<a href=\"http://hsqldb.org\">HyperSQL</a><br>"
+			+ "<a href=\"https://sourceforge.net/projects/jackcess\">Jackcess 2.1.11</a><br>"
+			+ "<a href=\"https://toedter.com/jcalendar\">JCalendar 1.4</a><br>"
+			+ "<a href=\"https://www.qoppa.com/pdfwriter\">jPDFWriter v2016R1.04</a><br>"
+			+ "<a href=\"https://git.eclipse.org/r/plugins/gitiles/windowbuilder/org.eclipse.windowbuilder/+/9be47c5cd5decde80f45e7febe7af8698e02d498/org.eclipse.wb.swing.MigLayout.lib/miglayout15-swing.jar?autodive=0%2F\">MigLayout15</a><br>"
+			+ "<a href=\"https://mvnrepository.com/artifact/commons-codec/commons-codec/1.11\">Apache Commons Codec 1.11</a><br>"
+			+ "<a href=\"https://mvnrepository.com/artifact/commons-io/commons-io/2.6\">Apache Commons IO 2.6</a><br>"
+			+ "<a href=\"https://mvnrepository.com/artifact/commons-lang/commons-lang/2.6\">Commons Lang 2.6</a><br>"
+			+ "<a href=\"https://mvnrepository.com/artifact/commons-logging/commons-logging/1.1.3\">Apache Commons Logging 1.1.3</a><br>"
+			+ "<br><br>Soli Deo Gloria - A Deus toda a glória!<br>";
 
 	/**
 	 * Create the dialog.
@@ -51,23 +70,7 @@ public class About extends JDialog {
 			sobre.setFont(new Font("Tahoma", Font.PLAIN, 12));
 			sobre.setContentType("text/html");
 			// JTextArea sobre = new JTextArea();
-			sobre.setText(
-					"\u00A9 DPSoft 2019 <br>Feito por D\u00E1rio Pereira\r\n<br>Email de Suporte: <a href=\"#\">" + Main.EMAIL_SUPORTE + "</a>"
-							+ "<br><br>Código Fonte (GitHub): <a href=\"https://github.com/dariopereiradp/Biblioteca_DAD\">Biblioteca DAD</a><br><br>"
-							+ "Compat\u00EDvel com <a href=\"https://www.java.com/download\">Java 8</a><br><br>"
-							+ "Bibliotecas usadas:<br><br><a href=\"https://github.com/atarw/material-ui-swing\">Material UI Swing 0.9.6.1</a><br>"
-							+ "<a href=\"https://sourceforge.net/projects/ucanaccess\">UCanAccess 4.0.4</a><br>"
-							+ "<a href=\"https://github.com/srikanth-lingala/zip4j\">Zip4j 2.1.1</a><br>"
-							+ "<a href=\"http://hsqldb.org\">HyperSQL</a><br>"
-							+ "<a href=\"https://sourceforge.net/projects/jackcess\">Jackcess 2.1.11</a><br>"
-							+ "<a href=\"https://toedter.com/jcalendar\">JCalendar 1.4</a><br>"
-							+ "<a href=\"https://www.qoppa.com/pdfwriter\">jPDFWriter v2016R1.04</a><br>"
-							+ "<a href=\"https://git.eclipse.org/r/plugins/gitiles/windowbuilder/org.eclipse.windowbuilder/+/9be47c5cd5decde80f45e7febe7af8698e02d498/org.eclipse.wb.swing.MigLayout.lib/miglayout15-swing.jar?autodive=0%2F\">MigLayout15</a><br>"
-							+ "<a href=\"https://mvnrepository.com/artifact/commons-codec/commons-codec/1.11\">Apache Commons Codec 1.11</a><br>"
-							+ "<a href=\"https://mvnrepository.com/artifact/commons-io/commons-io/2.6\">Apache Commons IO 2.6</a><br>"
-							+ "<a href=\"https://mvnrepository.com/artifact/commons-lang/commons-lang/2.6\">Commons Lang 2.6</a><br>"
-							+ "<a href=\"https://mvnrepository.com/artifact/commons-logging/commons-logging/1.1.3\">Apache Commons Logging 1.1.3</a><br>"
-							+ "<br><br>Soli Deo Gloria - A Deus toda a glória!<br>");
+			sobre.setText(info);
 
 			sobre.addHyperlinkListener(new HyperlinkListener() {
 				public void hyperlinkUpdate(HyperlinkEvent e) {
@@ -118,6 +121,9 @@ public class About extends JDialog {
 		}
 	}
 
+	/**
+	 * Torna o diálogo visível.
+	 */
 	public void open() {
 		setVisible(true);
 	}

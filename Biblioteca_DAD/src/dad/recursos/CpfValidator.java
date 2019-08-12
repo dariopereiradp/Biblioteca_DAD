@@ -3,7 +3,7 @@ import java.util.InputMismatchException;
 
 
 /**
- * 
+ * Classe para validar se um CPF tem formato válido ou não.
  * @author fearaujo <a href="https://github.com/feharaujo/Cpf-Validator">Cpf_Validator</a>
  *
  */

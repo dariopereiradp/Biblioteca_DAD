@@ -10,6 +10,11 @@ import java.util.zip.ZipOutputStream;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
+/**
+ * Classe para criar um ficheiro zip e comprimir os ficheiros de um diretório.
+ * @author Dário Pereira
+ *
+ */
 public class ZipCompress {
 	public static void compress(String dirPath, String name, String destinyPath) {
 		final Path sourceDir = Paths.get(dirPath);

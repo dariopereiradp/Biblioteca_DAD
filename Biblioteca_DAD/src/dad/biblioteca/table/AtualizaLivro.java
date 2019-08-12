@@ -11,6 +11,13 @@ import dad.recursos.Command;
 import dad.recursos.ConexaoLivros;
 import dad.recursos.Log;
 
+/**
+ * Classe que representa um comando para atualizar as informações de um livro,
+ * implementando as funções de undo e redo e guardando na base de dados.
+ * 
+ * @author Dário Pereira
+ *
+ */
 public class AtualizaLivro implements Command {
 
 	private Connection con;
