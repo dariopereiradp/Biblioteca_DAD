@@ -126,7 +126,7 @@ public class NovoCliente {
 					else {
 						User user = new User(nomeN.getText(), date_nasc.getDate(), cpfString,
 								telefone.getText().replace("-", "").replace("(", "").replace(")", "").replace(" ", ""),
-								1, false);
+								0, false);
 						TableModelUser.getInstance().addUser(user);
 						Log.getInstance().printLog("Novo cliente criado com sucesso:\n" + user.toText());
 						emp.getNome().setText(nomeN.getText());

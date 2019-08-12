@@ -31,7 +31,7 @@ public class TableModelUser extends AbstractTableModel {
 	private static final long serialVersionUID = 3247984074345998765L;
 	private static TableModelUser INSTANCE;
 	private ArrayList<User> users;
-	private String[] colunas = { "CPF", "Nome", "Data de Nascimento", "Telefone", "Número de Empréstmos" };
+	private String[] colunas = { "CPF", "Nome", "Data de Nascimento", "Telefone", "Número de Empréstimos" };
 	private Connection con;
 	private PreparedStatement pst;
 	private ResultSet rs;
@@ -303,6 +303,7 @@ public class TableModelUser extends AbstractTableModel {
 				user.adicionarNaBaseDeDados();
 				users.add(user);
 				UserPanel.getInstance().getJtfTotal().setText(String.valueOf(users.size()));
+				fireTableDataChanged();
 			} catch (Exception e) {
 				Log.getInstance().printLog("Erro ao criar cliente! " + e.getMessage());
 				e.printStackTrace();

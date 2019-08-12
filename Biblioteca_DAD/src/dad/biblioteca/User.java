@@ -65,12 +65,13 @@ public class User {
 		try {
 			CriptografiaAES.setKey(key);
 			CriptografiaAES.encrypt(cpf);
-			pst = con.prepareStatement("insert into usuarios(CPF,Nome,Data_Nascimento,N_Emprestimos) values (?,?,?,?)");
+			pst = con.prepareStatement("insert into usuarios(CPF,Nome,Data_Nascimento,Telefone,N_Emprestimos) values (?,?,?,?,?)");
 			pst.setString(1, CriptografiaAES.getEncryptedString());
 			pst.setString(2, getNome());
 			String data = new SimpleDateFormat("yyyy-M-d").format(data_nascimento);
 			pst.setDate(3, java.sql.Date.valueOf(data));
-			pst.setInt(4, getN_emprestimos());
+			pst.setString(4, getTelefone());
+			pst.setInt(5, getN_emprestimos());
 			pst.execute();
 		} catch (Exception e) {
 			Log.getInstance().printLog("Erro ao adicionar o cliente na base de dados! - " + e.getMessage());

@@ -451,7 +451,7 @@ public class LivroPanel extends JPanel {
 			}
 		});
 		panel4.add(bAdd);
-		
+
 		JButton bLimpar = new JButton("Limpar campos");
 		bLimpar.setForeground(MaterialColors.WHITE);
 		bLimpar.setBackground(MaterialColors.RED_300);
@@ -552,14 +552,6 @@ public class LivroPanel extends JPanel {
 		panelLocal.add(local, BorderLayout.CENTER);
 		last.add(panelLocal);
 
-		addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyPressed(KeyEvent e) {
-				if (e.getKeyCode() == KeyEvent.VK_ENTER)
-					adicionarLivro();
-			}
-		});
-
 		JPanel both = new JPanel(new GridLayout(2, 1));
 		both.add(panelAdd);
 		both.add(last);
@@ -576,16 +568,18 @@ public class LivroPanel extends JPanel {
 	 * Adiciona um novo livro de acordo com as informações inseridas.
 	 */
 	public void adicionarLivro() {
-		if (titulo.getText().trim().equals(""))
-			JOptionPane.showMessageDialog(this, "Deve inserir pelo menos o título!", "ADICIONAR",
-					JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource("/DAD_SS.jpg")));
-		else {
-			if (autor.getText().trim().equals("") && editora.getText().trim().equals("")
-					&& classificacao.getText().trim().equals(""))
-				modelLivro.addLivro(new Livro(titulo.getText()));
-			else
-				modelLivro.addLivro(new Livro(titulo.getText(), autor.getText(), editora.getText(),
-						classificacao.getText(), local.getText()));
+		if (DataGui.getInstance().getTabbedPane().getSelectedIndex() == 0) {
+			if (titulo.getText().trim().equals(""))
+				JOptionPane.showMessageDialog(this, "Deve inserir pelo menos o título!", "ADICIONAR",
+						JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource("/DAD_SS.jpg")));
+			else {
+				if (autor.getText().trim().equals("") && editora.getText().trim().equals("")
+						&& classificacao.getText().trim().equals(""))
+					modelLivro.addLivro(new Livro(titulo.getText()));
+				else
+					modelLivro.addLivro(new Livro(titulo.getText(), autor.getText(), editora.getText(),
+							classificacao.getText(), local.getText()));
+			}
 		}
 	}
 

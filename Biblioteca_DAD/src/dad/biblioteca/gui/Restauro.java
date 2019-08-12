@@ -47,13 +47,13 @@ public class Restauro extends JDialog {
 	private static final long serialVersionUID = -7863423688679744400L;
 	private final JPanel contentPanel = new JPanel();
 	private File backupFile;
-	private JCheckBox conf, func, livros, emprestimos, clientes;
+	private JCheckBox conf, base_dados;
 
 	/**
 	 * Create the dialog.
 	 */
 	public Restauro() {
-		setBounds(100, 100, 350, 300);
+		setBounds(100, 100, 350, 200);
 		getContentPane().setLayout(new BorderLayout());
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -74,29 +74,12 @@ public class Restauro extends JDialog {
 		conf.setBounds(6, 56, 142, 25);
 		contentPanel.add(conf);
 
-		func = new JCheckBox("Funcion\u00E1rios");
-		func.setSelected(true);
-		func.setFont(new Font("Dialog", Font.PLAIN, 14));
-		func.setBounds(6, 91, 142, 25);
-		contentPanel.add(func);
+		base_dados = new JCheckBox("Base de Dados");
+		base_dados.setSelected(true);
+		base_dados.setFont(new Font("Dialog", Font.PLAIN, 14));
+		base_dados.setBounds(6, 91, 142, 25);
+		contentPanel.add(base_dados);
 
-		livros = new JCheckBox("Livros");
-		livros.setSelected(true);
-		livros.setFont(new Font("Dialog", Font.PLAIN, 14));
-		livros.setBounds(6, 126, 142, 25);
-		contentPanel.add(livros);
-
-		emprestimos = new JCheckBox("Empr\u00E9stimos");
-		emprestimos.setSelected(true);
-		emprestimos.setFont(new Font("Dialog", Font.PLAIN, 14));
-		emprestimos.setBounds(6, 161, 142, 25);
-		contentPanel.add(emprestimos);
-
-		clientes = new JCheckBox("Clientes");
-		clientes.setSelected(true);
-		clientes.setFont(new Font("Dialog", Font.PLAIN, 14));
-		clientes.setBounds(6, 196, 142, 25);
-		contentPanel.add(clientes);
 
 		JLabel lInfo = new JLabel("Selecione quais itens deseja restaurar");
 		lInfo.setHorizontalAlignment(SwingConstants.CENTER);
@@ -160,21 +143,15 @@ public class Restauro extends JDialog {
 				File confFile = new File(tempDir + "conf.dad");
 				confFile.delete();
 			}
-			if (!func.isSelected()) {
+			if (!base_dados.isSelected()) {
 				File funcFile = new File(tempDir + "logins.mdb");
 				funcFile.delete();
-			}
-			if (!livros.isSelected()) {
 				File livrosFile = new File(tempDir + "livros.mdb");
 				livrosFile.delete();
 				File images = new File(tempDir + "Imagens/");
 				FileUtils.deleteDirectory(images);
-			}
-			if (!emprestimos.isSelected()) {
 				File empFile = new File(tempDir + "emprestimos.mdb");
 				empFile.delete();
-			}
-			if (!clientes.isSelected()) {
 				File userFile = new File(tempDir + "users.mdb");
 				userFile.delete();
 			}

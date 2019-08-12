@@ -452,7 +452,7 @@ public class UserPanel extends JPanel {
 			}
 		});
 		panel4.add(bAdd);
-		
+
 		JButton bLimpar = new JButton("Limpar campos");
 		bLimpar.setForeground(MaterialColors.WHITE);
 		bLimpar.setBackground(MaterialColors.RED_300);
@@ -533,6 +533,14 @@ public class UserPanel extends JPanel {
 
 		});
 
+		cpf.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_ENTER)
+					adicionarUser();
+			}
+		});
+
 		JLabel lCpf = new JLabel("CPF: ");
 		lCpf.setFont(new Font("Roboto", Font.BOLD, 15));
 
@@ -551,6 +559,14 @@ public class UserPanel extends JPanel {
 		telefone.setFont(new Font("Arial", Font.PLAIN, 15));
 		telefone.setBounds(120, 162, 181, 20);
 		telefone.setColumns(12);
+		
+		telefone.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_ENTER)
+					adicionarUser();
+			}
+		});
 
 		JLabel lPhone = new JLabel("Telefone: ");
 		lPhone.setFont(new Font("Roboto", Font.BOLD, 15));
@@ -616,10 +632,11 @@ public class UserPanel extends JPanel {
 					JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource("/DAD_SS.jpg")));
 		else {
 			if (validar()) {
-				TableModelUser.getInstance().addUser(
-						new User(nome.getText(), date_nasc.getDate(), cpf.getText().replace(".", "").replace("-", ""),
+				String cpfS = cpf.getText().replace(".", "").replace("-", "");
+				TableModelUser.getInstance()
+						.addUser(new User(nome.getText(), date_nasc.getDate(), cpfS,
 								telefone.getText().replace("-", "").replace("(", "").replace(")", "").replace(" ", ""),
-								0, false));
+								TableModelEmprestimo.getInstance().getNumEmprestimosParaCliente(cpfS), false));
 				Log.getInstance().printLog("Cliente adicionado com sucesso!");
 			} else
 				JOptionPane.showMessageDialog(this, "CPF inválido!", "ADICIONAR", JOptionPane.INFORMATION_MESSAGE,

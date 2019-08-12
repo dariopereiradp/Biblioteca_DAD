@@ -167,6 +167,20 @@ public class TableModelEmprestimo extends AbstractTableModel {
 		}
 		return n;
 	}
+	
+	/**
+	 * 
+	 * @param cpf - cpf do cliente que se pretende consultar
+	 * @return o número de empréstimos que o cliente com o cpf dado realizou
+	 */
+	public int getNumEmprestimosParaCliente(String cpf){
+		int n=0;
+		for (Emprestimo emp : emprestimos) {
+			if (emp.getCliente().getCpf().equals(cpf))
+				n++;
+		}
+		return n;
+	}
 
 	@Override
 	public int getColumnCount() {

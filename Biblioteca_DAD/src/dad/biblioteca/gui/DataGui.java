@@ -526,6 +526,10 @@ public class DataGui extends JFrame {
 	public JTextField getPesquisa() {
 		return pesquisa;
 	}
+	
+	public JTabbedPane getTabbedPane() {
+		return tabbedPane;
+	}
 
 	/**
 	 * Chama o método undo da tabela que estiver ativa.
