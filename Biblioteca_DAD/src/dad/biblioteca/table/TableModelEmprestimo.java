@@ -96,8 +96,7 @@ public class TableModelEmprestimo extends AbstractTableModel {
 			try {
 				Emprestimo em = emprestimos.get(i);
 				if (!em.isEntregue()) {
-					pst = con.prepareStatement(
-							"update emprestimos set Multa=?,Pago=? where ID=" + em.getId());
+					pst = con.prepareStatement("update emprestimos set Multa=?,Pago=? where ID=" + em.getId());
 					pst.setString(1, String.valueOf(em.getMulta()));
 					if (em.isPago())
 						pst.setString(2, "Sim");
@@ -116,7 +115,8 @@ public class TableModelEmprestimo extends AbstractTableModel {
 	/**
 	 * Atualiza o valor das multas para o empréstimo passado como parâmetro.
 	 * 
-	 * @param emp - empréstimo que se pretende atualizar as multas.
+	 * @param emp
+	 *            - empréstimo que se pretende atualizar as multas.
 	 * @throws Exception
 	 */
 	public void atualizarMultas(Emprestimo emp) throws Exception {
@@ -158,7 +158,8 @@ public class TableModelEmprestimo extends AbstractTableModel {
 
 	/**
 	 *
-	 * @return o número de empréstimos que ainda não foram devolvidos e têm multa pendente de pagamento.
+	 * @return o número de empréstimos que ainda não foram devolvidos e têm
+	 *         multa pendente de pagamento.
 	 */
 	public int getNumEmprestimosAtivosComMulta() {
 		int n = 0;
@@ -168,14 +169,15 @@ public class TableModelEmprestimo extends AbstractTableModel {
 		}
 		return n;
 	}
-	
+
 	/**
 	 * 
-	 * @param cpf - cpf do cliente que se pretende consultar
+	 * @param cpf
+	 *            - cpf do cliente que se pretende consultar
 	 * @return o número de empréstimos que o cliente com o cpf dado realizou
 	 */
-	public int getNumEmprestimosParaCliente(String cpf){
-		int n=0;
+	public int getNumEmprestimosParaCliente(String cpf) {
+		int n = 0;
 		for (Emprestimo emp : emprestimos) {
 			if (emp.getCliente().getCpf().equals(cpf))
 				n++;
@@ -199,6 +201,7 @@ public class TableModelEmprestimo extends AbstractTableModel {
 
 	/**
 	 * Adiciona um novo empréstimo ao ArrayList
+	 * 
 	 * @param emp
 	 */
 	public void addEmprestimo(Emprestimo emp) {
@@ -210,8 +213,10 @@ public class TableModelEmprestimo extends AbstractTableModel {
 	}
 
 	/**
-	 * @param item - Item que se deseja consultar os empréstimos.
-	 * @return um array contendo os indexes dos empréstimos que o Item passado como parâmetro tem.
+	 * @param item
+	 *            - Item que se deseja consultar os empréstimos.
+	 * @return um array contendo os indexes dos empréstimos que o Item passado
+	 *         como parâmetro tem.
 	 */
 	public int[] getEmprestimosByItem(Item item) {
 		ArrayList<Integer> emps = new ArrayList<>();
@@ -225,7 +230,10 @@ public class TableModelEmprestimo extends AbstractTableModel {
 
 	/**
 	 * Remove os empréstimos com indexes passados no array rows
-	 * @param rows - array que contém os indexes dos empréstimos que se pretende apagar.
+	 * 
+	 * @param rows
+	 *            - array que contém os indexes dos empréstimos que se pretende
+	 *            apagar.
 	 */
 	public void removeEmprestimos(int[] rows) {
 		ArrayList<Emprestimo> toDelete = new ArrayList<>();
@@ -237,8 +245,11 @@ public class TableModelEmprestimo extends AbstractTableModel {
 	}
 
 	/**
-	 * Apaga da base de dados o empréstimo passado como parâmetro e o recibo correspondente.
-	 * @param emp - empréstimo que se pretende apagar.
+	 * Apaga da base de dados o empréstimo passado como parâmetro e o recibo
+	 * correspondente.
+	 * 
+	 * @param emp
+	 *            - empréstimo que se pretende apagar.
 	 * @param toDelete
 	 */
 	private void apagar(Emprestimo emp, ArrayList<Emprestimo> toDelete) {
@@ -279,7 +290,11 @@ public class TableModelEmprestimo extends AbstractTableModel {
 		case 4:
 			return new SimpleDateFormat("dd/MM/yyyy").format(emprestimos.get(rowIndex).getData_entrega());
 		case 5:
-			return emprestimos.get(rowIndex).getCliente().getCpf();
+			User cliente = emprestimos.get(rowIndex).getCliente();
+			if (cliente == null)
+				return getCpfDB(emprestimos.get(rowIndex));
+			else
+				return cliente.getCpf();
 		case 6:
 			return emprestimos.get(rowIndex).getFuncionario();
 		case 7:
@@ -301,8 +316,7 @@ public class TableModelEmprestimo extends AbstractTableModel {
 		double multa = 0.0;
 		try {
 			con = ConexaoEmprestimos.getConnection();
-			pst = con.prepareStatement(
-					"select Multa from emprestimos where ID=" + emp.getId());
+			pst = con.prepareStatement("select Multa from emprestimos where ID=" + emp.getId());
 			rs = pst.executeQuery();
 			if (rs.next())
 				multa = rs.getDouble(1);
@@ -311,6 +325,21 @@ public class TableModelEmprestimo extends AbstractTableModel {
 			e.printStackTrace();
 		}
 		return multa;
+	}
+
+	public String getCpfDB(Emprestimo emp) {
+		String cpf = "";
+		try {
+			con = ConexaoEmprestimos.getConnection();
+			pst = con.prepareStatement("select Cliente from emprestimos where ID=" + emp.getId());
+			rs = pst.executeQuery();
+			if (rs.next())
+				cpf = rs.getString(1);
+		} catch (SQLException e) {
+			Log.getInstance().printLog("TableModelEmprestimo - getValueAt() - case 5 -- " + e.getMessage());
+			e.printStackTrace();
+		}
+		return cpf;
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })

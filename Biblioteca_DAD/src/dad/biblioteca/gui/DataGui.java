@@ -147,7 +147,7 @@ public class DataGui extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				new Estatisticas().open();
+				Estatisticas.getInstance().open();
 			}
 		});
 		mnArquivo.add(menuEstatisticas);
@@ -262,7 +262,7 @@ public class DataGui extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				new About().open();
+				About.getInstance().open();
 
 			}
 		});
@@ -464,9 +464,7 @@ public class DataGui extends JFrame {
 		int ok = JOptionPane.showConfirmDialog(null, message, "Cópia de Segurança", JOptionPane.YES_NO_OPTION,
 				JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource("/DAD_SS.jpg")));
 		if (ok == JOptionPane.OK_OPTION) {
-			String name = "BibliotecaDAD-Backup-" + new SimpleDateFormat("ddMMMyyyy-HH'h'mm").format(new Date())
-					+ ".dadb";
-			ZipCompress.compress(Main.DATABASE_DIR, name, Main.BACKUP_DIR);
+			backupDirect();
 			JOptionPane.showMessageDialog(null, "Cópia de segurança salva com sucesso na pasta:\n" + Main.BACKUP_DIR,
 					"Cópia de Segurança - Sucesso", JOptionPane.OK_OPTION,
 					new ImageIcon(getClass().getResource("/DAD_SS.jpg")));
@@ -476,6 +474,17 @@ public class DataGui extends JFrame {
 				e.printStackTrace();
 			}
 		}
+	}
+
+	/**
+	 * Cria um backup da base de dados diretamente.
+	 * @return o nome do ficheiro de backup criado.
+	 */
+	public String backupDirect() {
+		String name = "BibliotecaDAD-Backup-" + new SimpleDateFormat("ddMMMyyyy-HH'h'mm").format(new Date())
+				+ ".dadb";
+		ZipCompress.compress(Main.DATABASE_DIR, name, Main.BACKUP_DIR);
+		return Main.BACKUP_DIR + name;
 	}
 
 	/**

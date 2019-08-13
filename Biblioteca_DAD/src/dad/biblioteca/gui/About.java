@@ -18,11 +18,13 @@ import javax.swing.event.HyperlinkListener;
 import javax.swing.JTextPane;
 import javax.swing.JLabel;
 import java.awt.Font;
-import javax.swing.SwingConstants;
+import java.awt.Toolkit;
 
+import javax.swing.SwingConstants;
 
 /**
  * Diálogo que apresenta as informações sobre o programa.
+ * 
  * @author Dário Pereira
  *
  */
@@ -32,11 +34,13 @@ public class About extends JDialog {
 	 * 
 	 */
 	private static final long serialVersionUID = 8083357425196226363L;
+	private static About INSTANCE;
 	private final JPanel contentPanel = new JPanel();
 	/**
 	 * Informações a sserem mostradas no diálogo 'Sobre'.
 	 */
-	private String info = "\u00A9 DPSoft 2019 <br>Feito por D\u00E1rio Pereira\r\n<br>Email de Suporte: <a href=\"#\">" + Main.EMAIL_SUPORTE + "</a>"
+	private String info = "\u00A9 DPSoft 2019 <br>Feito por D\u00E1rio Pereira\r\n<br>Email de Suporte: <a href=\"#\">"
+			+ Main.EMAIL_SUPORTE + "</a>"
 			+ "<br><br>Código Fonte (GitHub): <a href=\"https://github.com/dariopereiradp/Biblioteca_DAD\">Biblioteca DAD</a><br><br>"
 			+ "Compat\u00EDvel com <a href=\"https://www.java.com/download\">Java 8</a><br><br>"
 			+ "Bibliotecas usadas:<br><br><a href=\"https://github.com/atarw/material-ui-swing\">Material UI Swing 0.9.6.1</a><br>"
@@ -56,10 +60,11 @@ public class About extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
-	public About() {
+	private About() {
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 350, 300);
 		setTitle("Sobre");
+		setIconImage(Toolkit.getDefaultToolkit().getImage((getClass().getResource("/DAD.jpg"))));
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
@@ -126,6 +131,12 @@ public class About extends JDialog {
 	 */
 	public void open() {
 		setVisible(true);
+	}
+
+	public static About getInstance() {
+		if (INSTANCE == null)
+			INSTANCE = new About();
+		return INSTANCE;
 	}
 
 }
