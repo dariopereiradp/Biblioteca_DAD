@@ -35,7 +35,7 @@ public class TableModelLivro extends AbstractTableModel {
 	private static TableModelLivro INSTANCE;
 	private ArrayList<Livro> livros;
 	private String[] colunas = { "ID", "Título", "Autor", "Editora", "Classificação", "Exemplares", "Disponíveis",
-			"Disponível", "Local" };
+			"Disponível", "Localização" };
 	private Connection con;
 	private PreparedStatement pst;
 	private ResultSet rs;

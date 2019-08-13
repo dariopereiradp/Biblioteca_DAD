@@ -55,7 +55,18 @@ public class NovoCliente {
 			lCPF.setFont(new Font("Roboto", Font.PLAIN, 12));
 			novo.getContentPane().add(lCPF);
 
-			JTextField cpfN = new JTextField();
+			MaskFormatter mascaraCpf;
+			JFormattedTextField cpfN;
+			
+			try {
+				mascaraCpf = new MaskFormatter("###.###.###-##");
+				mascaraCpf.setCommitsOnValidEdit(true);
+				cpfN = new JFormattedTextField(mascaraCpf);
+			} catch (ParseException e1) {
+				cpfN = new JFormattedTextField();
+				e1.printStackTrace();
+			}
+
 			cpfN.setText(cpfString);
 			cpfN.setEditable(false);
 			cpfN.setFont(new Font("Roboto", Font.PLAIN, 12));

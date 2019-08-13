@@ -52,7 +52,7 @@ import net.miginfocom.swing.MigLayout;
 public class LivroDetail {
 
 	private Livro l;
-	private JTextField titulo, autor, editora, classificacao, local, exemp, exempDisp, disp, exempEmp;
+	private JTextField id, titulo, autor, editora, classificacao, local, exemp, exempDisp, disp, exempEmp;
 	private JDialog dial;
 
 	public LivroDetail(Livro l) {
@@ -68,7 +68,7 @@ public class LivroDetail {
 		JPanel botoesPrincipais = new JPanel();
 		JPanel cimaPanel = new JPanel(new BorderLayout());
 		JPanel infoPanelWithButtons = new JPanel(new BorderLayout());
-		JPanel infoPanel = new JPanel(new GridLayout(10, 2));
+		JPanel infoPanel = new JPanel(new GridLayout(11, 2));
 		JPanel rightPanel = new JPanel(new BorderLayout());
 		JPanel imagePanel = new JPanel(new MigLayout("al center center, wrap, gapy 15"));
 		JPanel botoesSecund = new JPanel(new BorderLayout());
@@ -121,6 +121,8 @@ public class LivroDetail {
 		botoesSecund.add(salvar, "cell 17 0,alignx left,aligny center");
 		salvar.setEnabled(false);
 
+		id = new JTextField(String.valueOf(l.getId()));
+		id.setEditable(false);
 		titulo = new JTextField(l.getNome());
 		titulo.setEditable(false);
 		autor = new JTextField(l.getAutor());
@@ -140,6 +142,8 @@ public class LivroDetail {
 		exempEmp = new JTextField(String.valueOf(l.getN_exemp_emprestados()));
 		exempEmp.setEditable(false);
 
+		infoPanel.add(new JLabel("ID: "));
+		infoPanel.add(id);
 		infoPanel.add(new JLabel("Título: "));
 		infoPanel.add(titulo);
 		infoPanel.add(new JLabel("Autor: "));

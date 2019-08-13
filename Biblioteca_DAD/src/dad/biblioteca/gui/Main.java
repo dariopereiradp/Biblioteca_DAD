@@ -52,7 +52,7 @@ public class Main {
 
 	public static final String TITLE = "BIBLIOTECA DÁDIVA DE DEUS";
 	public static final String VERSION = "1.0";
-	public static final String DATA_PUBLICACAO = "12 de Agosto de 2019";
+	public static final String DATA_PUBLICACAO = "13 de Agosto de 2019";
 	public static final String EMAIL_SUPORTE = "pereira13.dario@gmail.com";
 	public static final String ADMIN_USER = "admin";
 	public static final String ADMIN_PASS = "dad";

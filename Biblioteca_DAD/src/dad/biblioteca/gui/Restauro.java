@@ -104,7 +104,7 @@ public class Restauro extends JDialog {
 								JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource("/DAD_SS.jpg")));
 						if (ok == JOptionPane.YES_OPTION) {
 							String name = "BibliotecaDAD-Backup-"
-									+ new SimpleDateFormat("ddMMMyyyy-HH'h'mm").format(new Date());
+									+ new SimpleDateFormat("ddMMMyyyy-HH'h'mm").format(new Date()) + ".dadb";
 							ZipCompress.compress(Main.DATABASE_DIR, name, Main.BACKUP_DIR);
 							restaurar();
 						}

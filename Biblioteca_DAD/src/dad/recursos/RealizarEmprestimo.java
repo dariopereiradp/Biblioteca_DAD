@@ -47,7 +47,9 @@ import javax.swing.JCheckBox;
 import javax.swing.SwingConstants;
 
 /**
- * Classe que permite tanto realizar um novo empréstimo como ver e alterar um empréstimo existente.
+ * Classe que permite tanto realizar um novo empréstimo como ver e alterar um
+ * empréstimo existente.
+ * 
  * @author Dário Pereira
  *
  */
@@ -59,19 +61,22 @@ public class RealizarEmprestimo {
 	private JDialog dial;
 	private JButton bValidar, alterar, bConf, bGerarRecibo, bVerRecibo, bSave;
 	private JTextField id, tipo, titulo, idEmp, nome, dias;
-	private JFormattedTextField cpf;
+	private JFormattedTextField cpf, multa;
 	private MaskFormatter mascaraCpf;
 	private JDateChooser date_emp, date_entrega;
 	private JCheckBox entregue, pagar;
 	private Emprestimo emp = null;
 	private Connection con;
 	private PreparedStatement pst;
+	private JLabel lMultaAPagar;
 
 	/**
-	 *  Abre o diálogo preparado para criar um novo empréstimo.
+	 * Abre o diálogo preparado para criar um novo empréstimo.
+	 * 
 	 * @wbp.parser.constructor
 	 *
-	 * @param item - o item que se pretende realizar o empréstimo.
+	 * @param item
+	 *            - o item que se pretende realizar o empréstimo.
 	 */
 	public RealizarEmprestimo(Item item) {
 		inicializar(item);
@@ -84,7 +89,9 @@ public class RealizarEmprestimo {
 
 	/**
 	 * Abre o diálogo para ver e alterar um empréstimo existente.
-	 * @param emp - empréstimo que se pretende ver e alterar.
+	 * 
+	 * @param emp
+	 *            - empréstimo que se pretende ver e alterar.
 	 */
 	public RealizarEmprestimo(Emprestimo emp) {
 		this.emp = emp;
@@ -99,12 +106,15 @@ public class RealizarEmprestimo {
 		alterar.setEnabled(true);
 		bConf.setVisible(false);
 		bSave.setEnabled(false);
-		if (emp.getMulta() > 0) {
+		if (TableModelEmprestimo.getInstance().getMultaDB(emp) > 0) {
+			multa.setText(String.valueOf(TableModelEmprestimo.getInstance().getMultaDB(emp)));
 			if (emp.isPago()) {
+				lMultaAPagar.setText("Valor pago: ");
 				pagar.setSelected(true);
 				pagar.setBackground(new Color(255, 0, 0));
 				pagar.setEnabled(false);
 			} else {
+				lMultaAPagar.setText("Valor a pagar: ");
 				pagar.setSelected(false);
 				pagar.setBackground(new Color(50, 205, 50));
 			}
@@ -119,6 +129,7 @@ public class RealizarEmprestimo {
 			date_entrega.setEnabled(false);
 			entregue.setBackground(new Color(255, 0, 0));
 			entregue.setEnabled(false);
+			pagar.setEnabled(false);
 		} else {
 			entregue.setSelected(false);
 		}
@@ -127,6 +138,7 @@ public class RealizarEmprestimo {
 
 	/**
 	 * Inicializa o diálogo do empréstimo.
+	 * 
 	 * @param item
 	 */
 	public void inicializar(Item item) {
@@ -356,28 +368,10 @@ public class RealizarEmprestimo {
 					int ok = JOptionPane.showConfirmDialog(dial, "Tem certeza que quer confirmar a devolução do item?",
 							"Confirmar devolução", JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE,
 							new ImageIcon(getClass().getResource("/DAD_SS.jpg")));
-					try {
-						if (ok == JOptionPane.YES_OPTION) {
-							emp.entregar();
-							con = ConexaoEmprestimos.getConnection();
-							pst = con.prepareStatement("update emprestimos set Ativo=? where ID=" + emp.getId());
-							if (emp.isEntregue())
-								pst.setString(1, "Não");
-							else
-								pst.setString(1, "Sim");
-							pst.execute();
-							entregue.setBackground(new Color(255, 0, 0));
-							bSave.setEnabled(false);
-							alterar.setEnabled(false);
-							date_emp.setEnabled(false);
-							date_entrega.setEnabled(false);
-							entregue.setEnabled(false);
-						} else {
-							entregue.setSelected(false);
-						}
-					} catch (SQLException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
+					if (ok == JOptionPane.YES_OPTION) {
+						entregar();
+					} else {
+						entregue.setSelected(false);
 					}
 
 				} else {
@@ -395,15 +389,36 @@ public class RealizarEmprestimo {
 		pagar.setHorizontalAlignment(SwingConstants.CENTER);
 		pagar.setBackground(new Color(255, 0, 0));
 		pagar.setFont(new Font("Roboto", Font.PLAIN, 12));
-		pagar.setBounds(353, 225, 115, 30);
+		pagar.setBounds(250, 117, 119, 28);
 		dial.getContentPane().add(pagar);
+
+		lMultaAPagar = new JLabel("Valor diário da multa: ");
+		lMultaAPagar.setFont(new Font("Roboto", Font.PLAIN, 12));
+		lMultaAPagar.setBounds(24, 126, 140, 14);
+		dial.getContentPane().add(lMultaAPagar);
+
+		MaskFormatter mask;
+		try {
+			mask = new MaskFormatter("R$ #.##");
+			mask.setCommitsOnValidEdit(true);
+			multa = new JFormattedTextField(mask);
+		} catch (ParseException e1) {
+			multa = new JFormattedTextField();
+			e1.printStackTrace();
+		}
+
+		multa.setEditable(false);
+		multa.setFont(new Font("Arial", Font.PLAIN, 14));
+		multa.setBounds(165, 124, 75, 20);
+		multa.setValue("R$ " + String.valueOf(Emprestimo.MULTA));
+		dial.getContentPane().add(multa);
 
 		pagar.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (pagar.isSelected()) {
-					int ok = JOptionPane.showConfirmDialog(dial, "Tem certeza que quer confirmar o pagamento da multa?",
+					int ok = JOptionPane.showConfirmDialog(dial, "Tem certeza que quer confirmar o pagamento da multa e entrega do empréstimo?",
 							"Confirmar pagamento", JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE,
 							new ImageIcon(getClass().getResource("/DAD_SS.jpg")));
 
@@ -416,6 +431,9 @@ public class RealizarEmprestimo {
 							pst.execute();
 							pagar.setBackground(new Color(255, 0, 0));
 							pagar.setEnabled(false);
+							lMultaAPagar.setText("Valor pago: ");
+							entregar();
+							entregue.setSelected(true);
 						} else {
 							pagar.setSelected(false);
 						}
@@ -433,11 +451,11 @@ public class RealizarEmprestimo {
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
 				String ant = dias.getText();
-				try{
-				dias.setText(String.valueOf(
-						ChronoUnit.DAYS.between(date_emp.getDate().toInstant(), date_entrega.getDate().toInstant())
-								+ 1));
-				} catch (NullPointerException e){
+				try {
+					dias.setText(String.valueOf(
+							ChronoUnit.DAYS.between(date_emp.getDate().toInstant(), date_entrega.getDate().toInstant())
+									+ 1));
+				} catch (NullPointerException e) {
 					Log.getInstance().printLog("Data null - " + e.getMessage());
 				}
 				if (!ant.equals(dias.getText()))
@@ -460,7 +478,8 @@ public class RealizarEmprestimo {
 
 		bConf.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Emprestimo emprestimo = new Emprestimo(TableModelUser.getInstance().getUserByCpf(cpf.getText().replace(".", "").replace("-", "")),
+				Emprestimo emprestimo = new Emprestimo(
+						TableModelUser.getInstance().getUserByCpf(cpf.getText().replace(".", "").replace("-", "")),
 						item, date_emp.getDate(), date_entrega.getDate(), Login.NOME);
 
 				con = ConexaoEmprestimos.getConnection();
@@ -531,8 +550,36 @@ public class RealizarEmprestimo {
 	}
 
 	/**
-	 * Verifica se o CPF introduzido é válido e se existe na base de dados. Se não existir, pede para criar um novo cliente com esse CPF.
-	 * @return - true se o CPF é válido. <br> - false caso contrário
+	 * Marca o empréstimo como entregue e salva a informação na base de dados.
+	 */
+	public void entregar() {
+		try {
+			emp.entregar();
+			con = ConexaoEmprestimos.getConnection();
+			pst = con.prepareStatement("update emprestimos set Ativo=? where ID=" + emp.getId());
+			if (emp.isEntregue())
+				pst.setString(1, "Não");
+			else
+				pst.setString(1, "Sim");
+			pst.execute();
+			entregue.setBackground(new Color(255, 0, 0));
+			bSave.setEnabled(false);
+			alterar.setEnabled(false);
+			date_emp.setEnabled(false);
+			date_entrega.setEnabled(false);
+			entregue.setEnabled(false);
+		} catch (SQLException e1) {
+			Log.getInstance().printLog("Erro ao devolver o empréstimo - " + e1.getMessage());
+			e1.printStackTrace();
+		}
+	}
+
+	/**
+	 * Verifica se o CPF introduzido é válido e se existe na base de dados. Se
+	 * não existir, pede para criar um novo cliente com esse CPF.
+	 * 
+	 * @return - true se o CPF é válido. <br>
+	 *         - false caso contrário
 	 */
 	public boolean validar() {
 		String cpfString;
@@ -560,6 +607,7 @@ public class RealizarEmprestimo {
 
 	/**
 	 * Salva um novo recibo para o empréstimo.
+	 * 
 	 * @param emprestimo
 	 */
 	private void save(Emprestimo emprestimo) {
@@ -586,6 +634,7 @@ public class RealizarEmprestimo {
 
 	/**
 	 * Abre o recibo associado a esse empréstimo, se existir.
+	 * 
 	 * @param emprestimo
 	 */
 	public void abrirRecibo(Emprestimo emprestimo) {
@@ -593,9 +642,11 @@ public class RealizarEmprestimo {
 			Desktop.getDesktop().open(new File(dirPath));
 			Desktop.getDesktop().open(new File(dirPath + emprestimo.toString() + ".pdf"));
 		} catch (Exception e) {
-			JOptionPane.showMessageDialog(dial, "Ocorreu um erro ao abrir o recibo! Provavelmente deve ter sido apagado! Pode 'Gerar um novo recibo'", "Erro", JOptionPane.ERROR_MESSAGE,
-					new ImageIcon(getClass().getResource("/DAD_SS.jpg")));
-			Log.getInstance().printLog("Ocorreu um erro ao abrir o recibo! Provavelmente deve ter sido apagado! -" + e.getMessage());
+			JOptionPane.showMessageDialog(dial,
+					"Ocorreu um erro ao abrir o recibo! Provavelmente deve ter sido apagado! Pode 'Gerar um novo recibo'",
+					"Erro", JOptionPane.ERROR_MESSAGE, new ImageIcon(getClass().getResource("/DAD_SS.jpg")));
+			Log.getInstance().printLog(
+					"Ocorreu um erro ao abrir o recibo! Provavelmente deve ter sido apagado! -" + e.getMessage());
 			e.printStackTrace();
 		}
 
@@ -620,7 +671,7 @@ public class RealizarEmprestimo {
 	public JButton getbConf() {
 		return bConf;
 	}
-	
+
 	/**
 	 * Torna o diálogo visível.
 	 */

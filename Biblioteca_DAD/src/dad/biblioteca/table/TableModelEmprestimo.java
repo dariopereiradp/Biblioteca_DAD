@@ -63,7 +63,7 @@ public class TableModelEmprestimo extends AbstractTableModel {
 					User user = TableModelUser.getInstance().getUserByCpf(cpf);
 					String funcionario = rs.getString(6);
 					String ativo = rs.getString(7);
-					String pago = rs.getString(8);
+					String pago = rs.getString(9);
 					Emprestimo emp;
 					emp = new Emprestimo(user, item, data_emprestimo, data_devolucao, funcionario);
 					emp.setId(Integer.parseInt(rs.getString(1)));
@@ -94,11 +94,12 @@ public class TableModelEmprestimo extends AbstractTableModel {
 	public void atualizarMultas() {
 		for (int i = 0; i < emprestimos.size(); i++) {
 			try {
-				if (!emprestimos.get(i).isEntregue()) {
+				Emprestimo em = emprestimos.get(i);
+				if (!em.isEntregue()) {
 					pst = con.prepareStatement(
-							"update emprestimos set Multa=?,Pago=? where ID=" + emprestimos.get(i).getId());
-					pst.setString(1, String.valueOf(emprestimos.get(i).getMulta()));
-					if (emprestimos.get(i).isPago())
+							"update emprestimos set Multa=?,Pago=? where ID=" + em.getId());
+					pst.setString(1, String.valueOf(em.getMulta()));
+					if (em.isPago())
 						pst.setString(2, "Sim");
 					else
 						pst.setString(2, "Não");
@@ -287,25 +288,29 @@ public class TableModelEmprestimo extends AbstractTableModel {
 			else
 				return "Não";
 		case 8:
-			double multa = 0.0;
-			try {
-				con = ConexaoEmprestimos.getConnection();
-				pst = con.prepareStatement(
-						"select Multa from emprestimos where ID=" + emprestimos.get(rowIndex).getId());
-				rs = pst.executeQuery();
-				if (rs.next())
-					multa = rs.getDouble(1);
-			} catch (SQLException e) {
-				Log.getInstance().printLog("TableModelEmprestimo - getValueAt() - case 8 -- " + e.getMessage());
-				e.printStackTrace();
-			}
 			if (emprestimos.get(rowIndex).isEntregue())
-				return multa;
+				return getMultaDB(emprestimos.get(rowIndex));
 			else
 				return emprestimos.get(rowIndex).getMulta();
 		default:
 			return emprestimos.get(rowIndex);
 		}
+	}
+
+	public double getMultaDB(Emprestimo emp) {
+		double multa = 0.0;
+		try {
+			con = ConexaoEmprestimos.getConnection();
+			pst = con.prepareStatement(
+					"select Multa from emprestimos where ID=" + emp.getId());
+			rs = pst.executeQuery();
+			if (rs.next())
+				multa = rs.getDouble(1);
+		} catch (SQLException e) {
+			Log.getInstance().printLog("TableModelEmprestimo - getValueAt() - case 8 -- " + e.getMessage());
+			e.printStackTrace();
+		}
+		return multa;
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })

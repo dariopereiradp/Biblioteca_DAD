@@ -59,9 +59,9 @@ public class CellRendererMulta extends DefaultTableCellRenderer {
 
 		Emprestimo emp = TableModelEmprestimo.getInstance().getEmprestimo(table.convertRowIndexToModel(row));
 
-		if (emp.getMulta() == 0.0 || emp.isPago())
+		if (emp.getMulta() == 0.0 || emp.isPago() || emp.isEntregue())
 			this.setIcon(right);
-		else if(emp.getMulta()>0 || !emp.isPago())
+		else if(emp.getMulta()>0 && !emp.isPago())
 			this.setIcon(wrong);
 		return this;
 	}
