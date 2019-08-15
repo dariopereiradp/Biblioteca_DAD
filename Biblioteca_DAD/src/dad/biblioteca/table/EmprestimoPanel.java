@@ -44,6 +44,7 @@ import dad.biblioteca.Emprestimo;
 import dad.biblioteca.Livro;
 import dad.biblioteca.User;
 import dad.biblioteca.gui.DataGui;
+import dad.biblioteca.gui.Main;
 import dad.recursos.CellRenderer;
 import dad.recursos.CellRendererMulta;
 import dad.recursos.CellRendererNoImage;
@@ -435,11 +436,11 @@ public class EmprestimoPanel extends JPanel {
 	public void removerEmprestimos() {
 		int[] rows = convertRowsIndextoModel();
 		if (rows.length > 0) {
-			int ok = JOptionPane.showConfirmDialog(this,
+			int ok = JOptionPane.showOptionDialog(this,
 					"Tem certeza que quer apagar o(s) empréstimo(s) selecionado(s)?\nO recibo relacionado a cada empréstimo também será apagado!\nATENÇÃO: ESSA AÇÃO NÃO PODE SER ANULADA!\nObs: pode marcar o empréstimo como 'entregue' sem precisar apagar!",
-					"APAGAR", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE,
-					new ImageIcon(getClass().getResource("/DAD_SS.jpg")));
-			if (ok == JOptionPane.OK_OPTION) {
+					"APAGAR", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE,
+					new ImageIcon(getClass().getResource("/DAD_SS.jpg")), Main.SIM_NAO, Main.SIM_NAO[0]);
+			if (ok == JOptionPane.YES_OPTION) {
 				modelEmprestimo.removeEmprestimos(rows);
 			}
 		}

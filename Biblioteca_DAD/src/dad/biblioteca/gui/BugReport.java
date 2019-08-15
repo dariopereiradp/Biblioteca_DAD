@@ -49,6 +49,7 @@ public class BugReport extends JDialog {
 	 * Create the dialog.
 	 */
 	public BugReport() {
+		super(DataGui.getInstance(), ModalityType.DOCUMENT_MODAL);
 		setTitle("Bug Report");
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 400, 350);

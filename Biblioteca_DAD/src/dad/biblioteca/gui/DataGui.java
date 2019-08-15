@@ -461,9 +461,9 @@ public class DataGui extends JFrame {
 				+ "Não modifique esse ficheiro!\n"
 				+ "Você deve copiá-lo para um lugar seguro (por exemplo, uma pen-drive) para mais tarde ser possível restaurar,\n"
 				+ "caso o computador seja formatado ou você pretenda usar o programa em outro computador.";
-		int ok = JOptionPane.showConfirmDialog(null, message, "Cópia de Segurança", JOptionPane.YES_NO_OPTION,
-				JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource("/DAD_SS.jpg")));
-		if (ok == JOptionPane.OK_OPTION) {
+		int ok = JOptionPane.showOptionDialog(null, message, "Cópia de Segurança", JOptionPane.YES_NO_OPTION,
+				JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource("/DAD_SS.jpg")), Main.SIM_NAO, Main.SIM_NAO[0]);
+		if (ok == JOptionPane.YES_OPTION) {
 			backupDirect();
 			JOptionPane.showMessageDialog(null, "Cópia de segurança salva com sucesso na pasta:\n" + Main.BACKUP_DIR,
 					"Cópia de Segurança - Sucesso", JOptionPane.OK_OPTION,

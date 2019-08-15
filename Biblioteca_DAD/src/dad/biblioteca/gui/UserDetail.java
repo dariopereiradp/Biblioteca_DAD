@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.Dialog.ModalityType;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -51,8 +52,7 @@ public class UserDetail {
 
 	public UserDetail(User user) {
 		this.user = user;
-		novo = new JDialog();
-		novo.setTitle("Cliente - " + user.getNome());
+		novo = new JDialog(DataGui.getInstance(), "Cliente - " + user.getNome(), ModalityType.DOCUMENT_MODAL);
 		novo.setLocationRelativeTo(null);
 		novo.setMinimumSize(new Dimension(600, 300));
 

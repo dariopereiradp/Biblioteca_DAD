@@ -44,6 +44,7 @@ public class Estatisticas extends JDialog {
 	private JTextField n_func;
 
 	private Estatisticas() {
+		super(DataGui.getInstance(), ModalityType.DOCUMENT_MODAL);
 		setBounds(100, 100, 600, 300);
 		setResizable(false);
 		getContentPane().setLayout(new BorderLayout());

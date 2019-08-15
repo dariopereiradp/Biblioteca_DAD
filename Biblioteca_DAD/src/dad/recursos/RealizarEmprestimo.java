@@ -5,6 +5,7 @@ import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Image;
+import java.awt.Dialog.ModalityType;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
@@ -36,6 +37,7 @@ import dad.biblioteca.Item;
 import dad.biblioteca.User;
 import dad.biblioteca.gui.DataGui;
 import dad.biblioteca.gui.Login;
+import dad.biblioteca.gui.Main;
 import dad.biblioteca.table.EmprestimoPanel;
 import dad.biblioteca.table.TableModelEmprestimo;
 import dad.biblioteca.table.TableModelLivro;
@@ -147,7 +149,7 @@ public class RealizarEmprestimo {
 		File docDir = new File(dirPath);
 		if (!docDir.exists())
 			docDir.mkdirs();
-		dial = new JDialog(DataGui.getInstance(), "Realizar Empréstimo");
+		dial = new JDialog(DataGui.getInstance(), "Realizar Empréstimo", ModalityType.DOCUMENT_MODAL);
 		dial.getContentPane().setFont(new Font("Roboto", Font.PLAIN, 12));
 		dial.setMinimumSize(new Dimension(500, 400));
 		dial.setResizable(false);
@@ -365,9 +367,9 @@ public class RealizarEmprestimo {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (entregue.isSelected() && (emp.isPago() || emp.getMulta() == 0.0)) {
-					int ok = JOptionPane.showConfirmDialog(dial, "Tem certeza que quer confirmar a devolução do item?",
+					int ok = JOptionPane.showOptionDialog(dial, "Tem certeza que quer confirmar a devolução do item?",
 							"Confirmar devolução", JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE,
-							new ImageIcon(getClass().getResource("/DAD_SS.jpg")));
+							new ImageIcon(getClass().getResource("/DAD_SS.jpg")), Main.SIM_NAO, Main.SIM_NAO[0]);
 					if (ok == JOptionPane.YES_OPTION) {
 						entregar();
 					} else {
@@ -418,9 +420,9 @@ public class RealizarEmprestimo {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (pagar.isSelected()) {
-					int ok = JOptionPane.showConfirmDialog(dial, "Tem certeza que quer confirmar o pagamento da multa e entrega do empréstimo?",
+					int ok = JOptionPane.showOptionDialog(dial, "Tem certeza que quer confirmar o pagamento da multa e entrega do empréstimo?",
 							"Confirmar pagamento", JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE,
-							new ImageIcon(getClass().getResource("/DAD_SS.jpg")));
+							new ImageIcon(getClass().getResource("/DAD_SS.jpg")), Main.SIM_NAO, Main.SIM_NAO[0]);
 
 					try {
 						if (ok == JOptionPane.YES_OPTION) {
@@ -617,8 +619,8 @@ public class RealizarEmprestimo {
 			String message = "O empréstimo com ID=" + emprestimo.getId()
 					+ " foi criado com sucesso!\nFoi salvo um recibo (que pode ser impresso) na pasta:\n" + dirPath
 					+ "\nVocê quer abrir o recibo agora?";
-			int ok = JOptionPane.showConfirmDialog(dial, message, "Criado com sucesso", JOptionPane.YES_NO_OPTION,
-					JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource("/DAD_SS.jpg")));
+			int ok = JOptionPane.showOptionDialog(dial, message, "Criado com sucesso", JOptionPane.YES_NO_OPTION,
+					JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource("/DAD_SS.jpg")), Main.SIM_NAO, Main.SIM_NAO[0]);
 			Log.getInstance().printLog(message);
 			if (ok == JOptionPane.YES_OPTION) {
 				Desktop.getDesktop().open(new File(dirPath));

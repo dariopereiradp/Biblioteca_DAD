@@ -62,6 +62,7 @@ public class Main {
 			+ "Documents/BibliotecaDAD/BugReports/";
 	public static final String DATA_DIR = System.getenv("APPDATA") + "/BibliotecaDAD/";
 	public static final String DATABASE_DIR = DATA_DIR + "Databases/";
+	public static final String[] SIM_NAO = {"Sim", "Não"};
 	public static long inicialTime;
 	private Connection con;
 

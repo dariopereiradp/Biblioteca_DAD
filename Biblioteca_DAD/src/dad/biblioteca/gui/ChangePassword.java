@@ -52,6 +52,7 @@ public class ChangePassword extends JDialog {
 	 * Create the dialog.
 	 */
 	public ChangePassword(String nome, boolean admin) {
+		super(DataGui.getInstance(), ModalityType.DOCUMENT_MODAL);
 		this.nome = nome;
 		setBounds(100, 100, 450, 210);
 		getContentPane().setLayout(new BorderLayout());

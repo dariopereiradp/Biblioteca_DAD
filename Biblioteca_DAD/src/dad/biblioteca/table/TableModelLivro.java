@@ -7,6 +7,7 @@ import javax.swing.table.AbstractTableModel;
 import dad.biblioteca.Item;
 import dad.biblioteca.Livro;
 import dad.biblioteca.gui.DataGui;
+import dad.biblioteca.gui.Main;
 import dad.recursos.Command;
 import dad.recursos.CompositeCommand;
 import dad.recursos.ConexaoLivros;
@@ -183,20 +184,20 @@ public class TableModelLivro extends AbstractTableModel {
 	 *         - false caso contrário
 	 */
 	public boolean perguntaIncrementar(Livro l) {
-		int ok = JOptionPane.showConfirmDialog(DataGui.getInstance(),
+		int ok = JOptionPane.showOptionDialog(DataGui.getInstance(),
 				"Esse livro já existe! Deseja aumentar um exemplar ao livro já existente?", "Livro já existe",
-				JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE,
-				new ImageIcon(getClass().getResource("/DAD_SS.jpg")));
-		if (ok == JOptionPane.OK_OPTION) {
+				JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE,
+				new ImageIcon(getClass().getResource("/DAD_SS.jpg")), Main.SIM_NAO, Main.SIM_NAO[0]);
+		if (ok == JOptionPane.YES_OPTION) {
 			if (TableModelEmprestimo.getInstance().getEmprestimosByItem(l).length > 0) {
-				int ok1 = JOptionPane.showConfirmDialog(null,
+				int ok1 = JOptionPane.showOptionDialog(null,
 						"ATENÇÃO! O livro " + l.getNome()
 								+ " tem empréstimos registados na base de dados!\nSe clicar em 'OK' todos os empréstimos ligados a esse livro serão apagados!\n"
 								+ "Embora seja possível anular a ação de apagar o livro, os histórico de empréstimos para esse livro será perdido definitivamente!\n"
 								+ "Tem a certeza que quer apagar?",
-						"APAGAR", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE,
-						new ImageIcon(getClass().getResource("/DAD_SS.jpg")));
-				if (ok1 == JOptionPane.OK_OPTION)
+						"APAGAR", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE,
+						new ImageIcon(getClass().getResource("/DAD_SS.jpg")), Main.SIM_NAO, Main.SIM_NAO[0]);
+				if (ok1 == JOptionPane.YES_OPTION)
 					return true;
 				else
 					return false;
@@ -599,14 +600,14 @@ public class TableModelLivro extends AbstractTableModel {
 				for (int i = 0; i < rows.length; i++) {
 					Livro l = livros.get(rows[i]);
 					if (TableModelEmprestimo.getInstance().getEmprestimosByItem(l).length > 0) {
-						int ok = JOptionPane.showConfirmDialog(null,
+						int ok = JOptionPane.showOptionDialog(null,
 								"ATENÇÃO! O livro " + l.getNome()
 										+ " tem empréstimos registados na base de dados!\nSe clicar em 'OK' todos os empréstimos ligados a esse livro serão apagados!\n"
 										+ "Embora seja possível anular a ação de apagar o livro, os histórico de empréstimos para esse livro será perdido definitivamente!\n"
 										+ "Tem a certeza que quer apagar?",
-								"APAGAR", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE,
-								new ImageIcon(getClass().getResource("/DAD_SS.jpg")));
-						if (ok == JOptionPane.OK_OPTION) {
+								"APAGAR", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE,
+								new ImageIcon(getClass().getResource("/DAD_SS.jpg")), Main.SIM_NAO, Main.SIM_NAO[0]);
+						if (ok == JOptionPane.YES_OPTION) {
 							pst = con.prepareStatement("delete from livros where ID=" + livros.get(rows[i]).getId());
 							pst.execute();
 							remover.add(livros.get(rows[i]));
@@ -670,14 +671,14 @@ public class TableModelLivro extends AbstractTableModel {
 					if (livros.get(rows[i]).getNumero_exemplares() == 1) {
 						Livro l = livros.get(rows[i]);
 						if (TableModelEmprestimo.getInstance().getEmprestimosByItem(l).length > 0) {
-							int ok = JOptionPane.showConfirmDialog(null,
+							int ok = JOptionPane.showOptionDialog(null,
 									"ATENÇÃO! O livro " + l.getNome()
 											+ " tem empréstimos registados na base de dados!\nSe clicar em 'OK' todos os empréstimos ligados a esse livro serão apagados!\n"
 											+ "Embora seja possível anular a ação de apagar o livro, os histórico de empréstimos para esse livro será perdido definitivamente!\n"
 											+ "Tem a certeza que quer apagar?",
-									"APAGAR", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE,
-									new ImageIcon(getClass().getResource("/DAD_SS.jpg")));
-							if (ok == JOptionPane.OK_OPTION) {
+									"APAGAR", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE,
+									new ImageIcon(getClass().getResource("/DAD_SS.jpg")),Main.SIM_NAO, Main.SIM_NAO[0]);
+							if (ok == JOptionPane.YES_OPTION) {
 								pst = con
 										.prepareStatement("delete from livros where ID=" + livros.get(rows[i]).getId());
 								pst.execute();

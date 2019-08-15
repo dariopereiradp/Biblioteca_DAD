@@ -54,6 +54,7 @@ public class Restauro extends JDialog {
 	 * Create the dialog.
 	 */
 	public Restauro() {
+		super(DataGui.getInstance(), ModalityType.DOCUMENT_MODAL);
 		setBounds(100, 100, 350, 200);
 		getContentPane().setLayout(new BorderLayout());
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
@@ -97,13 +98,13 @@ public class Restauro extends JDialog {
 
 					@Override
 					public void actionPerformed(ActionEvent e) {
-						int ok = JOptionPane.showConfirmDialog(null,
+						int ok = JOptionPane.showOptionDialog(null,
 								"Tem certeza que quer restaurar a cópia de segurança selecionada?\n"
 										+ "Tenha atenção que os dados selecionados serão perdidos e substituídos pelos dados da cópia!\n"
-										+ "Se clicar em 'Yes', o programa vai ser fechado. Quando você abrir outra vez os dados da cópia estarão restaurados.\n"
+										+ "Se clicar em 'Sim', o programa vai ser fechado. Quando você abrir outra vez os dados da cópia estarão restaurados.\n"
 										+ "Obs: Por segurança, vai ser realizada uma cópia de segurança dos dados atuais. Essa cópia pode ser restaurada mais tarde.",
 								"Restaurar Cópia de Segurança", JOptionPane.YES_NO_OPTION,
-								JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource("/DAD_SS.jpg")));
+								JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource("/DAD_SS.jpg")), Main.SIM_NAO, Main.SIM_NAO[0]);
 						if (ok == JOptionPane.YES_OPTION) {
 							String name = "BibliotecaDAD-Backup-"
 									+ new SimpleDateFormat("ddMMMyyyy-HH'h'mm").format(new Date()) + ".dadb";

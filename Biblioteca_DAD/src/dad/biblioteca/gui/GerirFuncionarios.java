@@ -34,6 +34,7 @@ public class GerirFuncionarios extends JDialog {
 	 * Create the dialog.
 	 */
 	public GerirFuncionarios() {
+		super(DataGui.getInstance(), ModalityType.DOCUMENT_MODAL);
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		setTitle("Gerir Funcionários");
 		setBounds(100, 100, 1100, 350);

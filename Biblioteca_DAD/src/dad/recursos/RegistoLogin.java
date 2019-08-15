@@ -1,6 +1,7 @@
 package dad.recursos;
 
 import java.awt.Toolkit;
+import java.awt.Dialog.ModalityType;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -20,6 +21,7 @@ import javax.swing.JFrame;
 import org.apache.commons.lang.time.DurationFormatUtils;
 
 import dad.biblioteca.Funcionario;
+import dad.biblioteca.gui.DataGui;
 import dad.biblioteca.gui.Login;
 import dad.biblioteca.gui.Main;
 import dad.biblioteca.table.TableModelFuncionario;
@@ -63,7 +65,7 @@ public class RegistoLogin {
 
 	private RegistoLogin() {
 		INSTANCE = this;
-		dialog = new JDialog();
+		dialog = new JDialog(DataGui.getInstance(), ModalityType.DOCUMENT_MODAL);
 		dialog.setTitle("Biblioteca Dádiva de Deus - Registro");
 		dialog.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		dialog.setIconImage(Toolkit.getDefaultToolkit().getImage((getClass().getResource("/DAD.jpg"))));

@@ -19,7 +19,6 @@ import javax.swing.JTextPane;
 import javax.swing.JLabel;
 import java.awt.Font;
 import java.awt.Toolkit;
-
 import javax.swing.SwingConstants;
 
 /**
@@ -61,6 +60,7 @@ public class About extends JDialog {
 	 * Create the dialog.
 	 */
 	private About() {
+		super(DataGui.getInstance(), ModalityType.DOCUMENT_MODAL);
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 350, 300);
 		setTitle("Sobre");

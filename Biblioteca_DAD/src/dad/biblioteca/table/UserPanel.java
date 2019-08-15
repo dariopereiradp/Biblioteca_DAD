@@ -56,6 +56,7 @@ import javax.swing.text.MaskFormatter;
 import com.toedter.calendar.JDateChooser;
 import dad.biblioteca.User;
 import dad.biblioteca.gui.LivroDetail;
+import dad.biblioteca.gui.Main;
 import dad.biblioteca.gui.UserDetail;
 import dad.recursos.CellRenderer;
 import dad.recursos.CellRendererNoImage;
@@ -668,10 +669,10 @@ public class UserPanel extends JPanel {
 	public void removerUsers() {
 		int[] rows = convertRowsIndextoModel();
 		if (rows.length > 0) {
-			int ok = JOptionPane.showConfirmDialog(this, "Tem certeza que quer apagar o(s) cliente(s) selecionado(s)?",
-					"APAGAR", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE,
-					new ImageIcon(getClass().getResource("/DAD_SS.jpg")));
-			if (ok == JOptionPane.OK_OPTION) {
+			int ok = JOptionPane.showOptionDialog(this, "Tem certeza que quer apagar o(s) cliente(s) selecionado(s)?",
+					"APAGAR", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE,
+					new ImageIcon(getClass().getResource("/DAD_SS.jpg")), Main.SIM_NAO, Main.SIM_NAO[0]);
+			if (ok == JOptionPane.YES_OPTION) {
 				modelUser.removeUser(rows);
 			}
 		}

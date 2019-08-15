@@ -6,6 +6,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Image;
+import java.awt.Dialog.ModalityType;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -59,7 +60,7 @@ public class LivroDetail {
 		this.l = l;
 		int oldExemplares = l.getNumero_exemplares();
 		System.out.println(l);
-		dial = new JDialog(DataGui.getInstance(), l.getNome());
+		dial = new JDialog(DataGui.getInstance(), l.getNome(), ModalityType.DOCUMENT_MODAL);
 		dial.setSize(new Dimension(750, 500));
 		dial.setMinimumSize(new Dimension(750, 500));
 		dial.getContentPane().setLayout(new BorderLayout());

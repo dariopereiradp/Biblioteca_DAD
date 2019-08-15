@@ -3,6 +3,7 @@ package dad.recursos;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.Dialog.ModalityType;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -24,6 +25,7 @@ import com.toedter.calendar.JDateChooser;
 
 import dad.biblioteca.User;
 import dad.biblioteca.gui.DataGui;
+import dad.biblioteca.gui.Main;
 import dad.biblioteca.table.TableModelUser;
 import mdlaf.animation.MaterialUIMovement;
 import mdlaf.utils.MaterialColors;
@@ -39,14 +41,13 @@ public class NovoCliente {
 
 	public static void novoCliente(String cpfString, RealizarEmprestimo emp) {
 
-		int ok = JOptionPane.showConfirmDialog(DataGui.getInstance(),
+		int ok = JOptionPane.showOptionDialog(DataGui.getInstance(),
 				"O cliente ainda não existe! Deseja criar um novo cliente com esse CPF?", "Criar cliente",
 				JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE,
-				new ImageIcon(NovoCliente.class.getResource("/DAD_SS.jpg")));
+				new ImageIcon(NovoCliente.class.getResource("/DAD_SS.jpg")), Main.SIM_NAO, Main.SIM_NAO[0]);
 		if (ok == JOptionPane.YES_OPTION) {
-			JDialog novo = new JDialog();
+			JDialog novo = new JDialog(DataGui.getInstance(), ModalityType.DOCUMENT_MODAL);
 			novo.setTitle("Criar novo cliente");
-			novo.setLocationRelativeTo(null);
 			novo.setMinimumSize(new Dimension(400, 150));
 			novo.setResizable(false);
 			novo.getContentPane().setLayout(new GridLayout(5, 2));
