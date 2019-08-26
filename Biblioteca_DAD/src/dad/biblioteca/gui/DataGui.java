@@ -62,6 +62,12 @@ import javax.swing.ImageIcon;
 import javax.swing.JCheckBox;
 import javax.swing.JDialog;
 
+/**
+ * Classe que torna visível a 'data' das várias bases de dados.
+ * 
+ * @author Dário Pereira
+ *
+ */
 public class DataGui extends JFrame {
 
 	/**
