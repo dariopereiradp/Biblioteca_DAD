@@ -339,7 +339,7 @@ public class DataGui extends JFrame {
 	}
 
 	/**
-	 * Abre a a DataGui e um diálogo de boas vindas
+	 * Abre a DataGui e um diálogo de boas vindas
 	 */
 	public void open() {
 		setVisible(true);
