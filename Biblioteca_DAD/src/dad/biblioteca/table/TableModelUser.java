@@ -140,7 +140,7 @@ public class TableModelUser extends AbstractTableModel {
 	}
 
 	/**
-	 * Remove os cliente que têm os indexes passados no array rows.
+	 * Remove os clientes que têm os indexes passados no array rows.
 	 * 
 	 * @param rows
 	 *            - array que contém os indexes dos clientes para apagar.
