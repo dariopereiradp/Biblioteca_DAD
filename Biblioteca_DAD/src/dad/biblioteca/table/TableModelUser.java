@@ -118,7 +118,7 @@ public class TableModelUser extends AbstractTableModel {
 	 */
 	public void addUser(User user) {
 		undoManager.execute(new AddUser(user));
-		UserPanel.getInstance().clearTextFields();
+		ClientesPanel.getInstance().clearTextFields();
 		fireTableDataChanged();
 	}
 
@@ -256,7 +256,7 @@ public class TableModelUser extends AbstractTableModel {
 				}
 				users.removeAll(remover);
 				fireTableDataChanged();
-				UserPanel.getInstance().getJtfTotal().setText(String.valueOf(users.size()));
+				ClientesPanel.getInstance().getJtfTotal().setText(String.valueOf(users.size()));
 				Log.getInstance().printLog("Usuários apagados com sucesso!");
 			} catch (Exception e) {
 				Log.getInstance().printLog("Erro ao apagar o(s) usuário(s)\n" + e.getMessage());
@@ -302,7 +302,7 @@ public class TableModelUser extends AbstractTableModel {
 			try {
 				user.adicionarNaBaseDeDados();
 				users.add(user);
-				UserPanel.getInstance().getJtfTotal().setText(String.valueOf(users.size()));
+				ClientesPanel.getInstance().getJtfTotal().setText(String.valueOf(users.size()));
 				fireTableDataChanged();
 			} catch (Exception e) {
 				Log.getInstance().printLog("Erro ao criar cliente! " + e.getMessage());
@@ -314,7 +314,7 @@ public class TableModelUser extends AbstractTableModel {
 		public void undo() {
 			user.removerBaseDeDados();
 			users.remove(user);
-			UserPanel.getInstance().getJtfTotal().setText(String.valueOf(users.size()));
+			ClientesPanel.getInstance().getJtfTotal().setText(String.valueOf(users.size()));
 			fireTableDataChanged();
 		}
 

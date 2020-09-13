@@ -47,7 +47,7 @@ import dad.biblioteca.table.LivroPanel;
 import dad.biblioteca.table.TableModelEmprestimo;
 import dad.biblioteca.table.TableModelLivro;
 import dad.biblioteca.table.TableModelUser;
-import dad.biblioteca.table.UserPanel;
+import dad.biblioteca.table.ClientesPanel;
 import dad.recursos.CellRenderer;
 import dad.recursos.CellRendererNoImage;
 import dad.recursos.DefaultCellRenderer;
@@ -135,7 +135,7 @@ public class DataGui extends JFrame {
 
 		tabbedPane.addTab("Empréstimos", EmprestimoPanel.getInstance());
 
-		tabbedPane.addTab("Clientes", null, UserPanel.getInstance(), null);
+		tabbedPane.addTab("Clientes", null, ClientesPanel.getInstance(), null);
 
 		tabbedPane.setEnabledAt(1, false);
 		tabbedPane.setEnabledAt(2, false);
@@ -808,14 +808,14 @@ public class DataGui extends JFrame {
 	 */
 	public void filtrarUsers(String filtro) {
 		TableRowSorter<TableModelUser> sorter = new TableRowSorter<TableModelUser>(TableModelUser.getInstance());
-		UserPanel.getInstance().getUsers().setRowSorter(sorter);
+		ClientesPanel.getInstance().getUsers().setRowSorter(sorter);
 		RowFilter<TableModelUser, Object> filter;
 		if (filtro.trim().equals("")) {
 			sorter.setRowFilter(null);
 		} else {
 			if (num_checkboxEnabled() == 7 || num_checkboxEnabled() == 0) {
 				filter = RowFilter.regexFilter((Pattern.compile("(?i)" + filtro, Pattern.CASE_INSENSITIVE).toString()));
-				UserPanel.getInstance().getUsers().setDefaultRenderer(Object.class, new CellRenderer());
+				ClientesPanel.getInstance().getUsers().setDefaultRenderer(Object.class, new CellRenderer());
 			} else
 				filter = RowFilter.regexFilter((Pattern.compile("(?i)" + filtro, Pattern.CASE_INSENSITIVE).toString()),
 						checkBoxEnabled());
@@ -924,7 +924,7 @@ public class DataGui extends JFrame {
 			else
 				tcl.getColumn(6).setCellRenderer(new DefaultCellRenderer());
 		} else if (tabbedPane.getSelectedIndex() == 4) {
-			TableColumnModel tcl = UserPanel.getInstance().getUsers().getColumnModel();
+			TableColumnModel tcl = ClientesPanel.getInstance().getUsers().getColumnModel();
 
 			if (checkCpf.isSelected())
 				tcl.getColumn(0).setCellRenderer(new CellRendererNoImage());

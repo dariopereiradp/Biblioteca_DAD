@@ -14,7 +14,6 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.SQLSyntaxErrorException;
 import java.sql.Statement;
 import java.util.InputMismatchException;
 import java.util.Locale;
@@ -40,7 +39,6 @@ import dad.recursos.ConexaoUser;
 import dad.recursos.CriptografiaAES;
 import dad.recursos.Log;
 import mdlaf.MaterialLookAndFeel;
-import net.ucanaccess.jdbc.UcanaccessSQLException;
 
 /**
  * Classe responsável por inicializar todo o programa e bases de dados.
@@ -256,7 +254,9 @@ public class Main {
 					}
 				}
 				con.close();
-			} else {
+			}
+			/*
+			else {
 				con = ConexaoUser.getConnection();
 				try (Statement s = con.createStatement()) {
 					s.executeUpdate("ALTER TABLE Usuarios ADD COLUMN Telefone varchar(15);");
@@ -266,6 +266,7 @@ public class Main {
 				}
 				con.close();
 			}
+			*/
 
 			File emprestimos = new File(ConexaoEmprestimos.dbFile);
 			if (!emprestimos.exists()) {

@@ -61,6 +61,9 @@ public class TableModelEmprestimo extends AbstractTableModel {
 					Date data_devolucao = rs.getTimestamp(4);
 					String cpf = rs.getString(5);
 					User user = TableModelUser.getInstance().getUserByCpf(cpf);
+					if (user == null) {
+						user = new User("Desconhecido", new Date(1), cpf, "000000000", 0, false);
+					}
 					String funcionario = rs.getString(6);
 					String ativo = rs.getString(7);
 					String pago = rs.getString(9);

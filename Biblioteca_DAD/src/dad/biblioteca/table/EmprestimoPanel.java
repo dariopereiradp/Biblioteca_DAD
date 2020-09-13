@@ -277,7 +277,7 @@ public class EmprestimoPanel extends JPanel {
 							}
 						} else if (column == 5) {
 							try {
-								UserPanel.getInstance().abrir(TableModelUser.getInstance()
+								ClientesPanel.getInstance().abrir(TableModelUser.getInstance()
 										.getUserByCpf((String) table.getValueAt(rowAtPoint, column)));
 							} catch (NullPointerException e) {
 								JOptionPane.showMessageDialog(null,
@@ -461,6 +461,7 @@ public class EmprestimoPanel extends JPanel {
 	 */
 	public void abrir(Emprestimo emp) {
 		new RealizarEmprestimo(emp).open();
+		
 	}
 
 	public JTextField getJtfTotal() {

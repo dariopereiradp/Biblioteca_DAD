@@ -71,9 +71,9 @@ import mdlaf.utils.MaterialColors;
  * @author Dário Pereira
  *
  */
-public class UserPanel extends JPanel {
+public class ClientesPanel extends JPanel {
 
-	private static UserPanel INSTANCE;
+	private static ClientesPanel INSTANCE;
 	private JTable users;
 	private TableModelUser modelUser;
 	private JPanel panelAdd, pInferior, panel2, panel3;
@@ -91,7 +91,7 @@ public class UserPanel extends JPanel {
 	private String[] columnToolTips = { "CPF do cliente", "Nome do cliente", "Data de Nascimento do Cliente",
 			"Telefone do cliente", "Número de Empréstimos que o cliente fez" };
 
-	public UserPanel() {
+	public ClientesPanel() {
 		super();
 		INSTANCE = this;
 		setLayout(new BorderLayout());
@@ -714,9 +714,9 @@ public class UserPanel extends JPanel {
 		}
 	}
 
-	public static UserPanel getInstance() {
+	public static ClientesPanel getInstance() {
 		if (INSTANCE == null)
-			INSTANCE = new UserPanel();
+			INSTANCE = new ClientesPanel();
 		return INSTANCE;
 	}
 
