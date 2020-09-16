@@ -24,7 +24,7 @@
 		<dependency>
 			<groupId>io.github.vincenzopalazzo</groupId>
 			<artifactId>material-ui-swing</artifactId>
-			<version>1.1.1</version>
+			<version>1.1.1-rc1</version>
 		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/com.toedter/jcalendar -->

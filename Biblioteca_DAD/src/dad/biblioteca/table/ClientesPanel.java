@@ -498,7 +498,7 @@ public class ClientesPanel extends JPanel {
 		date_nasc.setDateFormatString("dd/MM/yyyy");
 		date_nasc.setMaxSelectableDate(new Date());
 		date_nasc.setDate(new Date());
-
+		
 		date_nasc.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
