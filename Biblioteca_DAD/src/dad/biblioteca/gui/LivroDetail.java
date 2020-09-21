@@ -3,7 +3,6 @@ package dad.biblioteca.gui;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Dialog.ModalityType;
@@ -41,7 +40,7 @@ import dad.biblioteca.table.TableModelLivro;
 import dad.recursos.CompositeCommand;
 import dad.recursos.ImageViewer;
 import dad.recursos.RealizarEmprestimo;
-import mdlaf.animation.MaterialUIMovement;
+import dad.recursos.Utils;
 import mdlaf.utils.MaterialColors;
 import net.miginfocom.swing.MigLayout;
 
@@ -95,11 +94,11 @@ public class LivroDetail {
 		});
 		botoesPrincipais.add(apagar, "cell 0 0,alignx left,aligny center");
 		apagar.setBackground(MaterialColors.RED_400);
-		personalizarBotao(apagar);
+		Utils.personalizarBotao(apagar);
 
 		JButton emprestar = new JButton("Realizar Empréstimo");
 		emprestar.setBackground(MaterialColors.LIGHT_GREEN_500);
-		personalizarBotao(emprestar);
+		Utils.personalizarBotao(emprestar);
 		botoesPrincipais.add(emprestar, "cell 5 0,alignx left,aligny center");
 		if (!l.isDisponivel()) {
 			emprestar.setEnabled(false);
@@ -108,17 +107,17 @@ public class LivroDetail {
 
 		JButton ok = new JButton("Ok");
 		ok.setBackground(MaterialColors.LIGHT_BLUE_200);
-		personalizarBotao(ok);
+		Utils.personalizarBotao(ok);
 		botoesPrincipais.add(ok, "cell 17 0,alignx left,aligny center");
 
 		JButton editar = new JButton("Editar");
 		editar.setBackground(MaterialColors.YELLOW_300);
-		personalizarBotao(editar);
+		Utils.personalizarBotao(editar);
 		botoesSecund.add(editar, "cell 0 0,alignx left,aligny center");
 
 		JButton salvar = new JButton("Salvar");
 		salvar.setBackground(MaterialColors.LIGHT_GREEN_300);
-		personalizarBotao(salvar);
+		Utils.personalizarBotao(salvar);
 		botoesSecund.add(salvar, "cell 17 0,alignx left,aligny center");
 		salvar.setEnabled(false);
 
@@ -271,7 +270,7 @@ public class LivroDetail {
 		else
 			addImage.setText("Alterar imagem");
 		addImage.setBackground(MaterialColors.BLUE_GRAY_500);
-		personalizarBotao(addImage);
+		Utils.personalizarBotao(addImage);
 		imagePanel.add(image);
 		imagePanel.add(addImage, "center");
 
@@ -423,16 +422,6 @@ public class LivroDetail {
 			dial.dispose();
 		}
 
-	}
-
-	/**
-	 * Personaliza o aspecto dos botões.
-	 * 
-	 * @param jb - botão a ser personalizado.
-	 */
-	public static void personalizarBotao(JButton jb) {
-		jb.setFont(new Font("Roboto", Font.PLAIN, 15));
-		MaterialUIMovement.add(jb, MaterialColors.GRAY_300, 5, 1000 / 30);
 	}
 
 	/**

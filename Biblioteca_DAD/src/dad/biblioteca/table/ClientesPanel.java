@@ -55,7 +55,6 @@ import javax.swing.text.MaskFormatter;
 
 import com.toedter.calendar.JDateChooser;
 import dad.biblioteca.User;
-import dad.biblioteca.gui.LivroDetail;
 import dad.biblioteca.gui.Main;
 import dad.biblioteca.gui.UserDetail;
 import dad.recursos.CellRenderer;
@@ -63,6 +62,7 @@ import dad.recursos.CellRendererNoImage;
 import dad.recursos.CpfValidator;
 import dad.recursos.Log;
 import dad.recursos.SairAction;
+import dad.recursos.Utils;
 import mdlaf.utils.MaterialColors;
 
 /**
@@ -432,7 +432,7 @@ public class ClientesPanel extends JPanel {
 		JButton bSair = new JButton("SAIR");
 		bSair.setBackground(new Color(247, 247, 255));
 		bSair.setForeground(MaterialColors.LIGHT_BLUE_400);
-		LivroDetail.personalizarBotao(bSair);
+		Utils.personalizarBotao(bSair);
 		bSair.addActionListener(new SairAction());
 		panel2.add(bSair);
 
@@ -442,7 +442,7 @@ public class ClientesPanel extends JPanel {
 		bAdd = new JButton("ADICIONAR");
 		bAdd.setForeground(MaterialColors.WHITE);
 		bAdd.setBackground(MaterialColors.LIGHT_GREEN_500);
-		LivroDetail.personalizarBotao(bAdd);
+		Utils.personalizarBotao(bAdd);
 		bAdd.setEnabled(false);
 		bAdd.addActionListener(new ActionListener() {
 
@@ -457,7 +457,7 @@ public class ClientesPanel extends JPanel {
 		JButton bLimpar = new JButton("Limpar campos");
 		bLimpar.setForeground(MaterialColors.WHITE);
 		bLimpar.setBackground(MaterialColors.RED_300);
-		LivroDetail.personalizarBotao(bLimpar);
+		Utils.personalizarBotao(bLimpar);
 		bLimpar.addActionListener(new ActionListener() {
 
 			@Override

@@ -15,6 +15,9 @@ import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
+
+import dad.recursos.Utils;
+
 import javax.swing.JTextPane;
 import javax.swing.JLabel;
 import java.awt.Font;
@@ -113,6 +116,7 @@ public class About extends JDialog {
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			{
 				JButton okButton = new JButton("OK");
+				Utils.personalizarBotao(okButton);
 				okButton.addActionListener(new ActionListener() {
 
 					@Override

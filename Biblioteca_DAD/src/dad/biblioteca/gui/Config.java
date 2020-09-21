@@ -15,6 +15,7 @@ import dad.biblioteca.Emprestimo;
 import dad.biblioteca.table.TableModelEmprestimo;
 import dad.recursos.Log;
 import dad.recursos.RegistoLogin;
+import dad.recursos.Utils;
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -92,7 +93,7 @@ public class Config extends JDialog {
 			}
 		});
 		bAddFuncionrio.setBounds(25, 130, 240, 25);
-		LivroDetail.personalizarBotao(bAddFuncionrio);
+		Utils.personalizarBotao(bAddFuncionrio);
 		contentPanel.add(bAddFuncionrio);
 
 		JLabel lBemVindo = new JLabel("Bem vindo! Est\u00E1 ligado como " + Login.NOME);
@@ -118,7 +119,7 @@ public class Config extends JDialog {
 			}
 		});
 		bGerirFunc.setBounds(25, 166, 240, 25);
-		LivroDetail.personalizarBotao(bGerirFunc);
+		Utils.personalizarBotao(bGerirFunc);
 		contentPanel.add(bGerirFunc);
 		if (!Login.NOME.equals("admin")) {
 			bGerirFunc.setEnabled(false);
@@ -132,7 +133,7 @@ public class Config extends JDialog {
 			}
 		});
 		bAlterarPass.setBounds(25, 202, 240, 25);
-		LivroDetail.personalizarBotao(bAlterarPass);
+		Utils.personalizarBotao(bAlterarPass);
 		if (Login.NOME.equals("admin")) {
 			bAlterarPass.setEnabled(false);
 			bAlterarPass.setToolTipText("Não é possível alterar a senha do utilizador 'admin'!");
@@ -144,7 +145,7 @@ public class Config extends JDialog {
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			{
 				JButton okButton = new JButton("OK");
-				LivroDetail.personalizarBotao(okButton);
+				Utils.personalizarBotao(okButton);
 				okButton.addActionListener(new ActionListener() {
 
 					/**
@@ -203,7 +204,7 @@ public class Config extends JDialog {
 			}
 			{
 				JButton cancelButton = new JButton("Cancelar");
-				LivroDetail.personalizarBotao(cancelButton);
+				Utils.personalizarBotao(cancelButton);
 				cancelButton.addActionListener(new ActionListener() {
 
 					@Override

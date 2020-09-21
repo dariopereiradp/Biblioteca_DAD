@@ -33,7 +33,7 @@ import dad.biblioteca.table.EmprestimoPanel;
 import dad.biblioteca.table.TableModelUser;
 import dad.recursos.CompositeCommand;
 import dad.recursos.Log;
-import mdlaf.animation.MaterialUIMovement;
+import dad.recursos.Utils;
 import mdlaf.utils.MaterialColors;
 
 /**
@@ -130,13 +130,13 @@ public class UserDetail {
 		JButton editar = new JButton("Editar");
 		editar.setFont(new Font("Roboto", Font.PLAIN, 12));
 		editar.setBackground(MaterialColors.RED_300);
-		MaterialUIMovement.add(editar, MaterialColors.GRAY_300, 5, 1000 / 30);
+		Utils.personalizarBotao(editar);
 		botoes.add(editar);
 
 		JButton salvar = new JButton("Salvar");
 		salvar.setFont(new Font("Roboto", Font.PLAIN, 12));
 		salvar.setBackground(MaterialColors.LIGHT_GREEN_400);
-		MaterialUIMovement.add(salvar, MaterialColors.GRAY_300, 5, 1000 / 30);
+		Utils.personalizarBotao(salvar);
 		salvar.setEnabled(false);
 		botoes.add(salvar);
 		salvar.addActionListener(new ActionListener() {

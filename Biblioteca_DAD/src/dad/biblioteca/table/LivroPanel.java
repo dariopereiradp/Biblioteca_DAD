@@ -49,7 +49,7 @@ import dad.recursos.CellRenderer;
 import dad.recursos.CellRendererNoImage;
 import dad.recursos.RealizarEmprestimo;
 import dad.recursos.SairAction;
-import mdlaf.animation.MaterialUIMovement;
+import dad.recursos.Utils;
 import mdlaf.utils.MaterialColors;
 
 /**
@@ -432,7 +432,7 @@ public class LivroPanel extends JPanel {
 		JButton bSair = new JButton("SAIR");
 		bSair.setBackground(new Color(247, 247, 255));
 		bSair.setForeground(MaterialColors.LIGHT_BLUE_400);
-		personalizarBotao(bSair);
+		Utils.personalizarBotao(bSair);
 		bSair.addActionListener(new SairAction());
 		panel2.add(bSair);
 
@@ -442,7 +442,7 @@ public class LivroPanel extends JPanel {
 		bAdd = new JButton("ADICIONAR");
 		bAdd.setForeground(MaterialColors.WHITE);
 		bAdd.setBackground(MaterialColors.LIGHT_GREEN_500);
-		personalizarBotao(bAdd);
+		Utils.personalizarBotao(bAdd);
 		bAdd.addActionListener(new ActionListener() {
 
 			@Override
@@ -456,7 +456,7 @@ public class LivroPanel extends JPanel {
 		JButton bLimpar = new JButton("Limpar campos");
 		bLimpar.setForeground(MaterialColors.WHITE);
 		bLimpar.setBackground(MaterialColors.RED_300);
-		LivroDetail.personalizarBotao(bLimpar);
+		Utils.personalizarBotao(bLimpar);
 		bLimpar.addActionListener(new ActionListener() {
 
 			@Override
@@ -558,11 +558,6 @@ public class LivroPanel extends JPanel {
 		both.add(last);
 
 		pInferior.add(both, BorderLayout.CENTER);
-	}
-
-	public void personalizarBotao(JButton jb) {
-		jb.setFont(new Font("Roboto", Font.PLAIN, 15));
-		MaterialUIMovement.add(jb, MaterialColors.GRAY_300, 5, 1000 / 30);
 	}
 
 	/**

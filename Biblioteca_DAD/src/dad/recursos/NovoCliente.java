@@ -27,7 +27,6 @@ import dad.biblioteca.User;
 import dad.biblioteca.gui.DataGui;
 import dad.biblioteca.gui.Main;
 import dad.biblioteca.table.TableModelUser;
-import mdlaf.animation.MaterialUIMovement;
 import mdlaf.utils.MaterialColors;
 
 /**
@@ -113,7 +112,7 @@ public class NovoCliente {
 			JButton cancel = new JButton("Cancelar");
 			cancel.setFont(new Font("Roboto", Font.PLAIN, 12));
 			cancel.setBackground(MaterialColors.RED_300);
-			MaterialUIMovement.add(cancel, MaterialColors.GRAY_300, 5, 1000 / 30);
+			Utils.personalizarBotao(cancel);
 			novo.getContentPane().add(cancel);
 			cancel.addActionListener(new ActionListener() {
 
@@ -126,7 +125,7 @@ public class NovoCliente {
 			JButton okButton = new JButton("Criar");
 			okButton.setFont(new Font("Roboto", Font.PLAIN, 12));
 			okButton.setBackground(MaterialColors.LIGHT_GREEN_400);
-			MaterialUIMovement.add(okButton, MaterialColors.GRAY_300, 5, 1000 / 30);
+			Utils.personalizarBotao(okButton);
 			novo.getContentPane().add(okButton);
 			okButton.addActionListener(new ActionListener() {
 

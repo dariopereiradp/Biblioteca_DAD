@@ -25,10 +25,6 @@ import dad.biblioteca.gui.DataGui;
 import dad.biblioteca.gui.Login;
 import dad.biblioteca.gui.Main;
 import dad.biblioteca.table.TableModelFuncionario;
-import dad.recursos.ConexaoLogin;
-import dad.recursos.CriptografiaAES;
-import dad.recursos.Log;
-import mdlaf.animation.MaterialUIMovement;
 import mdlaf.utils.MaterialColors;
 
 import javax.swing.JLabel;
@@ -115,7 +111,7 @@ public class RegistoLogin {
 		registar.setFont(new Font("Roboto", Font.BOLD, 12));
 		registar.setBounds(190, 245, 120, 23);
 		registar.setBackground(MaterialColors.LIGHT_BLUE_600);
-		MaterialUIMovement.add(registar, MaterialColors.GRAY_300, 5, 1000 / 30);
+		Utils.personalizarBotao(registar);
 		dialog.getContentPane().add(registar);
 		registar.addActionListener(new ActionListener() {
 
